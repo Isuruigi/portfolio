@@ -21,11 +21,24 @@ export default function Blog() {
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        fetch("/api/medium")
+        // Use rss2json service for client-side RSS fetching
+        const RSS_URL = "https://medium.com/feed/@isuruig";
+        const API_URL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}`;
+
+        fetch(API_URL)
             .then((res) => res.json())
             .then((data) => {
-                if (data.success) {
-                    setPosts(data.posts);
+                if (data.status === "ok" && data.items) {
+                    const formattedPosts = data.items.map((item: { title: string; link: string; pubDate: string; description: string; categories?: string[]; thumbnail?: string }) => ({
+                        title: item.title,
+                        link: item.link,
+                        pubDate: item.pubDate,
+                        description: item.description?.replace(/<[^>]*>/g, '').substring(0, 200) + '...',
+                        categories: item.categories || [],
+                        thumbnail: item.thumbnail || null,
+                        readingTime: "5 min read",
+                    }));
+                    setPosts(formattedPosts);
                 } else {
                     setError(true);
                 }
