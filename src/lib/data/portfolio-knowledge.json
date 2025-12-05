@@ -1,0 +1,239 @@
+{
+    "personal_info": {
+        "name": "Isuru (IG) Chathuranga",
+        "title": "AI/ML Engineer",
+        "location": "Colombo, Sri Lanka",
+        "availability": "Open to remote opportunities",
+        "email": "isuruigic@gmail.com",
+        "linkedin": "https://linkedin.com/in/isuruig",
+        "github": "https://github.com/Isuruigi",
+        "twitter": "https://x.com/Isuru_ig",
+        "portfolio": "https://isuruig.com",
+        "summary": "Third-year IT & Management student at University of Colombo specializing in Applied Statistics & Data Science. Building production AI systems with PyTorch, LangChain, and MLOps expertise. Open source contributor to LangChain, PyTorch, Hugging Face, and MLflow."
+    },
+    "skills": {
+        "deep_learning": {
+            "frameworks": [
+                "PyTorch (Proficient)",
+                "TensorFlow (Intermediate)",
+                "Keras (Intermediate)"
+            ],
+            "description": "Building neural networks, computer vision models, and deep learning pipelines"
+        },
+        "llms_and_agents": {
+            "tools": [
+                "LangChain (Proficient)",
+                "Transformers (Intermediate)",
+                "OpenAI API (Intermediate)",
+                "Anthropic Claude (Intermediate)",
+                "Groq (Proficient)"
+            ],
+            "description": "Multi-agent systems, RAG architectures, LLM integration and orchestration"
+        },
+        "mlops_production": {
+            "tools": [
+                "FastAPI (Proficient)",
+                "Docker (Proficient)",
+                "Kubernetes (Intermediate)",
+                "MLflow (Intermediate)",
+                "Apache Airflow (Intermediate)"
+            ],
+            "description": "Production deployment, model monitoring, CI/CD for ML systems, workflow orchestration"
+        },
+        "cloud_platforms": {
+            "platforms": [
+                "GCP (Intermediate)",
+                "AWS (Intermediate)",
+                "Azure (Familiar)",
+                "Oracle Cloud (Familiar)"
+            ],
+            "description": "Cloud deployment and ML infrastructure"
+        },
+        "data_science": {
+            "tools": [
+                "Python (Proficient)",
+                "Pandas (Proficient)",
+                "NumPy (Proficient)",
+                "scikit-learn (Proficient)",
+                "R (Intermediate)",
+                "Jupyter (Proficient)"
+            ],
+            "description": "Data analysis, statistical modeling, classical ML algorithms"
+        }
+    },
+    "projects": [
+        {
+            "name": "Sri Lankan Market Intelligence Agent",
+            "status": "Completed",
+            "description": "AI-powered market intelligence system analyzing Sri Lankan economic indicators with multi-agent LangChain system and custom RAG architecture.",
+            "tech_stack": [
+                "LangChain",
+                "Groq",
+                "RAG",
+                "Python",
+                "SentenceTransformers",
+                "FastAPI"
+            ],
+            "achievements": [
+                "Production-ready LangChain agent implementation",
+                "Real-time processing of economic indicators",
+                "Safe AST-based calculator integration",
+                "Intelligent query handling with RAG"
+            ],
+            "github": "https://github.com/Isuruigi/sl-market-agent"
+        },
+        {
+            "name": "Multi-Modal Crypto Intelligence System",
+            "status": "Completed",
+            "description": "AI-powered trading signal generator with multi-agent architecture including Whale Tracker, Orderbook Analyzer, Sentiment Analyzer, and LLM Coordinator.",
+            "tech_stack": [
+                "LangChain",
+                "Multi-Agent",
+                "FinBERT",
+                "FastAPI",
+                "Redis",
+                "Docker",
+                "WebSocket"
+            ],
+            "achievements": [
+                "Multi-agent architecture with 4 specialized agents",
+                "Real-time trading signal generation",
+                "WebSocket support for live updates",
+                "Docker-ready deployment with Redis caching"
+            ],
+            "github": "https://github.com/Isuruigi/crypto-intelligence-system"
+        },
+        {
+            "name": "ML Monitoring System",
+            "status": "Completed",
+            "description": "Production-ready ML monitoring with automated drift detection and real-time dashboard.",
+            "tech_stack": [
+                "Docker",
+                "FastAPI",
+                "MLflow",
+                "Drift Detection",
+                "Prometheus",
+                "Grafana",
+                "CI/CD"
+            ],
+            "achievements": [
+                "Automated model drift detection",
+                "Real-time monitoring dashboard",
+                "Self-healing pipelines with alerts",
+                "Docker-ready with CI/CD integration"
+            ],
+            "github": "https://github.com/Isuruigi/ml-monitoring-system"
+        },
+        {
+            "name": "Fraud Detection System",
+            "status": "Completed",
+            "description": "End-to-end ML system predicting fraudulent transactions with production deployment and drift detection.",
+            "tech_stack": [
+                "PyTorch",
+                "scikit-learn",
+                "FastAPI",
+                "Docker",
+                "Drift Detection",
+                "MLOps"
+            ],
+            "achievements": [
+                "End-to-end ML pipeline from features to production",
+                "Drift detection and automated retraining",
+                "Business-validated predictions",
+                "Production deployment with monitoring"
+            ],
+            "github": "https://github.com/Isuruigi/fraud-detection-system"
+        }
+    ],
+    "experience": [
+        {
+            "title": "Open Source Contributor",
+            "company": "Open Source Community",
+            "period": "September 2024 - Present",
+            "description": "Contributing to leading AI/ML open-source projects to advance production machine learning tools and frameworks.",
+            "contributions": [
+                "LangChain - Multi-agent system implementations, RAG architecture examples",
+                "PyTorch - Deep learning tutorials, test coverage improvements",
+                "Hugging Face Transformers - Model integration examples, tokenizer documentation",
+                "MLflow - Production ML tracking capabilities, deployment examples"
+            ]
+        },
+        {
+            "title": "Freelance AI Engineer",
+            "company": "Self Employed",
+            "period": "June 2024 - Present",
+            "description": "Building production-ready AI/ML systems for diverse applications including market intelligence, predictive analytics, and multi-agent architectures.",
+            "achievements": [
+                "Deployed production ML systems on AWS, GCP, and Azure",
+                "Built multi-agent LangChain architectures for real-time processing",
+                "Implemented automated MLOps pipelines with drift detection"
+            ]
+        }
+    ],
+    "education": [
+        {
+            "degree": "BSc(Hons) IT & Management",
+            "institution": "University of Colombo",
+            "specialization": "Applied Statistics & Data Science",
+            "period": "May 2023 - May 2027",
+            "status": "3rd Year"
+        },
+        {
+            "degree": "Bachelor of Information Technology (BIT)",
+            "institution": "University of Colombo School of Computing (UCSC)",
+            "period": "October 2023 - October 2026"
+        }
+    ],
+    "certifications": [
+        "Oracle Cloud Infrastructure 2025 Certified AI Foundations Associate (Official)",
+        "AI Engineer for Data Scientists Associate - DataCamp",
+        "Python Data Associate - DataCamp",
+        "Model Context Protocol (MCP): Hands-On with Agentic AI - LinkedIn",
+        "Deep Learning with PyTorch: Image Segmentation - Coursera",
+        "Sentiment Analysis with Deep Learning using BERT - Coursera",
+        "MLOps Essentials: Model Development and Integration - LinkedIn",
+        "Astronomer Certification for Apache Airflow 3"
+    ],
+    "faqs": [
+        {
+            "question": "What kind of roles are you looking for?",
+            "answer": "I'm seeking remote AI/ML engineering roles focusing on LLM engineering, multi-agent systems, MLOps/AIOps infrastructure, and production ML pipelines. Open to full-time opportunities, freelance projects, and technical collaborations."
+        },
+        {
+            "question": "What's your experience with production ML systems?",
+            "answer": "I've deployed multiple production ML systems on GCP, AWS, and Azure. My projects include real-time market intelligence agents, crypto trading signal generators, ML monitoring systems with drift detection, and fraud detection pipelines."
+        },
+        {
+            "question": "Can you work remotely?",
+            "answer": "Yes! I'm based in Colombo, Sri Lanka and fully remote-ready with experience in asynchronous collaboration. I'm comfortable working across time zones and have flexible availability."
+        },
+        {
+            "question": "What's your expertise in LangChain?",
+            "answer": "I'm proficient with LangChain, specializing in multi-agent systems and RAG architectures. I've built production systems using LangChain for orchestrating complex AI workflows. I'm also an active open source contributor to the LangChain project."
+        },
+        {
+            "question": "Do you have MLOps experience?",
+            "answer": "Yes, hands-on MLOps experience including FastAPI for ML APIs, Docker containerization, Kubernetes orchestration, MLflow for experiment tracking, Apache Airflow for workflow orchestration, and building automated pipelines with drift detection and monitoring."
+        },
+        {
+            "question": "Are you currently a student?",
+            "answer": "Yes, I'm a 3rd-year student at University of Colombo pursuing dual degrees in IT & Management (with Applied Statistics & Data Science specialization) and BIT from UCSC. However, I've been building production ML systems and contributing to open source alongside my studies."
+        },
+        {
+            "question": "What makes you different from other AI/ML candidates?",
+            "answer": "I focus on production-first engineering rather than just model training. Most AI engineers can train models, but I deploy them at scale, monitor performance, and fix them when they break. I combine statistical rigor from my academic background with practical MLOps expertise."
+        },
+        {
+            "question": "How can I contact you?",
+            "answer": "You can reach me at isuruigic@gmail.com, through LinkedIn at linkedin.com/in/isuruig, via X/Twitter at x.com/Isuru_ig, or check out all my links at linktr.ee/isuruig. I typically respond within 24 hours."
+        }
+    ],
+    "availability": {
+        "status": "Actively seeking remote opportunities",
+        "start_date": "Immediately available for discussions, flexible start date",
+        "response_time": "Within 24 hours",
+        "preferred_contact": "Email (isuruigic@gmail.com) or LinkedIn",
+        "timezone": "GMT+5:30 (Sri Lanka Time)",
+        "work_hours": "Flexible, can overlap with US/EU time zones"
+    }
+}

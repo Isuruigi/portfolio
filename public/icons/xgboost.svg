@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <path fill="#E52636" d="M12 0L2.4 5.4v13.2L12 24l9.6-5.4V5.4L12 0zm0 2.16l7.2 4.05v8.1L12 18.36l-7.2-4.05v-8.1L12 2.16z"/>
+  <path fill="#E52636" d="M12 6l-4.8 2.7v5.4L12 16.8l4.8-2.7V8.7L12 6zm0 1.8l2.4 1.35v2.7L12 13.2l-2.4-1.35v-2.7L12 7.8z"/>
+  <text x="12" y="13" font-size="4" font-weight="bold" text-anchor="middle" fill="#E52636">XGB</text>
+</svg>
