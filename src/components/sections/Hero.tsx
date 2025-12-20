@@ -86,7 +86,7 @@ export default function Hero() {
                         >
                             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                             <span className="text-sm text-green-600 dark:text-green-400 font-medium">
-                                Open to Remote Opportunities
+                                🎄 Open to Remote Opportunities | Happy Holidays!
                             </span>
                         </motion.div>
 

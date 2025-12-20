@@ -96,6 +96,7 @@ def load_portfolio_data() -> List[Document]:
     """Load and parse portfolio knowledge base"""
     # Try multiple possible paths
     possible_paths = [
+        Path(__file__).parent / "portfolio-knowledge.json",  # Same directory (Railway)
         Path(__file__).parent.parent / "src" / "lib" / "data" / "portfolio-knowledge.json",
         Path(__file__).parent / ".." / "src" / "lib" / "data" / "portfolio-knowledge.json",
         Path("../src/lib/data/portfolio-knowledge.json"),

@@ -30,7 +30,7 @@ export default function Chatbot() {
     const [messages, setMessages] = useState<Message[]>([
         {
             role: "assistant",
-            content: "Hey there! I'm Vira, Isuru's AI assistant!\n\nI'm here to help you learn about his AI/ML engineering work, production systems, and technical expertise. Think of me as your guide to his portfolio!\n\nWhat would you like to explore?",
+            content: "Hey there! I'm Vira, Isuru's AI assistant! 🎄 Happy Holidays!\n\nI'm here to help you learn about his AI/ML engineering work, production systems, and technical expertise. Think of me as your guide to his portfolio!\n\nWhat would you like to explore?",
         },
     ]);
     const [input, setInput] = useState("");
@@ -59,7 +59,7 @@ export default function Chatbot() {
         setIsLoading(true);
 
         try {
-            const response = await fetch("http://localhost:8000/chat", {
+            const response = await fetch("https://pleasing-strength-production.up.railway.app/chat", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -178,8 +178,8 @@ export default function Chatbot() {
                                     {/* Message bubble */}
                                     <div
                                         className={`max-w-[80%] rounded-2xl px-4 py-3 ${message.role === "user"
-                                                ? "bg-blue-600 text-white"
-                                                : "bg-zinc-800 text-zinc-100"
+                                            ? "bg-blue-600 text-white"
+                                            : "bg-zinc-800 text-zinc-100"
                                             }`}
                                     >
                                         <p className="text-sm whitespace-pre-wrap">{message.content}</p>

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Code, Briefcase, GraduationCap } from "lucide-react";
+import { Code, Briefcase, GraduationCap, Trophy } from "lucide-react";
 
 interface Experience {
     id: number;
@@ -38,6 +38,25 @@ const experiences: Experience[] = [
     },
     {
         id: 2,
+        title: "ML Systems Finalist",
+        company: "Zuu Crew AI",
+        location: "Remote",
+        period: "October 2025 - December 2025",
+        current: false,
+        description: "Selected as Top 10 Finalist out of 290 participants in the intensive 13-week 'Build Production-Ready Machine Learning Systems' program. Completed comprehensive training in production ML engineering with hands-on projects.",
+        highlights: [
+            "Built end-to-end ML pipelines with MLflow integration for experiment tracking and model versioning",
+            "Implemented scalable data processing workflows using Apache PySpark and Airflow orchestration",
+            "Developed real-time streaming prediction pipelines with Apache Kafka",
+            "Deployed production-grade ML systems with monitoring, CI/CD, and automated workflows",
+            "Capstone: End-to-end streaming-to-prediction pipeline with production deployment",
+        ],
+        skills: ["Python", "MLflow", "Apache Spark", "Apache Airflow", "Apache Kafka", "ML Pipelines", "CI/CD", "Production ML"],
+        icon: Trophy,
+        type: "freelance",
+    },
+    {
+        id: 3,
         title: "Freelance AI Engineer",
         company: "Self Employed",
         location: "Remote",
@@ -55,7 +74,7 @@ const experiences: Experience[] = [
         type: "freelance",
     },
     {
-        id: 3,
+        id: 4,
         title: "BSc IT & Management Student",
         company: "University of Colombo",
         location: "Colombo, Sri Lanka",
