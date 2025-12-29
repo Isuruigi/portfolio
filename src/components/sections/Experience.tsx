@@ -38,12 +38,12 @@ const experiences: Experience[] = [
     },
     {
         id: 2,
-        title: "ML Systems Finalist",
+        title: "ML Systems Top 3 Winner",
         company: "Zuu Crew AI",
         location: "Remote",
         period: "October 2025 - December 2025",
         current: false,
-        description: "Selected as Top 10 Finalist out of 290 participants in the intensive 13-week 'Build Production-Ready Machine Learning Systems' program. Completed comprehensive training in production ML engineering with hands-on projects.",
+        description: "🏆 Top 3 Winner out of 290 participants in the intensive 13-week 'Build Production-Ready Machine Learning Systems' bootcamp. Recognized for exceptional performance in building end-to-end production ML systems.",
         highlights: [
             "Built end-to-end ML pipelines with MLflow integration for experiment tracking and model versioning",
             "Implemented scalable data processing workflows using Apache PySpark and Airflow orchestration",

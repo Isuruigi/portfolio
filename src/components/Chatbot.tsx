@@ -30,7 +30,7 @@ export default function Chatbot() {
     const [messages, setMessages] = useState<Message[]>([
         {
             role: "assistant",
-            content: "Hey there! I'm Vira, Isuru's AI assistant! 🎄 Happy Holidays!\n\nI'm here to help you learn about his AI/ML engineering work, production systems, and technical expertise. Think of me as your guide to his portfolio!\n\nWhat would you like to explore?",
+            content: "Hey there! I'm Vira, Isuru's AI assistant! 🎉 Happy New Year 2026!\n\nI'm here to help you learn about his AI/ML engineering work, production systems, and technical expertise. Think of me as your guide to his portfolio!\n\nWhat would you like to explore?",
         },
     ]);
     const [input, setInput] = useState("");
