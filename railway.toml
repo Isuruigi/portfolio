@@ -1,0 +1,9 @@
+# Railway should only deploy from backend folder
+# Frontend is deployed on Cloudflare Pages
+
+[build]
+builder = "nixpacks"
+watchPatterns = ["backend/**"]
+
+[deploy]
+rootDirectory = "backend"
