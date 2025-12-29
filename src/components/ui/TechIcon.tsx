@@ -10,6 +10,15 @@ interface TechIconProps {
     className?: string
 }
 
+// Soft skills emoji icons (no actual icon file needed)
+const softSkillIcons: { [key: string]: string } = {
+    'brain': '🧠',
+    'communication': '💬',
+    'team': '🤝',
+    'adapt': '🔄',
+    'learning': '📚',
+}
+
 // Local icons with brand colors
 const localIconMap: { [key: string]: string } = {
     'amazonaws': '/icons/aws.svg',
@@ -108,11 +117,27 @@ export default function TechIcon({
     }, [])
 
     const nameLower = name.toLowerCase()
+    const softSkillEmoji = softSkillIcons[nameLower]
     const localIcon = localIconMap[nameLower]
     const simpleIcon = simpleIconsMap[nameLower]
     const displayName = displayNames[nameLower] || name
 
     const isDark = mounted && resolvedTheme === 'dark'
+
+    // Soft skills use emoji icons
+    if (softSkillEmoji) {
+        return (
+            <div className={`flex flex-col items-center gap-2 ${className}`} title={displayName}>
+                <div
+                    className="flex items-center justify-center transition-all duration-300 hover:scale-110"
+                    style={{ width: size, height: size, fontSize: size * 0.7 }}
+                >
+                    {softSkillEmoji}
+                </div>
+                {showLabel && <span className="text-xs text-muted">{displayName}</span>}
+            </div>
+        )
+    }
 
     // Determine icon URL
     let iconUrl: string

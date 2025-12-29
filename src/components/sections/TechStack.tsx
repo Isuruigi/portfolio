@@ -6,7 +6,7 @@ import { Star, Info } from "lucide-react";
 import TechIcon from "@/components/ui/TechIcon";
 
 type SkillLevel = "Proficient" | "Intermediate" | "Familiar";
-type Category = "Deep Learning" | "LLMs & Agents" | "MLOps" | "Cloud ML" | "Data Science";
+type Category = "Deep Learning" | "LLMs & Agents" | "MLOps" | "Cloud ML" | "Data Science" | "Soft Skills";
 
 interface Technology {
     name: string;
@@ -60,9 +60,16 @@ const technologies: Technology[] = [
     { name: "postgresql", displayName: "PostgreSQL", level: "Intermediate", stars: 3, category: "Data Science", description: "Data Storage" },
     { name: "mongodb", displayName: "MongoDB", level: "Intermediate", stars: 3, category: "Data Science", description: "Document DB" },
     { name: "visualstudiocode", displayName: "VS Code", level: "Proficient", stars: 4, category: "Data Science", description: "Development" },
+
+    // Soft Skills
+    { name: "brain", displayName: "Problem Solving", level: "Proficient", stars: 4, category: "Soft Skills", description: "Analyzing complex problems" },
+    { name: "communication", displayName: "Technical Communication", level: "Proficient", stars: 4, category: "Soft Skills", description: "Conveying complex concepts" },
+    { name: "team", displayName: "Collaboration", level: "Proficient", stars: 4, category: "Soft Skills", description: "Cross-functional teams" },
+    { name: "adapt", displayName: "Adaptability", level: "Proficient", stars: 4, category: "Soft Skills", description: "New tech & environments" },
+    { name: "learning", displayName: "Continuous Learning", level: "Proficient", stars: 4, category: "Soft Skills", description: "Industry trends" },
 ];
 
-const categories: (Category | "All")[] = ["All", "Deep Learning", "LLMs & Agents", "MLOps", "Cloud ML", "Data Science"];
+const categories: (Category | "All")[] = ["All", "Deep Learning", "LLMs & Agents", "MLOps", "Cloud ML", "Data Science", "Soft Skills"];
 
 const categoryColors: Record<Category, string> = {
     "Deep Learning": "from-blue-500/5 to-blue-500/10",
@@ -70,12 +77,13 @@ const categoryColors: Record<Category, string> = {
     "MLOps": "from-green-500/5 to-green-500/10",
     "Cloud ML": "from-orange-500/5 to-orange-500/10",
     "Data Science": "from-teal-500/5 to-teal-500/10",
+    "Soft Skills": "from-pink-500/5 to-pink-500/10",
 };
 
 const stats = [
-    { value: "35+", label: "AI/ML Technologies" },
+    { value: "38+", label: "Technical Skills" },
     { value: "12", label: "Production Ready" },
-    { value: "6", label: "Frameworks Mastered" },
+    { value: "5", label: "Soft Skills" },
 ];
 
 export default function TechStack() {
