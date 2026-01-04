@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import Chatbot from "@/components/Chatbot";
-import Confetti from "@/components/Confetti";
 import "./globals.css";
 
 const inter = Inter({
@@ -63,7 +62,6 @@ export default function RootLayout({
           disableTransitionOnChange={false}
         >
           {children}
-          <Confetti />
           <Chatbot />
         </ThemeProvider>
       </body>
