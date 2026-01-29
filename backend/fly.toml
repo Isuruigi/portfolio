@@ -1,0 +1,37 @@
+# Fly.io deployment configuration for Portfolio Chatbot Backend
+
+app = "portfolio-chatbot-backend"
+primary_region = "lax"  # Los Angeles - change if needed
+
+[build]
+  # Use nixpacks to auto-detect Python
+  builder = "nixpacks"
+
+[env]
+  PORT = "8000"
+  PYTHON_VERSION = "3.11.0"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0  # Scale to zero when idle (free tier)
+  processes = ["app"]
+
+  # Health check endpoint
+  [[http_service.checks]]
+    grace_period = "30s"
+    interval = "15s"
+    method = "GET"
+    timeout = "5s"
+    path = "/health"
+
+# VM Resources - Optimized for free tier
+[[vm]]
+  memory = "1gb"  # Free tier allows 1GB shared VMs
+  cpu_kind = "shared"
+  cpus = 1
+
+# Secrets (set via flyctl CLI):
+# flyctl secrets set GROQ_API_KEY=your_key_here
