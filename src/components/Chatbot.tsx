@@ -49,6 +49,13 @@ export default function Chatbot() {
         scrollToBottom();
     }, [messages]);
 
+    // Wake up the backend when the component mounts
+    useEffect(() => {
+        // Send a silent background request to wake up the Hugging Face space
+        fetch("https://isuruig-portfolio-chatbot-backend.hf.space/health")
+            .catch((err) => console.log("Backend wake-up ping failed:", err));
+    }, []);
+
     const handleSend = async (messageText?: string) => {
         const text = messageText || input.trim();
         if (!text || isLoading) return;
