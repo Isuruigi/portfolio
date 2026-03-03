@@ -47,3 +47,6 @@ backend/*.pyc
 backend/venv/
 *.pyc
 __pycache__/
+
+# Deployment Guides
+backend/*.md
