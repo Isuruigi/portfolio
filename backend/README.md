@@ -1,3 +1,12 @@
+---
+title: Portfolio Chatbot Backend
+emoji: 🤖
+colorFrom: blue
+colorTo: purple
+sdk: docker
+pinned: false
+---
+
 # Vira - Portfolio AI Chatbot Backend
 
 AI-powered chatbot backend for Isuru's portfolio using LangChain RAG with Groq LLM.
