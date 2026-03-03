@@ -63,61 +63,96 @@
     },
     "projects": [
         {
-            "name": "Sri Lankan Market Intelligence Agent",
+            "name": "PersonaPlex: Full-Duplex Voice AI Agent",
             "status": "Completed",
-            "description": "AI-powered market intelligence system analyzing Sri Lankan economic indicators with multi-agent LangChain system and custom RAG architecture.",
+            "description": "A production-ready voice AI agent that answers real phone calls with sub-second latency. Features robust speech-to-text with end-of-speech detection and 100% customizable personas.",
             "tech_stack": [
-                "LangChain",
-                "Groq",
-                "RAG",
                 "Python",
-                "SentenceTransformers",
+                "Twilio",
+                "Deepgram STT",
+                "OpenAI",
+                "Edge TTS",
                 "FastAPI"
             ],
             "achievements": [
-                "Production-ready LangChain agent implementation",
+                "Sub-second latency for voice responses",
+                "Robust speech-to-text with end-of-speech detection",
+                "100% customizable personas",
+                "Full-duplex conversation handling via Twilio"
+            ],
+            "github": "https://github.com/Isuruigi/personaplex-agent"
+        },
+        {
+            "name": "Real-Time AI Research Agent",
+            "status": "Completed",
+            "description": "Agentic system with autonomous web search, custom RAG, and automatic source citations. Hosted on Hugging Face Spaces with robust error handling and lazy initialization.",
+            "tech_stack": [
+                "LangGraph",
+                "FastAPI",
+                "RAG",
+                "Multi-Agent",
+                "Python"
+            ],
+            "achievements": [
+                "Autonomous web search capabilities",
+                "Custom RAG with source citations",
+                "Robust error handling during research",
+                "Lazy initialization for efficient deployment"
+            ],
+            "github": "https://github.com/Isuruigi/ai-research-agent"
+        },
+        {
+            "name": "Cost-Aware Fraud Detection System",
+            "status": "Completed",
+            "description": "Production ML system optimized for business metrics (cost of false positives vs. false negatives). Features MLflow tracking, automated evaluation, and 92% test coverage.",
+            "tech_stack": [
+                "XGBoost",
+                "MLflow",
+                "Cost-Aware ML",
+                "CI/CD",
+                "Python"
+            ],
+            "achievements": [
+                "End-to-end ML pipeline from features to production",
+                "Optimization for business metrics and costs",
+                "92% test coverage and MLflow tracking",
+                "Production deployment with monitoring"
+            ],
+            "github": "https://github.com/Isuruigi/fraud-detection-system"
+        },
+        {
+            "name": "Sri Lankan Market Intelligence Agent",
+            "status": "Completed",
+            "description": "Multi-agent LangChain system with custom RAG for real-time market analysis. Production-deployed on GCP with monitoring and automated failover.",
+            "tech_stack": [
+                "LangChain",
+                "RAG",
+                "Multi-Agent",
+                "GCP",
+                "FastAPI",
+                "Python"
+            ],
+            "achievements": [
+                "Production-ready LangChain agent implementation on GCP",
                 "Real-time processing of economic indicators",
-                "Safe AST-based calculator integration",
-                "Intelligent query handling with RAG"
+                "Monitoring and automated failover",
+                "Intelligent query handling with custom RAG"
             ],
             "github": "https://github.com/Isuruigi/sl-market-agent"
         },
         {
-            "name": "Multi-Modal Crypto Intelligence System",
+            "name": "ML Monitoring & Drift Detection System",
             "status": "Completed",
-            "description": "AI-powered trading signal generator with multi-agent architecture including Whale Tracker, Orderbook Analyzer, Sentiment Analyzer, and LLM Coordinator.",
+            "description": "End-to-end ML monitoring pipeline with automated data drift detection alerts and real-time visualization dashboards.",
             "tech_stack": [
-                "LangChain",
-                "Multi-Agent",
-                "FinBERT",
-                "FastAPI",
-                "Redis",
-                "Docker",
-                "WebSocket"
-            ],
-            "achievements": [
-                "Multi-agent architecture with 4 specialized agents",
-                "Real-time trading signal generation",
-                "WebSocket support for live updates",
-                "Docker-ready deployment with Redis caching"
-            ],
-            "github": "https://github.com/Isuruigi/crypto-intelligence-system"
-        },
-        {
-            "name": "ML Monitoring System",
-            "status": "Completed",
-            "description": "Production-ready ML monitoring with automated drift detection and real-time dashboard.",
-            "tech_stack": [
-                "Docker",
-                "FastAPI",
-                "MLflow",
+                "Python",
                 "Drift Detection",
-                "Prometheus",
-                "Grafana",
-                "CI/CD"
+                "AIOps",
+                "Monitoring",
+                "Docker"
             ],
             "achievements": [
-                "Automated model drift detection",
+                "Automated model drift detection and alerts",
                 "Real-time monitoring dashboard",
                 "Self-healing pipelines with alerts",
                 "Docker-ready with CI/CD integration"
@@ -125,24 +160,63 @@
             "github": "https://github.com/Isuruigi/ml-monitoring-system"
         },
         {
-            "name": "Fraud Detection System",
+            "name": "Telco Churn Prediction Pipeline",
             "status": "Completed",
-            "description": "End-to-end ML system predicting fraudulent transactions with production deployment and drift detection.",
+            "description": "End-to-end ML system from feature engineering to production deployment — validated predictions driving business decisions.",
             "tech_stack": [
                 "PyTorch",
-                "scikit-learn",
-                "FastAPI",
+                "MLOps",
                 "Docker",
-                "Drift Detection",
-                "MLOps"
+                "CI/CD",
+                "Python"
             ],
             "achievements": [
-                "End-to-end ML pipeline from features to production",
-                "Drift detection and automated retraining",
-                "Business-validated predictions",
-                "Production deployment with monitoring"
+                "End-to-end ML pipeline creation",
+                "Business-validated predictions driving decisions",
+                "Production deployment with automated CI/CD",
+                "Comprehensive MLOps integration"
             ],
-            "github": "https://github.com/Isuruigi/fraud-detection-system"
+            "github": "https://github.com/Isuruigi/telco-churn-production"
+        },
+        {
+            "name": "Multi-Modal Crypto Intelligence System",
+            "status": "Completed",
+            "description": "Real-time sentiment orchestration and trading signal generation with sub-2s latency. AIOps integration for anomaly detection.",
+            "tech_stack": [
+                "Multi-Agent",
+                "AIOps",
+                "Real-time Sentiment Analysis",
+                "Python",
+                "FastAPI",
+                "WebSocket"
+            ],
+            "achievements": [
+                "Multi-agent architecture with specialized agents",
+                "Real-time trading signal generation with sub-2s latency",
+                "AIOps integration for anomaly detection",
+                "Docker-ready deployment with WebSocket support"
+            ],
+            "github": "https://github.com/Isuruigi/crypto-intelligence-system"
+        },
+        {
+            "name": "MediAgent SL: Multilingual Agentic Healthcare Navigator",
+            "status": "Future Project",
+            "description": "A 7-agent hierarchical system on LangGraph 1.0 with MCP for FHIR R4 clinical data. Intended to triage OPD patients and produce trilingual medical intake.",
+            "tech_stack": [
+                "LangGraph",
+                "Python",
+                "MCP",
+                "FastAPI",
+                "PostgreSQL",
+                "ChromaDB"
+            ],
+            "achievements": [
+                "Multi-Agent system with trilingual support (Sinhala, Tamil, English)",
+                "Scalable triage engine handling dengue outbreak demand spikes",
+                "Graceful fallback states and pessimistic routing for emergencies",
+                "Dual output: patient explanation & clinical JSON (ICD-10/LOINC)"
+            ],
+            "github": "future"
         }
     ],
     "experience": [
@@ -197,6 +271,10 @@
         }
     ],
     "certifications": [
+        "Databricks Accredited AI Agent Fundamentals - Databricks",
+        "Databricks Accredited Generative AI Fundamentals - Databricks",
+        "Qdrant Essentials - Qdrant",
+        "AI Agent Fundamentals with Azure AI Foundry - Microsoft",
         "Oracle Cloud Infrastructure 2025 Certified AI Foundations Associate (Official)",
         "AI Engineer for Data Scientists Associate - DataCamp",
         "Python Data Associate - DataCamp",
