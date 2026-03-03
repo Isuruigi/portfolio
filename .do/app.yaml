@@ -1,0 +1,49 @@
+name: portfolio-chatbot-backend
+region: nyc
+
+services:
+  - name: backend
+    github:
+      repo: Isuruigi/portfolio
+      branch: main
+      deploy_on_push: true
+    
+    # Source configuration
+    source_dir: /backend
+    
+    # Build configuration
+    build_command: pip install -r requirements.txt
+    
+    # Run configuration
+    run_command: uvicorn main:app --host 0.0.0.0 --port 8080
+    
+    # Environment
+    envs:
+      - key: PORT
+        value: "8080"
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+      - key: GROQ_API_KEY
+        type: SECRET
+        # You'll set this in the DigitalOcean dashboard
+    
+    # Instance configuration
+    instance_count: 1
+    instance_size_slug: basic-xs  # 512MB RAM - covered by free tier/credits
+    
+    # Health check
+    health_check:
+      http_path: /health
+      initial_delay_seconds: 30
+      period_seconds: 10
+      timeout_seconds: 5
+      success_threshold: 1
+      failure_threshold: 3
+    
+    # HTTP configuration
+    http_port: 8080
+    
+    # Routes
+    routes:
+      - path: /
+        preserve_path_prefix: true
