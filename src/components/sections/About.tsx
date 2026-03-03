@@ -84,7 +84,7 @@ export default function About() {
                         </p>
 
                         <p className="text-lg text-muted leading-relaxed">
-                            I focus on AI systems that actually work in production—not just notebook demos.
+                            I focus on AI systems that actually work in production not just notebook demos.
                             From multi-agent LangChain architectures to automated MLOps pipelines with drift detection,
                             I build systems that handle real traffic and self-heal when things break.
                         </p>

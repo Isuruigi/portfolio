@@ -127,7 +127,7 @@ export default function Hero() {
                         >
                             <span className="text-foreground font-medium">I Ship AI Systems That Actually Work in Production.</span>{" "}
                             Building production-first ML systems with PyTorch, LangChain, and MLOps expertise.
-                            Not just models—deployed systems that scale.
+                            Not just models deployed systems that scale.
                         </motion.p>
 
                         {/* Key Metrics */}
