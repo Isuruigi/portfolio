@@ -16,7 +16,7 @@ const infoCards = [
         title: "Education",
         text: "BSc IT & Management (Hons)",
         subtext: "University of Colombo",
-        badge: "3rd Year • 2023-2027",
+        badge: "Final Year • 2023-2027",
         additional: "BIT, UCSC (2023-2026)",
     },
     {
@@ -79,19 +79,23 @@ export default function About() {
                         </p>
 
                         <p className="text-lg text-muted leading-relaxed">
-                            Third year at University of Colombo (IT & Management Hons | Applied Statistics & Data Science),
+                            Final-year at University of Colombo (IT & Management Hons | Applied Statistics & Data Science),
                             building production AI systems where statistical rigor meets MLOps and AIOps.
                         </p>
 
                         <p className="text-lg text-muted leading-relaxed">
-                            I focus on AI systems that actually work in production not just notebook demos.
-                            From multi-agent LangChain architectures to automated MLOps pipelines with drift detection,
+                            Currently <span className="text-foreground font-medium">Technical Assistant on the BuildrLabs.ai Agentic AI Bootcamp</span>, supporting engineers through labs covering LLMs, RAG, LangGraph/CrewAI agents, custom MCP servers, Kubernetes, and full production observability with Prometheus, Grafana, and OpenTelemetry.
+                        </p>
+
+                        <p className="text-lg text-muted leading-relaxed">
+                            I focus on AI systems that actually work in production, not just notebook demos.
+                            From multi-agent architectures and n8n automation pipelines to MLOps with drift detection,
                             I build systems that handle real traffic and self-heal when things break.
                         </p>
 
                         <p className="text-lg text-muted leading-relaxed">
                             <span className="text-foreground font-medium">Open source contributor</span> to LangChain,
-                            PyTorch, Hugging Face Transformers, and MLflow—helping thousands of ML engineers deploy
+                            PyTorch, Hugging Face Transformers, and MLflow, helping thousands of ML engineers deploy
                             reliable systems at scale.
                         </p>
                     </motion.div>

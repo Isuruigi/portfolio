@@ -6,7 +6,7 @@ import { Star, Info } from "lucide-react";
 import TechIcon from "@/components/ui/TechIcon";
 
 type SkillLevel = "Proficient" | "Intermediate" | "Familiar";
-type Category = "Deep Learning" | "LLMs & Agents" | "MLOps" | "Cloud ML" | "Data Science" | "Soft Skills";
+type Category = "Deep Learning" | "LLMs & Agents" | "MLOps" | "Cloud ML" | "Data Science" | "Automation" | "Soft Skills";
 
 interface Technology {
     name: string;
@@ -20,33 +20,37 @@ interface Technology {
 const technologies: Technology[] = [
     // Deep Learning Frameworks
     { name: "pytorch", displayName: "PyTorch", level: "Proficient", stars: 4, category: "Deep Learning", description: "Primary DL Framework" },
-    { name: "tensorflow", displayName: "TensorFlow", level: "Intermediate", stars: 3, category: "Deep Learning", description: "Neural Networks" },
-    { name: "keras", displayName: "Keras", level: "Intermediate", stars: 3, category: "Deep Learning", description: "High-Level API" },
     { name: "pytorch", displayName: "PEFT (LoRA)", level: "Intermediate", stars: 3, category: "Deep Learning", description: "Model Fine-Tuning" },
 
     // LLMs & Multi-Agent Systems
     { name: "langchain", displayName: "LangChain", level: "Proficient", stars: 4, category: "LLMs & Agents", description: "Multi-Agent Orchestration" },
+    { name: "langgraph", displayName: "LangGraph", level: "Proficient", stars: 4, category: "LLMs & Agents", description: "Stateful Agent Workflows" },
+    { name: "crewai", displayName: "CrewAI", level: "Intermediate", stars: 3, category: "LLMs & Agents", description: "Multi-Agent Framework" },
+    { name: "mcp", displayName: "MCP", level: "Intermediate", stars: 3, category: "LLMs & Agents", description: "Model Context Protocol" },
     { name: "huggingface", displayName: "Transformers", level: "Intermediate", stars: 3, category: "LLMs & Agents", description: "Pre-trained Models" },
     { name: "openai", displayName: "OpenAI API", level: "Intermediate", stars: 3, category: "LLMs & Agents", description: "GPT Integration" },
     { name: "anthropic", displayName: "Anthropic Claude", level: "Intermediate", stars: 3, category: "LLMs & Agents", description: "Claude API" },
-    { name: "pinecone", displayName: "Pinecone", level: "Familiar", stars: 2, category: "LLMs & Agents", description: "Vector Database" },
+    { name: "groq", displayName: "Groq", level: "Proficient", stars: 4, category: "LLMs & Agents", description: "Fast LLM Inference" },
+    { name: "qdrant", displayName: "Qdrant", level: "Proficient", stars: 4, category: "LLMs & Agents", description: "Vector Database" },
+    { name: "twilio", displayName: "Twilio", level: "Intermediate", stars: 3, category: "LLMs & Agents", description: "Voice AI Telephony" },
+    { name: "deepgram", displayName: "Deepgram", level: "Intermediate", stars: 3, category: "LLMs & Agents", description: "Speech-to-Text" },
 
     // MLOps & Production
     { name: "fastapi", displayName: "FastAPI", level: "Proficient", stars: 4, category: "MLOps", description: "ML API Development" },
     { name: "docker", displayName: "Docker", level: "Proficient", stars: 4, category: "MLOps", description: "ML Containerization" },
     { name: "kubernetes", displayName: "Kubernetes", level: "Intermediate", stars: 3, category: "MLOps", description: "Model Orchestration" },
     { name: "mlflow", displayName: "MLflow", level: "Intermediate", stars: 3, category: "MLOps", description: "Experiment Tracking" },
-    { name: "weightsandbiases", displayName: "Weights & Biases", level: "Intermediate", stars: 3, category: "MLOps", description: "ML Monitoring" },
-    { name: "dvc", displayName: "DVC", level: "Familiar", stars: 2, category: "MLOps", description: "Data Version Control" },
+    { name: "langsmith", displayName: "LangSmith", level: "Intermediate", stars: 3, category: "MLOps", description: "LLM Observability" },
+    { name: "prometheus", displayName: "Prometheus", level: "Intermediate", stars: 3, category: "MLOps", description: "Metrics & Monitoring" },
+    { name: "grafana", displayName: "Grafana", level: "Intermediate", stars: 3, category: "MLOps", description: "Observability Dashboards" },
     { name: "git", displayName: "Git", level: "Proficient", stars: 4, category: "MLOps", description: "Version Control" },
     { name: "github", displayName: "GitHub", level: "Proficient", stars: 4, category: "MLOps", description: "Code Collaboration" },
     { name: "redis", displayName: "Redis", level: "Familiar", stars: 2, category: "MLOps", description: "Feature Store/Cache" },
-    { name: "onnx", displayName: "ONNX", level: "Familiar", stars: 2, category: "MLOps", description: "Model Optimization" },
 
     // Cloud ML Platforms
     { name: "googlecloud", displayName: "GCP (Vertex AI)", level: "Intermediate", stars: 3, category: "Cloud ML", description: "ML Deployment" },
-    { name: "amazonaws", displayName: "AWS (SageMaker)", level: "Intermediate", stars: 3, category: "Cloud ML", description: "ML Services" },
-    { name: "microsoftazure", displayName: "Azure ML", level: "Familiar", stars: 2, category: "Cloud ML", description: "ML Platform" },
+    { name: "amazonaws", displayName: "AWS (Bedrock)", level: "Intermediate", stars: 3, category: "Cloud ML", description: "ML Services" },
+    { name: "microsoftazure", displayName: "Azure OpenAI", level: "Familiar", stars: 2, category: "Cloud ML", description: "ML Platform" },
 
     // Data Science & Processing
     { name: "python", displayName: "Python", level: "Proficient", stars: 4, category: "Data Science", description: "Primary Language" },
@@ -56,10 +60,16 @@ const technologies: Technology[] = [
     { name: "jupyter", displayName: "Jupyter", level: "Proficient", stars: 4, category: "Data Science", description: "Interactive Notebooks" },
     { name: "xgboost", displayName: "XGBoost", level: "Intermediate", stars: 3, category: "Data Science", description: "Gradient Boosting" },
     { name: "r", displayName: "R", level: "Intermediate", stars: 3, category: "Data Science", description: "Statistical Analysis" },
-    { name: "plotly", displayName: "Plotly", level: "Intermediate", stars: 3, category: "Data Science", description: "Interactive Viz" },
     { name: "postgresql", displayName: "PostgreSQL", level: "Intermediate", stars: 3, category: "Data Science", description: "Data Storage" },
-    { name: "mongodb", displayName: "MongoDB", level: "Intermediate", stars: 3, category: "Data Science", description: "Document DB" },
+    { name: "neo4j", displayName: "Neo4j", level: "Intermediate", stars: 3, category: "Data Science", description: "Graph Database" },
+    { name: "apachekafka", displayName: "Apache Kafka", level: "Intermediate", stars: 3, category: "Data Science", description: "Event Streaming" },
+    { name: "apacheairflow", displayName: "Apache Airflow", level: "Intermediate", stars: 3, category: "Data Science", description: "Workflow Orchestration" },
     { name: "visualstudiocode", displayName: "VS Code", level: "Proficient", stars: 4, category: "Data Science", description: "Development" },
+
+    // Automation (n8n, Make, Zapier)
+    { name: "n8n", displayName: "n8n", level: "Proficient", stars: 4, category: "Automation", description: "Workflow Automation" },
+    { name: "make", displayName: "Make", level: "Familiar", stars: 2, category: "Automation", description: "Visual Automation" },
+    { name: "zapier", displayName: "Zapier", level: "Familiar", stars: 2, category: "Automation", description: "App Integrations" },
 
     // Soft Skills
     { name: "brain", displayName: "Problem Solving", level: "Proficient", stars: 4, category: "Soft Skills", description: "Analyzing complex problems" },
@@ -69,7 +79,7 @@ const technologies: Technology[] = [
     { name: "learning", displayName: "Continuous Learning", level: "Proficient", stars: 4, category: "Soft Skills", description: "Industry trends" },
 ];
 
-const categories: (Category | "All")[] = ["All", "Deep Learning", "LLMs & Agents", "MLOps", "Cloud ML", "Data Science", "Soft Skills"];
+const categories: (Category | "All")[] = ["All", "Deep Learning", "LLMs & Agents", "MLOps", "Cloud ML", "Data Science", "Automation", "Soft Skills"];
 
 const categoryColors: Record<Category, string> = {
     "Deep Learning": "from-blue-500/5 to-blue-500/10",
@@ -77,12 +87,13 @@ const categoryColors: Record<Category, string> = {
     "MLOps": "from-green-500/5 to-green-500/10",
     "Cloud ML": "from-orange-500/5 to-orange-500/10",
     "Data Science": "from-teal-500/5 to-teal-500/10",
+    "Automation": "from-indigo-500/5 to-indigo-500/10",
     "Soft Skills": "from-pink-500/5 to-pink-500/10",
 };
 
 const stats = [
-    { value: "38+", label: "Technical Skills" },
-    { value: "12", label: "Production Ready" },
+    { value: "44+", label: "Technical Skills" },
+    { value: "16", label: "Production Ready" },
     { value: "5", label: "Soft Skills" },
 ];
 

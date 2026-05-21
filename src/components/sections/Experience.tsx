@@ -20,6 +20,24 @@ interface Experience {
 const experiences: Experience[] = [
     {
         id: 1,
+        title: "Technical Assistant, Agentic AI Bootcamp",
+        company: "Buildr Labs",
+        location: "Colombo, Sri Lanka (Hatch Works)",
+        period: "May 2026 - Present",
+        current: true,
+        description: "Technical Assistant on BuildrLabs.ai's 16-week Agentic AI Bootcamp (May 2026 Cohort), training engineers to ship production-grade agentic AI systems at Hatch Works, Colombo.",
+        highlights: [
+            "In-person lab support every Saturday, debugging across LLMs, RAG pipelines, agent workflows, and MCP servers",
+            "Async Discord support throughout the week, unblocking participants on technical issues outside class hours",
+            "Reviewing project submissions and commit history alongside the instructor team",
+            "Curriculum: LangGraph/CrewAI agents, 4-tier memory MCP servers, Kubernetes, multi-cloud deployment (AWS Bedrock, Vertex AI, Azure OpenAI), and cognitive observability with Prometheus, Grafana, and OTel",
+        ],
+        skills: ["LangGraph", "CrewAI", "MCP", "Kubernetes", "LangSmith", "LangFuse", "Prometheus", "OTel", "RAG", "Docker"],
+        icon: Briefcase,
+        type: "freelance",
+    },
+    {
+        id: 3,
         title: "Open Source Contributor",
         company: "Open Source Community",
         location: "Remote",
@@ -37,7 +55,7 @@ const experiences: Experience[] = [
         type: "opensource",
     },
     {
-        id: 2,
+        id: 4,
         title: "ML Systems Top 3 Winner",
         company: "Zuu Crew AI",
         location: "Remote",
@@ -56,7 +74,7 @@ const experiences: Experience[] = [
         type: "freelance",
     },
     {
-        id: 3,
+        id: 5,
         title: "Freelance AI Engineer",
         company: "Self Employed",
         location: "Remote",
@@ -74,13 +92,13 @@ const experiences: Experience[] = [
         type: "freelance",
     },
     {
-        id: 4,
+        id: 6,
         title: "BSc IT & Management Student",
         company: "University of Colombo",
         location: "Colombo, Sri Lanka",
         period: "May 2023 - May 2027",
         current: true,
-        description: "Third-year student specializing in Applied Statistics & Data Science, with focus on production ML systems. Building AI systems where statistical rigor meets MLOps and AIOps. Also pursuing BIT at University of Colombo School of Computing (Oct 2023 - Oct 2026).",
+        description: "Final-year student specializing in Applied Statistics & Data Science, with focus on production ML systems. Building AI systems where statistical rigor meets MLOps and AIOps. Also pursuing BIT at University of Colombo School of Computing (Oct 2023 - Oct 2026).",
         highlights: [
             "Specialization: Applied Statistics & Data Science",
             "Focus: Machine Learning Engineering & Production ML Systems",
