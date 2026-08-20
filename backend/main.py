@@ -51,6 +51,13 @@ qa_chain = None
 vector_store = None
 conversations = {}
 
+# Model is configurable so a Groq retirement can be fixed without a code change
+GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
+
+# Real health state: whether the LLM actually answered, not just whether objects exist
+llm_ok = False
+last_error = None
+
 # Rate limiting
 rate_limit_store = defaultdict(list)
 
@@ -84,7 +91,19 @@ PORTFOLIO_KEYWORDS = [
     "deep learning", "mlops", "fastapi", "docker", "cloud", "gcp",
     "aws", "data", "engineer", "developer", "freelance", "open source",
     "crypto", "market", "fraud", "monitoring", "email", "linkedin",
-    "location", "colombo", "sri lanka", "university", "student"
+    "location", "colombo", "sri lanka", "university", "student",
+    # Project names - these were missing, so "Tell me about NEXUS" was deflected
+    "nexus", "personaplex", "graphrag", "rag", "exam portal", "itm",
+    "research agent", "churn", "telco", "lora", "adaptive", "medicore",
+    "kapruka", "n8n", "automation", "workflow", "voice", "agent",
+    # Employers / programs
+    "veracity", "buildr", "bootcamp", "zuu crew", "teaching", "assistant",
+    # Stack terms
+    "llm", "vllm", "langgraph", "qdrant", "neo4j", "redpanda", "dragonfly",
+    "kubernetes", "vector", "graph", "tech", "stack", "tool", "framework",
+    # Common phrasings that carry no other keyword
+    "service", "offer", "hire", "build", "built", "latest", "recent",
+    "current", "who", "what do you", "tell me about", "your"
 ]
 
 def is_portfolio_related(query: str) -> bool:
@@ -233,7 +252,7 @@ def load_portfolio_data() -> List[Document]:
 
 def initialize_chatbot():
     """Initialize the RAG chatbot"""
-    global qa_chain, vector_store
+    global qa_chain, vector_store, llm_ok, last_error
 
     print("[*] Initializing Vira - Portfolio Chatbot...")
 
@@ -262,8 +281,11 @@ def initialize_chatbot():
     print("[+] Vector store created")
 
     # Initialize LLM
+    # Groq retires models periodically (llama-3.3-70b-versatile was decommissioned and
+    # started returning 404 model_not_found). Keep this overridable via env so a future
+    # retirement can be fixed by changing a secret instead of redeploying code.
     llm = ChatGroq(
-        model="llama-3.3-70b-versatile",
+        model=GROQ_MODEL,
         api_key=os.getenv("GROQ_API_KEY"),
         temperature=0.7,
         max_tokens=1024
@@ -321,6 +343,19 @@ Respond as Vira - be helpful and friendly!"""
         verbose=False
     )
 
+    # Probe the model once at startup. Building the chain succeeds even when the
+    # configured model no longer exists, so without this the service reports healthy
+    # and then 500s on every question.
+    try:
+        llm.invoke("ping")
+        llm_ok = True
+        print(f"[+] LLM reachable: {GROQ_MODEL}")
+    except Exception as e:
+        llm_ok = False
+        last_error = f"{type(e).__name__}: {e}"
+        print(f"[!] LLM PROBE FAILED for '{GROQ_MODEL}': {last_error}")
+        print("[!] /chat will return 500 until this is resolved.")
+
     print("[+] Vira initialized!")
     print("[+] Chatbot ready!")
 
@@ -345,11 +380,17 @@ async def root():
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
+    # Previously this reported "healthy" purely because the objects existed, so a
+    # decommissioned model looked fine while every question returned a 500.
+    healthy = vector_store is not None and qa_chain is not None and llm_ok
     return {
-        "status": "healthy",
+        "status": "healthy" if healthy else "degraded",
         "assistant": "Vira",
         "vector_store_loaded": vector_store is not None,
         "qa_chain_loaded": qa_chain is not None,
+        "llm_ok": llm_ok,
+        "model": GROQ_MODEL,
+        "last_error": last_error,
         "timestamp": datetime.utcnow().isoformat()
     }
 
@@ -435,7 +476,9 @@ async def chat(request: ChatRequest, req: Request):
         )
         
     except Exception as e:
-        print(f"[!] Error in chat: {e}")
+        global last_error
+        last_error = f"{type(e).__name__}: {e}"
+        print(f"[!] Error in chat ({GROQ_MODEL}): {last_error}")
         raise HTTPException(
             status_code=500,
             detail="Sorry, I encountered an error. Please try again."

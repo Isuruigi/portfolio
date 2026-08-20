@@ -1,7 +1,7 @@
 {
     "personal_info": {
         "name": "Isuru (IG) Chathuranga",
-        "title": "AI/ML Engineer | TA @ Buildr Labs",
+        "title": "AI/ML Engineer @ Veracity Digital | TA @ Buildr Labs",
         "location": "Colombo, Sri Lanka",
         "availability": "Open to remote opportunities",
         "email": "isuruigic@gmail.com",
@@ -9,7 +9,7 @@
         "github": "https://github.com/Isuruigi",
         "twitter": "https://x.com/Isuru_ig",
         "portfolio": "https://isuruig.com",
-        "summary": "Final-year IT & Management (Hons) student at University of Colombo specializing in Applied Statistics & Data Science. Currently Technical Assistant on BuildrLabs.ai's Agentic AI Bootcamp. Building production AI systems, agentic workflows, and automation pipelines with PyTorch, LangGraph, and n8n. Open source contributor to LangChain, PyTorch, Hugging Face, and MLflow."
+        "summary": "AI/ML Engineer focused on shipping systems that hold up in production, not just notebooks. Currently an AI/ML Engineer at Veracity Digital and Technical Assistant on BuildrLabs.ai's AI Bootcamps, supporting cohort participants through labs and async Discord help while contributing to a curriculum covering LLMs, agents, MCP, Kubernetes, and full observability for production AI. Studying IT & Management (Hons) at University of Colombo, specializing in Artificial Intelligence, Machine Learning & Data Science. Open source contributor to LangChain, PyTorch, Hugging Face, and MLflow."
     },
     "skills": {
         "deep_learning": {
@@ -237,7 +237,7 @@
                 "Redpanda streaming + Dragonfly cache for low latency",
                 "Multi-modal input support"
             ],
-            "github": "https://github.com/Isuruigi/nexus-graphrag"
+            "github": "Private (in development)"
         },
         {
             "name": "ITM Exam Portal",
@@ -255,7 +255,7 @@
                 "End-to-end exam lifecycle management",
                 "Built and shipped solo under real deadline pressure"
             ],
-            "github": "https://github.com/Isuruigi/itm-exam-portal"
+            "github": "Private repository"
         },
         {
             "name": "AI-Powered Automation Workflows (n8n)",
@@ -276,10 +276,23 @@
                 "Human-in-the-loop checkpoints at critical approval stages",
                 "LLM orchestration with real-world tool integrations"
             ],
-            "github": "https://github.com/Isuruigi/n8n-automation-workflows"
+            "github": "Private repository"
         }
     ],
     "experience": [
+        {
+            "title": "AI/ML Engineer",
+            "company": "Veracity Digital",
+            "period": "August 2026 - Present",
+            "current": true,
+            "description": "Building and shipping production AI systems, working across LLM serving, multi-agent architectures, and the infrastructure that keeps them reliable under real traffic.",
+            "contributions": [
+                "Production AI systems built with PyTorch and served through vLLM for high-throughput inference",
+                "Multi-agent architectures applied to real-world business workflows",
+                "Deployment, monitoring, and reliability for models running against live traffic"
+            ],
+            "location": "Colombo, Sri Lanka (Hybrid)"
+        },
         {
             "title": "Technical Assistant, Agentic AI Bootcamp",
             "company": "Buildr Labs",
@@ -306,10 +319,10 @@
             ]
         },
         {
-            "title": "ML Systems Finalist",
+            "title": "Machine Learning Finalist",
             "company": "Zuu Crew AI",
-            "period": "October 2025 - December 2025",
-            "description": "Selected as Top 10 Finalist out of 290 participants in the intensive 13-week 'Build Production-Ready Machine Learning Systems' program.",
+            "period": "September 2025 - December 2025",
+            "description": "Selected as Top 3 Finalist out of 290 participants in the intensive 13-week 'Build Production-Ready Machine Learning Systems' program.",
             "achievements": [
                 "Built end-to-end ML pipelines with MLflow integration for experiment tracking",
                 "Implemented scalable data processing workflows using Apache PySpark and Airflow",
@@ -320,20 +333,21 @@
         {
             "title": "Freelance AI Engineer",
             "company": "Self Employed",
-            "period": "June 2024 - Present",
+            "period": "June 2024 - August 2026",
             "description": "Building production-ready AI/ML systems for diverse applications including market intelligence, predictive analytics, and multi-agent architectures.",
             "achievements": [
                 "Deployed production ML systems on AWS, GCP, and Azure",
                 "Built multi-agent LangChain architectures for real-time processing",
                 "Implemented automated MLOps pipelines with drift detection"
-            ]
+            ],
+            "current": false
         }
     ],
     "education": [
         {
             "degree": "BSc(Hons) IT & Management",
             "institution": "University of Colombo",
-            "specialization": "Applied Statistics & Data Science",
+            "specialization": "Artificial Intelligence, Machine Learning & Data Science",
             "period": "May 2023 - May 2027",
             "status": "Final Year"
         },
@@ -380,7 +394,7 @@
         },
         {
             "question": "Are you currently a student?",
-            "answer": "Yes, I'm a final-year student at University of Colombo pursuing dual degrees in IT & Management (with Applied Statistics & Data Science specialization) and BIT from UCSC. I'm also currently the Technical Assistant on BuildrLabs.ai's Agentic AI Bootcamp. I've been building production ML systems and contributing to open source alongside my studies."
+            "answer": "Yes, I'm a final-year student at University of Colombo pursuing dual degrees in IT & Management (specializing in Artificial Intelligence, Machine Learning & Data Science) and BIT from UCSC. I'm also an AI/ML Engineer at Veracity Digital and the Technical Assistant on BuildrLabs.ai's AI Bootcamps. I've been building production ML systems and contributing to open source alongside my studies."
         },
         {
             "question": "What makes you different from other AI/ML candidates?",
@@ -396,25 +410,47 @@
             "name": "Agentic AI Assistants",
             "subhead": "MULTI-CHANNEL CHATBOTS",
             "description": "AI assistants that handle WhatsApp, web chat, and email 24/7. Custom RAG over your private docs, human-in-the-loop checkpoints, and analytics built in.",
-            "use_cases": ["Customer support automation", "Internal knowledge base chatbots", "Lead qualification on WhatsApp", "Document Q&A systems"]
+            "use_cases": [
+                "Customer support automation",
+                "Internal knowledge base chatbots",
+                "Lead qualification on WhatsApp",
+                "Document Q&A systems"
+            ]
         },
         {
             "name": "Voice AI Agents",
             "subhead": "24/7 CALL HANDLING",
             "description": "Full-duplex voice agents on Twilio + Deepgram + OpenAI with sub-second latency. Handle bookings, FAQs, and routing in English, Sinhala, or Tamil.",
-            "use_cases": ["24/7 phone line handling", "Appointment booking automation", "Multilingual call routing", "FAQ handling for inbound calls"]
+            "use_cases": [
+                "24/7 phone line handling",
+                "Appointment booking automation",
+                "Multilingual call routing",
+                "FAQ handling for inbound calls"
+            ]
         },
         {
             "name": "Workflow Automation",
             "subhead": "n8n / MAKE / ZAPIER",
             "description": "Production automation pipelines that connect LLMs to real-world tools. Payment verification with bank reconciliation, Meta Ads decisioning agents, and multi-step approvals with human checkpoints.",
-            "use_cases": ["Payment verification pipelines", "Meta Ads campaign automation", "Multi-step approval workflows", "CRM and database automation", "Document processing pipelines"]
+            "use_cases": [
+                "Payment verification pipelines",
+                "Meta Ads campaign automation",
+                "Multi-step approval workflows",
+                "CRM and database automation",
+                "Document processing pipelines"
+            ]
         },
         {
             "name": "Custom ML & Knowledge Systems",
             "subhead": "RAG / GRAPHRAG / DEEP LEARNING",
             "description": "Custom models trained on your data for churn prediction, fraud detection, or medical imaging. Plus RAG/GraphRAG knowledge engines that let your team query private data in plain language.",
-            "use_cases": ["Customer churn prediction", "Fraud detection pipelines", "Internal knowledge search (RAG)", "Multi-hop reasoning over company data (GraphRAG)", "Custom ML model training and deployment"]
+            "use_cases": [
+                "Customer churn prediction",
+                "Fraud detection pipelines",
+                "Internal knowledge search (RAG)",
+                "Multi-hop reasoning over company data (GraphRAG)",
+                "Custom ML model training and deployment"
+            ]
         }
     ],
     "availability": {

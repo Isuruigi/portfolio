@@ -13,7 +13,7 @@ AI-powered chatbot backend for Isuru's portfolio using LangChain RAG with Groq L
 
 ## Features
 - 🤖 RAG-based conversational AI
-- ⚡ Fast responses with Groq LLM (Llama 3.3)
+- ⚡ Fast responses with Groq LLM (openai/gpt-oss-120b, set via GROQ_MODEL)
 - 🔍 FAISS vector store for semantic search
 - 🚀 FastAPI for production-ready API
 
