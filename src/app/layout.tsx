@@ -11,10 +11,16 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Isuru Chathuranga | AI/ML Engineer & MLOps Specialist",
-  description: "AI/ML Engineer shipping production systems with PyTorch, LangChain, and MLOps expertise. Open source contributor to LangChain, PyTorch, and Hugging Face. Specializing in multi-agent systems, LLM engineering, and production ML pipelines. Based in Colombo, Sri Lanka - Remote Ready.",
+  title: "Isuru Chathuranga | AI/ML Engineer @ Veracity Digital",
+  description: "AI/ML Engineer at Veracity Digital and Technical Assistant on BuildrLabs.ai's AI Bootcamps, shipping systems that hold up in production, not just notebooks. Agentic AI, RAG and GraphRAG, multi-agent systems, and MLOps with PyTorch, LangGraph, and vLLM. Based in Colombo, Sri Lanka - Remote Ready.",
+  metadataBase: new URL("https://isuruig.com"),
   keywords: [
     "AI Engineer",
+    "Agentic AI",
+    "LangGraph",
+    "RAG",
+    "GraphRAG",
+    "vLLM",
     "ML Engineer",
     "MLOps",
     "AIOps",
@@ -33,13 +39,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://isuruig.com",
     title: "Isuru Chathuranga | AI/ML Engineer",
-    description: "Shipping production AI systems with PyTorch, LangChain, and MLOps",
+    description: "Shipping AI systems that hold up in production, not just notebooks",
     siteName: "Isuru Chathuranga Portfolio",
   },
   twitter: {
     card: "summary_large_image",
     title: "Isuru Chathuranga | AI/ML Engineer",
-    description: "Production AI systems with PyTorch & LangChain",
+    description: "AI systems that hold up in production, not just notebooks",
   },
   robots: {
     index: true,

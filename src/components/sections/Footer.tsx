@@ -57,7 +57,7 @@ export default function Footer() {
                             Shipping Production AI Systems
                         </p>
                         <p className="text-sm text-muted">
-                            AI/ML Engineer | MLOps Specialist
+                            AI/ML Engineer @ Veracity Digital | TA @ Buildr Labs
                         </p>
                     </motion.div>
 

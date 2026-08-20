@@ -79,12 +79,12 @@ export default function About() {
                         </p>
 
                         <p className="text-lg text-muted leading-relaxed">
-                            Final-year at University of Colombo (IT & Management Hons | Applied Statistics & Data Science),
+                            Final-year at University of Colombo (IT & Management Hons | Artificial Intelligence, Machine Learning & Data Science),
                             building production AI systems where statistical rigor meets MLOps and AIOps.
                         </p>
 
                         <p className="text-lg text-muted leading-relaxed">
-                            Currently <span className="text-foreground font-medium">Technical Assistant on the BuildrLabs.ai Agentic AI Bootcamp</span>, supporting engineers through labs covering LLMs, RAG, LangGraph/CrewAI agents, custom MCP servers, Kubernetes, and full production observability with Prometheus, Grafana, and OpenTelemetry.
+                            Currently <span className="text-foreground font-medium">AI/ML Engineer at Veracity Digital</span>, and <span className="text-foreground font-medium">Technical Assistant on the BuildrLabs.ai Agentic AI Bootcamp</span>, supporting engineers through labs covering LLMs, RAG, LangGraph/CrewAI agents, custom MCP servers, Kubernetes, and full production observability with Prometheus, Grafana, and OpenTelemetry.
                         </p>
 
                         <p className="text-lg text-muted leading-relaxed">

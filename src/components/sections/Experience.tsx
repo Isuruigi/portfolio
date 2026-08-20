@@ -14,10 +14,27 @@ interface Experience {
     highlights: string[];
     skills: string[];
     icon: typeof Code;
-    type: "opensource" | "freelance" | "academic";
+    type: "opensource" | "freelance" | "employment" | "academic";
 }
 
 const experiences: Experience[] = [
+    {
+        id: 0,
+        title: "AI/ML Engineer",
+        company: "Veracity Digital",
+        location: "Colombo, Sri Lanka (Hybrid)",
+        period: "August 2026 - Present",
+        current: true,
+        description: "Building and shipping production AI systems, working across LLM serving, multi-agent architectures, and the infrastructure that keeps them reliable under real traffic.",
+        highlights: [
+            "Production AI systems built with PyTorch and served through vLLM for high-throughput inference",
+            "Multi-agent architectures applied to real-world business workflows",
+            "Deployment, monitoring, and reliability for models running against live traffic",
+        ],
+        skills: ["PyTorch", "vLLM", "Multi-Agent Systems", "Python"],
+        icon: Briefcase,
+        type: "employment",
+    },
     {
         id: 1,
         title: "Technical Assistant, Agentic AI Bootcamp",
@@ -34,7 +51,7 @@ const experiences: Experience[] = [
         ],
         skills: ["LangGraph", "CrewAI", "MCP", "Kubernetes", "LangSmith", "LangFuse", "Prometheus", "OTel", "RAG", "Docker"],
         icon: Briefcase,
-        type: "freelance",
+        type: "employment",
     },
     {
         id: 3,
@@ -56,12 +73,12 @@ const experiences: Experience[] = [
     },
     {
         id: 4,
-        title: "ML Systems Top 3 Winner",
+        title: "Machine Learning Finalist",
         company: "Zuu Crew AI",
         location: "Remote",
-        period: "October 2025 - December 2025",
+        period: "September 2025 - December 2025",
         current: false,
-        description: "🏆 Top 3 Winner out of 290 participants in the intensive 13-week 'Build Production-Ready Machine Learning Systems' bootcamp. Recognized for exceptional performance in building end-to-end production ML systems.",
+        description: "🏆 Top 3 Finalist out of 290 participants in the intensive 13-week 'Build Production-Ready Machine Learning Systems' bootcamp. Recognized for exceptional performance in building end-to-end production ML systems.",
         highlights: [
             "Built end-to-end ML pipelines with MLflow integration for experiment tracking and model versioning",
             "Implemented scalable data processing workflows using Apache PySpark and Airflow orchestration",
@@ -78,8 +95,8 @@ const experiences: Experience[] = [
         title: "Freelance AI Engineer",
         company: "Self Employed",
         location: "Remote",
-        period: "June 2024 - Present",
-        current: true,
+        period: "June 2024 - August 2026",
+        current: false,
         description: "Building production-ready AI/ML systems for diverse applications including market intelligence, predictive analytics, and multi-agent architectures. Specializing in LangChain-based systems, PyTorch deep learning, and end-to-end MLOps pipelines deployed on cloud infrastructure.",
         highlights: [
             "AI-Powered Sri Lankan Market Intelligence Agent - Multi-agent RAG system analyzing economic indicators with automated monitoring on GCP",
@@ -98,9 +115,9 @@ const experiences: Experience[] = [
         location: "Colombo, Sri Lanka",
         period: "May 2023 - May 2027",
         current: true,
-        description: "Final-year student specializing in Applied Statistics & Data Science, with focus on production ML systems. Building AI systems where statistical rigor meets MLOps and AIOps. Also pursuing BIT at University of Colombo School of Computing (Oct 2023 - Oct 2026).",
+        description: "Final-year student specializing in Artificial Intelligence, Machine Learning & Data Science, with focus on production ML systems. Building AI systems where statistical rigor meets MLOps and AIOps. Also pursuing BIT at University of Colombo School of Computing (Oct 2023 - Oct 2026).",
         highlights: [
-            "Specialization: Applied Statistics & Data Science",
+            "Specialization: Artificial Intelligence, Machine Learning & Data Science",
             "Focus: Machine Learning Engineering & Production ML Systems",
             "Research: Statistical Programming & ML Theory",
             "Additional: BIT at UCSC (2023-2026)",
@@ -183,10 +200,12 @@ export default function Experience() {
                                     </p>
 
                                     {/* Highlights */}
+                                    {exp.highlights.length > 0 && (
                                     <div className="mb-4">
                                         <p className="text-sm font-medium text-foreground mb-2">
                                             {exp.type === "opensource" ? "Key Contributions:" :
-                                                exp.type === "freelance" ? "Key Projects:" : "Academic Focus:"}
+                                                exp.type === "employment" ? "Focus Areas:" :
+                                                    exp.type === "freelance" ? "Key Projects:" : "Academic Focus:"}
                                         </p>
                                         <ul className="space-y-2">
                                             {exp.highlights.map((highlight, i) => (
@@ -197,6 +216,7 @@ export default function Experience() {
                                             ))}
                                         </ul>
                                     </div>
+                                    )}
 
                                     {/* Skills */}
                                     <div className="flex flex-wrap gap-2">

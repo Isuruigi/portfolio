@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     Github,
@@ -11,9 +11,11 @@ import {
     GraduationCap
 } from "lucide-react";
 import TechIcon from "@/components/ui/TechIcon";
+import HeroCards from "@/components/sections/HeroCards";
 
 const titles = [
     "AI/ML Engineer",
+    "Agentic AI Engineer",
     "AI Automation Engineer",
     "MLOps Specialist",
     "Multi-Agent Systems Developer",
@@ -38,31 +40,6 @@ const techStack = [
     { name: "postgresql", displayName: "PostgreSQL" },
 ];
 
-type AgentEvent = {
-    icon: string;
-    service: string;
-    serviceColor: string;
-    action: string;
-    meta: string;
-};
-
-const allEvents: AgentEvent[] = [
-    { icon: "🎙", service: "PersonaPlex", serviceColor: "text-emerald-400", action: "handled inbound call", meta: "1.2s · full-duplex · ok" },
-    { icon: "⚙", service: "n8n / payments", serviceColor: "text-amber-300", action: "auto-confirmed Rs 18,500", meta: "conf 0.94 · no human touch" },
-    { icon: "🔗", service: "NEXUS GraphRAG", serviceColor: "text-sky-400", action: "resolved multi-hop query", meta: "5 sources · 230ms" },
-    { icon: "🧠", service: "fraud_v3", serviceColor: "text-rose-300", action: "scored 1,204 transactions", meta: "99.7% recall · drift ok" },
-    { icon: "🎙", service: "PersonaPlex", serviceColor: "text-emerald-400", action: "recovered from caller barge-in", meta: "0.8s recovery · 2 turns" },
-    { icon: "⚙", service: "n8n / meta-ads", serviceColor: "text-amber-300", action: "auto-paused 3 underperforming ads", meta: "ROAS < 1.2 trigger" },
-    { icon: "🔗", service: "NEXUS GraphRAG", serviceColor: "text-sky-400", action: "traversed 14 graph edges", meta: "Company → Region → Pricing" },
-    { icon: "🧠", service: "churn_v2", serviceColor: "text-rose-300", action: "flagged 47 high-risk accounts", meta: "auto-routed to CS team" },
-    { icon: "🎙", service: "PersonaPlex", serviceColor: "text-emerald-400", action: "trilingual routing: SI → EN", meta: "1.4s · seamless handoff" },
-    { icon: "⚙", service: "n8n / whatsapp", serviceColor: "text-amber-300", action: "OCR'd receipt · queued for review", meta: "ref ambiguous · human in loop" },
-    { icon: "🔗", service: "NEXUS GraphRAG", serviceColor: "text-sky-400", action: "synthesized 8 sources", meta: "0.91 confidence · cited" },
-    { icon: "📊", service: "drift_monitor", serviceColor: "text-violet-300", action: "no significant drift in 24h", meta: "all 6 models healthy" },
-];
-
-const TIMESTAMPS = ["just now", "12s ago", "28s ago", "47s ago"];
-
 const fadeInUp = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0 },
@@ -70,29 +47,12 @@ const fadeInUp = {
 
 export default function Hero() {
     const [titleIndex, setTitleIndex] = useState(0);
-    const newUid = () => `e-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-    const [visibleEvents, setVisibleEvents] = useState<(AgentEvent & { uid: string })[]>(() =>
-        allEvents.slice(0, 4).map((ev) => ({ ...ev, uid: newUid() }))
-    );
-    const cursorRef = useRef(4);
 
     useEffect(() => {
         const interval = setInterval(() => {
             setTitleIndex((prev) => (prev + 1) % titles.length);
         }, 3000);
         return () => clearInterval(interval);
-    }, []);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setVisibleEvents((prev) => [
-                { ...allEvents[cursorRef.current % allEvents.length], uid: newUid() },
-                ...prev.slice(0, 3),
-            ]);
-            cursorRef.current++;
-        }, 2800);
-        return () => clearInterval(interval);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const scrollToSection = (id: string) => {
@@ -133,14 +93,23 @@ export default function Hero() {
                             </span>
                         </motion.div>
 
-                        {/* Tagline */}
-                        <motion.p
+                        {/* Tagline with animated underline */}
+                        <motion.div
                             variants={fadeInUp}
                             transition={{ duration: 0.5, delay: 0.08 }}
-                            className="text-base md:text-lg italic text-primary/90 mb-3 font-medium"
+                            className="inline-block mb-4"
                         >
-                            AI that ships.
-                        </motion.p>
+                            <p className="text-base md:text-lg italic text-primary/90 font-medium leading-none">
+                                AI that ships.
+                            </p>
+                            <motion.div
+                                initial={{ scaleX: 0 }}
+                                animate={{ scaleX: 1 }}
+                                transition={{ duration: 0.9, delay: 0.7, ease: "easeOut" }}
+                                style={{ transformOrigin: "left" }}
+                                className="h-px mt-1.5 bg-gradient-to-r from-primary via-primary/60 to-transparent"
+                            />
+                        </motion.div>
 
                         {/* Name */}
                         <motion.h1
@@ -177,8 +146,8 @@ export default function Hero() {
                             transition={{ duration: 0.5, delay: 0.2 }}
                             className="text-lg text-muted max-w-[600px] mb-8 mx-auto lg:mx-0 leading-relaxed"
                         >
-                            <span className="text-foreground font-medium">I Ship AI Systems That Actually Work in Production.</span>{" "}
-                            Building production-first AI systems, agentic workflows, and automation pipelines. Not just models, but deployed systems that scale and self-heal.
+                            <span className="text-foreground font-medium">I ship AI systems that hold up in production, not just notebooks.</span>{" "}
+                            AI/ML Engineer at Veracity Digital, building agentic workflows, RAG systems, and automation pipelines that survive real traffic.
                         </motion.p>
 
                         {/* Key Metrics */}
@@ -258,83 +227,8 @@ export default function Hero() {
 
                 </div>
 
-                {/* Live Agent Activity Feed */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.45 }}
-                    className="mt-14 lg:mt-20"
-                >
-                    <div className="rounded-2xl overflow-hidden border border-slate-800 bg-gradient-to-br from-slate-950 via-slate-950 to-slate-900 shadow-2xl">
-                        {/* Header */}
-                        <div className="flex items-center justify-between px-5 py-3 bg-slate-900/60 border-b border-slate-800">
-                            <div className="flex items-center gap-2.5">
-                                <span className="relative flex h-2.5 w-2.5">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
-                                </span>
-                                <span className="text-xs font-semibold tracking-wider text-slate-200 uppercase">Live</span>
-                                <span className="text-xs text-slate-600">/</span>
-                                <span className="text-xs text-slate-400">agentic ops</span>
-                            </div>
-                            <span className="text-[10px] text-slate-500 font-mono uppercase tracking-wider">stream · last 60s</span>
-                        </div>
-
-                        {/* Event Stream */}
-                        <div className="px-5 py-4 min-h-[280px]">
-                            <AnimatePresence initial={false}>
-                                {visibleEvents.map((ev, i) => (
-                                    <motion.div
-                                        key={ev.uid}
-                                        layout
-                                        initial={{ opacity: 0, y: -16, scale: 0.98 }}
-                                        animate={{ opacity: i === 0 ? 1 : 0.55 + (3 - i) * 0.15, y: 0, scale: 1 }}
-                                        exit={{ opacity: 0, height: 0, marginBottom: 0 }}
-                                        transition={{ duration: 0.45, ease: "easeOut" }}
-                                        className="flex items-start gap-3 py-2.5 border-b border-slate-800/40 last:border-b-0"
-                                    >
-                                        <div className={`text-base leading-none mt-1 ${ev.serviceColor}`}>
-                                            {ev.icon}
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex items-baseline justify-between gap-3">
-                                                <div className="flex items-baseline gap-2 min-w-0 flex-wrap">
-                                                    <span className={`text-sm font-semibold ${ev.serviceColor}`}>
-                                                        {ev.service}
-                                                    </span>
-                                                    <span className="text-sm text-slate-200">
-                                                        {ev.action}
-                                                    </span>
-                                                </div>
-                                                <span className="text-[10px] text-slate-500 font-mono whitespace-nowrap tabular-nums">
-                                                    {TIMESTAMPS[i]}
-                                                </span>
-                                            </div>
-                                            <div className="text-[11px] text-slate-500 mt-0.5 font-mono">
-                                                ↳ {ev.meta}
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </AnimatePresence>
-                        </div>
-
-                        {/* Footer status bar */}
-                        <div className="flex items-center justify-between px-5 py-2.5 bg-slate-900/40 border-t border-slate-800">
-                            <div className="flex items-center gap-4">
-                                <div className="flex items-center gap-1.5">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                                    <span className="text-[11px] text-slate-400">4 services online</span>
-                                </div>
-                                <div className="hidden sm:flex items-center gap-1.5">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-sky-400 animate-pulse" />
-                                    <span className="text-[11px] text-slate-400">12 events/min</span>
-                                </div>
-                            </div>
-                            <span className="text-[10px] text-slate-500 font-mono">24/7 · monitored</span>
-                        </div>
-                    </div>
-                </motion.div>
+                {/* Card deck — roles and shipped work, one at a time */}
+                <HeroCards />
 
                 {/* Tech Stack Preview */}
                 <motion.div

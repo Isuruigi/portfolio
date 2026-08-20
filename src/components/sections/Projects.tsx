@@ -243,7 +243,7 @@ const projects: Project[] = [
             "Multi-modal input support (text, structured data)",
         ],
         tech: ["LangGraph", "Qdrant", "Neo4j", "Redpanda", "Dragonfly", "Python", "FastAPI"],
-        github: "https://github.com/Isuruigi/nexus-graphrag",
+        github: "coming-soon",
         demo: "In Active Development",
         category: "In Development",
     },
@@ -263,11 +263,9 @@ const projects: Project[] = [
             "Built and shipped solo under real deadline pressure",
         ],
         tech: ["Next.js", "TypeScript", "PostgreSQL", "Docker", "FastAPI"],
-        github: "https://github.com/Isuruigi/itm-exam-portal",
+        github: "private",
         demo: "Live",
-        demoUrl: "https://github.com/Isuruigi/itm-exam-portal",
         category: "Production",
-        image: "https://opengraph.githubassets.com/1/Isuruigi/itm-exam-portal",
     },
     {
         id: 14,
@@ -284,10 +282,9 @@ const projects: Project[] = [
             "LLM orchestration with real-world tool integrations via n8n",
         ],
         tech: ["n8n", "LangChain", "OpenAI", "WhatsApp API", "Slack API", "Meta Ads API", "Python"],
-        github: "https://github.com/Isuruigi/n8n-automation-workflows",
+        github: "private",
         demo: "",
         category: "Production",
-        image: "https://opengraph.githubassets.com/1/Isuruigi/n8n-automation-workflows",
     },
 ];
 

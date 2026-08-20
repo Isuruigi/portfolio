@@ -123,6 +123,12 @@ const displayNames: { [key: string]: string } = {
     'zapier': 'Zapier',
     'visualstudiocode': 'VS Code',
     'xgboost': 'XGBoost',
+    'vllm': 'vLLM',
+    'graphrag': 'GraphRAG',
+    'chromadb': 'ChromaDB',
+    'tavily': 'Tavily',
+    'redpanda': 'Redpanda',
+    'dragonfly': 'Dragonfly',
 }
 
 export default function TechIcon({
