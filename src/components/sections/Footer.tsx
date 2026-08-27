@@ -151,11 +151,6 @@ export default function Footer() {
                         Built with Next.js • TypeScript • Tailwind CSS • Framer Motion
                     </p>
 
-                    {/* Status */}
-                    <div className="flex items-center justify-center gap-2 text-xs text-muted">
-                        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                        Open to Remote Opportunities
-                    </div>
                 </motion.div>
             </div>
         </footer>

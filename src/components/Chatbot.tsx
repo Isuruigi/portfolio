@@ -21,7 +21,7 @@ const suggestionSets = [
         "What's his MLOps experience?",
         "Show me his best project",
         "What certifications does he have?",
-        "What roles is he seeking?",
+        "What is he building now?",
     ],
 ];
 

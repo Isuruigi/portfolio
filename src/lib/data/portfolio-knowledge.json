@@ -3,7 +3,7 @@
         "name": "Isuru (IG) Chathuranga",
         "title": "AI/ML Engineer @ Veracity Digital | TA @ Buildr Labs",
         "location": "Colombo, Sri Lanka",
-        "availability": "Open to remote opportunities",
+        "availability": "AI/ML Engineer at Veracity Digital",
         "email": "isuruigic@gmail.com",
         "linkedin": "https://linkedin.com/in/isuruig",
         "github": "https://github.com/Isuruigi",
@@ -373,8 +373,8 @@
     ],
     "faqs": [
         {
-            "question": "What kind of roles are you looking for?",
-            "answer": "I'm seeking remote AI/ML engineering roles focusing on LLM engineering, multi-agent systems, MLOps/AIOps infrastructure, and production ML pipelines. Open to full-time opportunities, freelance projects, and technical collaborations."
+            "question": "What do you work on?",
+            "answer": "I'm an AI/ML Engineer at Veracity Digital, building and shipping production AI systems, and Technical Assistant on BuildrLabs.ai's AI Bootcamps. My work centres on agentic systems, RAG and GraphRAG retrieval, voice AI, n8n automation, and the MLOps around them: deployment, drift detection, and monitoring."
         },
         {
             "question": "What's your experience with production ML systems?",
@@ -382,7 +382,7 @@
         },
         {
             "question": "Can you work remotely?",
-            "answer": "Yes! I'm based in Colombo, Sri Lanka and fully remote-ready with experience in asynchronous collaboration. I'm comfortable working across time zones and have flexible availability."
+            "answer": "I'm based in Colombo, Sri Lanka and work comfortably across time zones, with experience in asynchronous collaboration. My current role at Veracity Digital is hybrid in Colombo."
         },
         {
             "question": "What's your expertise in LangChain?",
@@ -454,11 +454,11 @@
         }
     ],
     "availability": {
-        "status": "Actively seeking remote opportunities",
-        "start_date": "Immediately available for discussions, flexible start date",
+        "status": "Currently AI/ML Engineer at Veracity Digital, and Technical Assistant at Buildr Labs",
         "response_time": "Within 24 hours",
         "preferred_contact": "Email (isuruigic@gmail.com) or LinkedIn",
         "timezone": "GMT+5:30 (Sri Lanka Time)",
-        "work_hours": "Flexible, can overlap with US/EU time zones"
+        "work_hours": "Flexible, can overlap with US/EU time zones",
+        "collaborations": "Open to conversations about interesting production AI problems"
     }
 }

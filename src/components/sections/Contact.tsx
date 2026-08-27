@@ -67,12 +67,12 @@ const subjectOptions = [
     "General Inquiry",
 ];
 
-const seeking = [
-    "Remote AI/ML Engineering roles",
-    "LLM engineering & multi-agent systems",
-    "MLOps/AIOps infrastructure positions",
-    "Production ML pipeline development",
-    "Open source collaborations",
+const workOn = [
+    "Agentic AI systems & multi-agent workflows",
+    "RAG and GraphRAG retrieval pipelines",
+    "Voice AI agents and real-time speech",
+    "Workflow automation with n8n",
+    "MLOps: deployment, drift detection, monitoring",
 ];
 
 interface FormData {
@@ -236,7 +236,7 @@ export default function Contact() {
                         Let&apos;s Build Production AI Together
                     </h2>
                     <p className="text-lg text-muted max-w-[600px] mx-auto">
-                        Open to remote AI/ML roles, freelance projects, and collaborations on production systems
+                        Working on something in this space, or have a question? Send a message.
                     </p>
                 </motion.div>
 
@@ -248,13 +248,13 @@ export default function Contact() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.5, delay: 0.1 }}
                     >
-                        {/* Currently Seeking */}
+                        {/* What I work on */}
                         <div className="mb-8">
                             <h3 className="text-lg font-semibold text-foreground mb-4">
-                                Currently seeking:
+                                What I work on:
                             </h3>
                             <ul className="space-y-2">
-                                {seeking.map((item) => (
+                                {workOn.map((item) => (
                                     <li key={item} className="flex items-start gap-2 text-muted">
                                         <span className="text-primary mt-1">•</span>
                                         {item}

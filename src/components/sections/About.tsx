@@ -27,9 +27,9 @@ const infoCards = [
     },
     {
         icon: Briefcase,
-        title: "Availability",
-        text: "Open to Remote Opportunities",
-        subtext: "Full-time • Freelance • Collaborations",
+        title: "Current Role",
+        text: "AI/ML Engineer",
+        subtext: "Veracity Digital • Colombo",
     },
     {
         icon: Zap,
