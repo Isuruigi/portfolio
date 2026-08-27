@@ -103,12 +103,34 @@ PORTFOLIO_KEYWORDS = [
     "kubernetes", "vector", "graph", "tech", "stack", "tool", "framework",
     # Common phrasings that carry no other keyword
     "service", "offer", "hire", "build", "built", "latest", "recent",
-    "current", "who", "what do you", "tell me about", "your"
+    "current", "who", "what do you", "tell me about", "your",
+    # education phrasings the allowlist previously missed
+    "study", "studied", "degree", "academic", "graduate", "college", "course",
+    "faculty", "campus",
+    # writing and problem-solving phrasings. Safe to allow broadly because
+    # OFFTOPIC_PATTERNS is evaluated first and catches task requests.
+    "blog", "post", "article", "medium", "writing", "written", "problem", "solve", "challenge", "approach"
 ]
+
+# Task requests and injection attempts that would otherwise slip through on a
+# single tech keyword, e.g. "write python code to sort a list" matches "python".
+# Checked before the allowlist, so these are rejected regardless of keywords.
+OFFTOPIC_PATTERNS = [
+    "write me a", "write a poem", "write an essay", "write python", "write code",
+    "write some code", "code to sort", "code that does", "generate a poem",
+    "tell me a joke", "poem about", "essay about", "story about", "recipe for",
+    "capital of", "translate this", "translate the following",
+    # prompt-injection probes
+    "ignore previous", "ignore all previous", "disregard previous",
+    "system prompt", "pretend you are", "act as if you", "you are now",
+]
+
 
 def is_portfolio_related(query: str) -> bool:
     """Check if query is related to portfolio"""
     query_lower = query.lower()
+    if any(pattern in query_lower for pattern in OFFTOPIC_PATTERNS):
+        return False
     return any(keyword in query_lower for keyword in PORTFOLIO_KEYWORDS)
 
 def load_portfolio_data() -> List[Document]:
@@ -147,7 +169,7 @@ def load_portfolio_data() -> List[Document]:
     LinkedIn: {personal.get('linkedin', '')}
     GitHub: {personal.get('github', '')}
     Summary: {personal.get('summary', '')}
-    Availability: {personal.get('availability', 'Open to remote opportunities')}
+    Availability: {personal.get('availability', '')}
     """
     documents.append(Document(
         page_content=personal_text,
@@ -233,11 +255,24 @@ def load_portfolio_data() -> List[Document]:
             metadata={"source": "faq", "type": "qa"}
         ))
     
+    # Services
+    for svc in data.get("services", []):
+        svc_text = f"""
+        Service: {svc.get('name', '')}
+        Focus: {svc.get('subhead', '')}
+        Description: {svc.get('description', '')}
+        Use Cases: {', '.join(svc.get('use_cases', []))}
+        """
+        documents.append(Document(
+            page_content=svc_text,
+            metadata={"source": "services", "type": "service", "name": svc.get('name', '')}
+        ))
+
     # Availability
     avail = data.get("availability", {})
     avail_text = f"""
-    Availability Status: {avail.get('status', 'Actively seeking remote opportunities')}
-    Start Date: {avail.get('start_date', 'Immediately available')}
+    Current Status: {avail.get('status', '')}
+    Collaborations: {avail.get('collaborations', '')}
     Response Time: {avail.get('response_time', 'Within 24 hours')}
     Preferred Contact: {avail.get('preferred_contact', 'Email or LinkedIn')}
     Timezone: {avail.get('timezone', 'GMT+5:30')}
