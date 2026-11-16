@@ -3,7 +3,7 @@
 #   npx wrangler pages secret put GROQ_API_KEY
 # For local development put them in .dev.vars (git-ignored), then:
 #   npm run build && npx wrangler pages dev
-name = "isuruig-portfolio"
+name = "portfolio" # must match the Pages project name, or Cloudflare ignores this file
 pages_build_output_dir = "out"
 compatibility_date = "2026-11-01"
 compatibility_flags = ["nodejs_compat"]
