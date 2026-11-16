@@ -1,0 +1,37 @@
+# Isuru (IG) Chathuranga
+
+> AI/ML Engineer at Veracity Digital in Colombo, Sri Lanka, and Technical Assistant on Buildr Labs' Agentic AI Bootcamp. Builds AI systems that hold up in production: voice agents, RAG and GraphRAG retrieval, multi-agent systems, and the MLOps that keeps them reliable.
+
+Structured version of this file: https://isuruig.com/profile.json
+
+## Now
+
+- AI/ML Engineer, Veracity Digital (Aug 2026 to now): production AI with PyTorch and vLLM, multi-agent workflows, deployment and monitoring.
+- Technical Assistant, Agentic AI Bootcamp, Buildr Labs (May 2026 to now): Saturday labs and weekday support on LangGraph, RAG, MCP servers and Kubernetes.
+- BSc IT & Management (Hons), University of Colombo, specialising in AI, ML and data science (graduating May 2027).
+
+## Flagship work
+
+- [PersonaPlex](https://github.com/Isuruigi/personaplex-agent): full-duplex voice agent that answers real phone calls with sub-second responses (Twilio, Deepgram, OpenAI, Edge TTS).
+- NEXUS GraphRAG (in development): hybrid dense + graph retrieval for multi-hop questions (Qdrant, Neo4j, LangGraph, Redpanda).
+- [Cost-Aware Fraud Detection](https://github.com/Isuruigi/fraud-detection-system): XGBoost model with a cost-based decision threshold, 92% test coverage, MLflow tracking.
+
+## Other work
+
+- ITM Exam Portal: exam platform in production for the University of Colombo faculty cohort.
+- n8n AI automations: payment verification and Meta Ads decisions with human sign-off.
+- [AI Research Agent](https://github.com/Isuruigi/ai-research-agent), [Market Intelligence Agent](https://github.com/Isuruigi/sl-market-agent), [Adaptive Multi-Adapter LLM](https://github.com/Isuruigi/adaptive-lora-framework), [Drift Monitoring](https://github.com/Isuruigi/ml-monitoring-system), [Crypto Intelligence](https://github.com/Isuruigi/crypto-intelligence-system), [Telco Churn](https://github.com/Isuruigi/telco-churn-production).
+- Open source contributions to LangChain, PyTorch, Hugging Face and MLflow.
+
+## Recognition
+
+- Top 3 of 290, Zuu Crew AI production ML bootcamp (Sep to Dec 2025).
+- 28 certifications, including Oracle OCI 2025 AI Foundations Associate, Databricks Generative AI Fundamentals and AI Agent Fundamentals.
+
+## Contact
+
+- Email: isuruigic@gmail.com
+- [LinkedIn](https://linkedin.com/in/isuruig)
+- [GitHub](https://github.com/Isuruigi)
+- [X](https://x.com/Isuru_ig)
+- Portfolio and chat agent: https://isuruig.com

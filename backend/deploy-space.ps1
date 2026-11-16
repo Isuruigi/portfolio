@@ -42,7 +42,9 @@ $Payload = @(
     "Dockerfile",
     ".dockerignore",
     "README.md",              # carries the HF Space YAML frontmatter
-    "portfolio-knowledge.json"
+    "portfolio-knowledge.json",
+    "voice.py",               # Gemini Live token endpoint (imported lazily by main.py)
+    "agent_profile.md"        # Axon persona, read by voice.py
 )
 
 $BackendDir = $PSScriptRoot

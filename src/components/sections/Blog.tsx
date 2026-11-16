@@ -1,363 +1,122 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, Clock, ExternalLink, BookOpen, TrendingUp } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 
-interface BlogPost {
+const MEDIUM_PROFILE = "https://medium.com/@isuruig";
+const FEED_URL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent("https://medium.com/feed/@isuruig")}`;
+const WORDS_PER_MINUTE = 220;
+
+interface Post {
+    title: string;
+    link: string;
+    date: string;
+    excerpt: string;
+    minutes: number;
+}
+
+interface FeedItem {
     title: string;
     link: string;
     pubDate: string;
-    description: string;
-    categories: string[];
-    thumbnail?: string | null;
-    readingTime?: string;
-    creator?: string;
+    description?: string;
+    content?: string;
 }
 
+const stripHtml = (html = "") => html.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+const dateFormat = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric" });
+
 export default function Blog() {
-    const [posts, setPosts] = useState<BlogPost[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+    const [posts, setPosts] = useState<Post[] | null>(null);
+    const [failed, setFailed] = useState(false);
 
     useEffect(() => {
-        // Use rss2json service for client-side RSS fetching
-        const RSS_URL = "https://medium.com/feed/@isuruig";
-        const API_URL = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(RSS_URL)}`;
-
-        fetch(API_URL)
+        fetch(FEED_URL)
             .then((res) => res.json())
             .then((data) => {
-                if (data.status === "ok" && data.items) {
-                    const formattedPosts = data.items.map((item: { title: string; link: string; pubDate: string; description: string; categories?: string[]; thumbnail?: string }) => ({
-                        title: item.title,
-                        link: item.link,
-                        pubDate: item.pubDate,
-                        description: item.description?.replace(/<[^>]*>/g, '').substring(0, 200) + '...',
-                        categories: item.categories || [],
-                        thumbnail: item.thumbnail || null,
-                        readingTime: "5 min read",
-                    }));
-                    setPosts(formattedPosts);
-                } else {
-                    setError(true);
-                }
+                if (data.status !== "ok" || !Array.isArray(data.items)) throw new Error("feed unavailable");
+                setPosts(
+                    (data.items as FeedItem[]).slice(0, 6).map((item) => {
+                        const text = stripHtml(item.content || item.description);
+                        const words = text ? text.split(" ").length : 0;
+                        return {
+                            title: item.title,
+                            link: item.link,
+                            date: item.pubDate,
+                            excerpt: stripHtml(item.description).slice(0, 220),
+                            minutes: Math.max(1, Math.round(words / WORDS_PER_MINUTE)),
+                        };
+                    })
+                );
             })
-            .catch(() => setError(true))
-            .finally(() => setLoading(false));
+            .catch(() => setFailed(true));
     }, []);
 
-    // Loading state
-    if (loading) {
-        return (
-            <section id="blog" className="py-24 px-5">
-                <div className="max-w-[1200px] mx-auto">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-center mb-12"
-                    >
-                        <p className="text-sm uppercase tracking-wider text-muted mb-2">
-                            Blog & Articles
-                        </p>
-                        <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                            Latest Insights & Technical Writing
-                        </h2>
-                    </motion.div>
-
-                    {/* Loading skeletons */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {[1, 2, 3].map((i) => (
-                            <div key={i} className="animate-pulse">
-                                <div className="h-48 bg-secondary rounded-t-xl" />
-                                <div className="p-6 border border-t-0 border-border rounded-b-xl bg-card">
-                                    <div className="h-4 bg-secondary rounded w-3/4 mb-3" />
-                                    <div className="h-3 bg-secondary rounded w-full mb-2" />
-                                    <div className="h-3 bg-secondary rounded w-5/6" />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-        );
-    }
-
-    // Error state or no posts
-    if (error || posts.length === 0) {
-        return (
-            <section id="blog" className="py-24 px-5">
-                <div className="max-w-[1200px] mx-auto text-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                    >
-                        <p className="text-sm uppercase tracking-wider text-muted mb-2">
-                            Blog & Articles
-                        </p>
-                        <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                            Latest Insights & Technical Writing
-                        </h2>
-                        <p className="text-muted mb-8">
-                            I write about AI/ML engineering, production systems, and software development
-                        </p>
-
-                        <div className="inline-flex flex-col items-center gap-4 p-8 border border-border rounded-xl bg-card">
-                            <BookOpen className="w-16 h-16 text-muted" />
-                            <p className="text-muted">
-                                {error
-                                    ? "Unable to load articles at the moment"
-                                    : "No articles published yet"}
-                            </p>
-
-                            <a
-                                href="https://medium.com/@isuruig"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-all duration-200"
-                            >
-                                Visit My Medium Profile
-                                <ExternalLink className="w-4 h-4" />
-                            </a>
-                        </div>
-                    </motion.div>
-                </div>
-            </section>
-        );
-    }
-
-    // Success state with posts
-    const [featuredPost, ...gridPosts] = posts;
-
     return (
-        <section id="blog" className="py-24 px-5 bg-card">
-            <div className="max-w-[1200px] mx-auto">
-                {/* Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
-                    className="text-center mb-12"
-                >
-                    <p className="text-sm uppercase tracking-wider text-muted mb-2">
-                        Blog & Articles
-                    </p>
-                    <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                        Latest Insights & Technical Writing
-                    </h2>
-                    <p className="text-lg text-muted mb-6 max-w-[600px] mx-auto">
-                        Sharing knowledge about AI/ML, production systems, and software engineering
-                    </p>
-
+        <section id="blog" className="scroll-mt-16 bg-void py-28 text-ink">
+            <div className="mx-auto max-w-[1280px] px-5 lg:px-10">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <h2 className="text-balance font-display text-[clamp(2.4rem,5vw,4rem)] font-light leading-[1] tracking-[-0.04em]">
+                            Writing
+                        </h2>
+                        <p className="mt-5 max-w-[34rem] text-lg leading-relaxed text-ash">
+                            Notes on building, shipping and teaching AI systems, published on Medium.
+                        </p>
+                    </div>
                     <a
-                        href="https://medium.com/@isuruig"
+                        href={MEDIUM_PROFILE}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-primary hover:underline font-medium"
+                        className="inline-flex shrink-0 items-center gap-1.5 font-medium underline decoration-inferno-3 underline-offset-[6px] transition-colors hover:text-ember focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ember"
                     >
-                        View All Articles on Medium
-                        <ExternalLink className="w-4 h-4" />
+                        All posts on Medium
+                        <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
                     </a>
-                </motion.div>
+                </div>
 
-                {/* Featured Post */}
-                {featuredPost && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                        className="mb-12"
-                    >
-                        <a
-                            href={featuredPost.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group block border border-border rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 bg-background"
-                        >
-                            {/* Featured Image */}
-                            <div className="relative h-64 md:h-80 overflow-hidden bg-gradient-to-br from-primary/20 via-accent/10 to-purple-500/20">
-                                {featuredPost.thumbnail ? (
-                                    <img
-                                        src={featuredPost.thumbnail}
-                                        alt={featuredPost.title}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                    />
-                                ) : (
-                                    <div className="flex items-center justify-center h-full">
-                                        <BookOpen className="w-24 h-24 text-muted/30" />
-                                    </div>
-                                )}
-                                <div className="absolute top-4 left-4">
-                                    <span className="px-3 py-1 bg-primary text-white text-xs font-medium rounded-full">
-                                        Featured
-                                    </span>
-                                </div>
-                            </div>
+                <ul className="mt-12 border-t border-white/10" aria-busy={posts === null && !failed}>
+                    {posts === null && !failed &&
+                        [0, 1, 2].map((i) => (
+                            <li key={i} className="grid animate-pulse grid-cols-1 gap-3 border-b border-white/10 py-6 md:grid-cols-[8rem_minmax(0,1fr)]">
+                                <span className="h-3 w-20 rounded bg-white/10" />
+                                <span className="space-y-2">
+                                    <span className="block h-4 w-2/3 rounded bg-white/10" />
+                                    <span className="block h-3 w-full rounded bg-white/5" />
+                                </span>
+                            </li>
+                        ))}
 
-                            {/* Content */}
-                            <div className="p-6 md:p-8">
-                                {/* Meta */}
-                                <div className="flex items-center gap-4 mb-4 text-sm text-muted">
-                                    <span className="flex items-center gap-1">
-                                        <Calendar className="w-4 h-4" />
-                                        {new Date(featuredPost.pubDate).toLocaleDateString("en-US", {
-                                            month: "short",
-                                            day: "numeric",
-                                            year: "numeric",
-                                        })}
-                                    </span>
-                                    {featuredPost.readingTime && (
-                                        <span className="flex items-center gap-1">
-                                            <Clock className="w-4 h-4" />
-                                            {featuredPost.readingTime}
-                                        </span>
-                                    )}
-                                </div>
+                    {(failed || posts?.length === 0) && (
+                        <li className="border-b border-white/10 py-6 text-ash">
+                            {failed ? "The Medium feed didn't load. " : "No posts yet. "}
+                            <a href={MEDIUM_PROFILE} target="_blank" rel="noopener noreferrer" className="text-ink underline decoration-inferno-3 underline-offset-4 hover:text-ember">
+                                Read on Medium instead
+                            </a>
+                        </li>
+                    )}
 
-                                {/* Title */}
-                                <h3 className="text-xl md:text-2xl font-bold text-foreground mb-3 group-hover:text-primary transition-colors">
-                                    {featuredPost.title}
-                                </h3>
-
-                                {/* Description */}
-                                <p className="text-muted mb-4 line-clamp-3">
-                                    {featuredPost.description}
-                                </p>
-
-                                {/* Categories */}
-                                {featuredPost.categories.length > 0 && (
-                                    <div className="flex flex-wrap gap-2 mb-4">
-                                        <AnimatePresence>
-                                            {featuredPost.categories.slice(0, 3).map((cat, i) => (
-                                                <motion.span
-                                                    key={i}
-                                                    initial={{ opacity: 0, scale: 0.9 }}
-                                                    animate={{ opacity: 1, scale: 1 }}
-                                                    className="px-2 py-1 text-xs bg-secondary rounded text-muted"
-                                                >
-                                                    {cat}
-                                                </motion.span>
-                                            ))}
-                                        </AnimatePresence>
-                                    </div>
-                                )}
-
-                                {/* Read More */}
-                                <div className="flex items-center gap-2 text-primary font-medium">
-                                    Read Full Article
-                                    <ExternalLink className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                </div>
-                            </div>
-                        </a>
-                    </motion.div>
-                )}
-
-                {/* Grid Posts */}
-                {gridPosts.length > 0 && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {gridPosts.map((post, index) => (
-                            <motion.a
-                                key={index}
-                                href={post.link}
+                    {posts?.map((p) => (
+                        <li key={p.link}>
+                            <a
+                                href={p.link}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.4, delay: index * 0.1 }}
-                                whileHover={{ y: -4 }}
-                                className="group block border border-border rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300 bg-background"
+                                className="group grid grid-cols-1 gap-2 border-b border-white/10 py-6 transition-colors hover:bg-white/[0.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember md:grid-cols-[8rem_minmax(0,1fr)_5rem_1.5rem] md:items-baseline md:gap-6"
                             >
-                                {/* Thumbnail */}
-                                <div className="relative h-48 overflow-hidden bg-gradient-to-br from-primary/10 via-accent/5 to-purple-500/10">
-                                    {post.thumbnail ? (
-                                        <img
-                                            src={post.thumbnail}
-                                            alt={post.title}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                        />
-                                    ) : (
-                                        <div className="flex items-center justify-center h-full">
-                                            <TrendingUp className="w-16 h-16 text-muted/20" />
-                                        </div>
-                                    )}
-                                </div>
-
-                                {/* Content */}
-                                <div className="p-5">
-                                    {/* Meta */}
-                                    <div className="flex items-center gap-3 mb-3 text-xs text-muted">
-                                        <span className="flex items-center gap-1">
-                                            <Calendar className="w-3 h-3" />
-                                            {new Date(post.pubDate).toLocaleDateString("en-US", {
-                                                month: "short",
-                                                day: "numeric",
-                                            })}
-                                        </span>
-                                        {post.readingTime && (
-                                            <span className="flex items-center gap-1">
-                                                <Clock className="w-3 h-3" />
-                                                {post.readingTime}
-                                            </span>
-                                        )}
-                                    </div>
-
-                                    {/* Title */}
-                                    <h3 className="text-lg font-semibold text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
-                                        {post.title}
-                                    </h3>
-
-                                    {/* Description */}
-                                    <p className="text-sm text-muted mb-3 line-clamp-3">
-                                        {post.description}
-                                    </p>
-
-                                    {/* Categories */}
-                                    {post.categories.length > 0 && (
-                                        <div className="flex flex-wrap gap-1 mb-3">
-                                            {post.categories.slice(0, 2).map((cat, i) => (
-                                                <span
-                                                    key={i}
-                                                    className="px-2 py-0.5 text-xs bg-secondary rounded text-muted"
-                                                >
-                                                    {cat}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    )}
-
-                                    {/* Read More */}
-                                    <div className="flex items-center gap-1 text-sm text-primary font-medium">
-                                        Read More
-                                        <ExternalLink className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                                    </div>
-                                </div>
-                            </motion.a>
-                        ))}
-                    </div>
-                )}
-
-                {/* View All Link */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                    className="text-center mt-12"
-                >
-                    <a
-                        href="https://medium.com/@isuruig"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-6 py-3 border border-primary text-primary rounded-lg hover:bg-primary hover:text-white transition-all duration-200 font-medium"
-                    >
-                        <BookOpen className="w-5 h-5" />
-                        View All Articles on Medium
-                        <ExternalLink className="w-4 h-4" />
-                    </a>
-                </motion.div>
+                                <time dateTime={p.date} className="font-mono text-[11px] text-ash">
+                                    {dateFormat.format(new Date(p.date.replace(" ", "T")))}
+                                </time>
+                                <span className="min-w-0">
+                                    <span className="block text-pretty text-lg font-medium leading-snug group-hover:text-ember">{p.title}</span>
+                                    {p.excerpt && <span className="mt-1.5 line-clamp-2 block text-sm leading-relaxed text-ash">{p.excerpt}</span>}
+                                </span>
+                                <span className="font-mono text-[11px] tabular-nums text-ash">{p.minutes} min read</span>
+                                <ArrowUpRight className="hidden h-4 w-4 text-ash transition-colors group-hover:text-ember md:block" aria-hidden="true" />
+                            </a>
+                        </li>
+                    ))}
+                </ul>
             </div>
         </section>
     );

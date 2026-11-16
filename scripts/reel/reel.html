@@ -1,0 +1,418 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<!--
+  30-second brand reel (v2): real photos with slow camera moves, a warm grade and film grain,
+  bold captions, and three small product moments. Every style is a pure function of time:
+  window.seek(t) draws the frame at t seconds, so scripts/reel/render.py can step through it
+  frame by frame. No CSS transitions, no timers. Open with ?play to watch it live.
+
+  The voiceover (scripts/reel/voiceover.py) is timed to these scenes; the photo cuts in the
+  list scene follow window.CUES.list, the moment each word is spoken.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@300;400;500;800&family=Instrument+Serif:ital@1&family=Martian+Mono:wght@300;400&display=block" rel="stylesheet">
+<style>
+  html, body { margin: 0; background: #000004; }
+  #stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #000004; color: #ece9f1;
+           font-family: 'Host Grotesk', sans-serif; }
+  .abs { position: absolute; left: 0; top: 0; }
+  .full { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+  .mono { font-family: 'Martian Mono', monospace; }
+  .w { display: inline-block; margin-right: 0.24em; white-space: nowrap; }
+  .bold { font-weight: 800; text-transform: uppercase; letter-spacing: -0.03em; }
+  .serif { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; letter-spacing: -0.01em; color: #fca50a; }
+  svg { position: absolute; left: 0; top: 0; overflow: visible; }
+  img.photo { object-fit: cover; transform-origin: 50% 50%; will-change: auto; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script>
+const W = 1920, H = 1080, DURATION = 30;
+const VOID = '#000004', INK = '#ece9f1', ASH = '#a3a0b0', EMBER = '#fca50a', CORAL = '#dd513a';
+const PANEL = 'rgba(10,9,18,0.84)';
+const stage = document.getElementById('stage');
+// When each word of "Support. Research. Operations. Data." is spoken (from the voiceover)
+const LIST = (window.CUES && window.CUES.list && window.CUES.list.length === 4) ? window.CUES.list : [21.3, 22.37, 23.67, 24.87];
+
+// ---------- maths ----------
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const lerp = (a, b, p) => a + (b - a) * p;
+const easeOut = (x) => 1 - Math.pow(1 - x, 3);
+const easeInOut = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+// Closed-form spring step response: settles at 1 with a barely visible overshoot
+const spring = (x) => (x <= 0 ? 0 : x >= 1 ? 1 : 1 - Math.exp(-6.5 * x) * Math.cos(7.5 * x));
+const window_ = (t, a, b, fin = 0.3, fout = 0.3) => Math.min(easeOut(prog(t, a, a + fin)), 1 - easeInOut(prog(t, b - fout, b)));
+
+function make(tag, css = '', html = '', parent = stage) {
+  const e = document.createElement(tag);
+  e.className = 'abs';
+  e.style.cssText = css;
+  e.innerHTML = html;
+  parent.appendChild(e);
+  return e;
+}
+
+// ---------- photos: slow camera moves with a slight handheld sway ----------
+const PHOTOS = [
+  // file, in, out, scale from -> to, drift x/y from -> to (px), crossfade, blur
+  { f: 'hook', tin: 0, tout: 4.2, s: [1.04, 1.13], x: [0, -18], y: [6, -8], fade: 0.6 },
+  // Behind the Veracity card: the same photo, blurred right out
+  { f: 'veracity', tin: 4.0, tout: 6.9, s: [1.5, 1.6], x: [0, 0], y: [0, 0], fade: 0.5, blur: 26 },
+  { f: 'ship', tin: 6.7, tout: 9.5, s: [1.04, 1.1], x: [16, -14], y: [4, -4], fade: 0.5 },
+  { f: 'sofa', tin: 9.3, tout: 13.0, s: [1.08, 1.15], x: [0, -12], y: [0, -6], fade: 0.5, blur: 5 },
+  { f: 'room', tin: 12.8, tout: 17.0, s: [1.15, 1.08], x: [-14, 12], y: [0, 0], fade: 0.5, blur: 5 },
+  { f: 'lab', tin: 16.8, tout: 21.3, s: [1.07, 1.13], x: [10, -10], y: [4, -4], fade: 0.5, blur: 4 },
+  // The list: one photo per spoken word, cut on the word with a small zoom punch
+  { f: 'support', tin: LIST[0] - 0.2, tout: LIST[1], punch: true, x: [0, -8], y: [0, 0], fade: 0.25 },
+  { f: 'research', tin: LIST[1] - 0.05, tout: LIST[2], punch: true, x: [6, -6], y: [0, 0], fade: 0.12 },
+  { f: 'ops', tin: LIST[2] - 0.05, tout: LIST[3], punch: true, x: [-6, 6], y: [0, 0], fade: 0.12 },
+  { f: 'data', tin: LIST[3] - 0.05, tout: 26.5, punch: true, x: [0, 8], y: [0, 0], fade: 0.12 },
+].map((p, i) => {
+  const el = document.createElement('img');
+  el.className = 'full photo';
+  el.src = `photos/${p.f}.jpg`;
+  el.style.filter = `saturate(0.92) contrast(1.06) brightness(0.96)${p.blur ? ` blur(${p.blur}px)` : ''}`;
+  stage.appendChild(el);
+  return { ...p, el, phase: i * 1.7 };
+});
+
+// The Veracity photo as a framed card on the right (its only source is a square crop)
+const vcard = document.createElement('img');
+vcard.className = 'abs';
+vcard.src = 'photos/veracity.jpg';
+vcard.style.cssText = 'left:1030px;top:150px;width:740px;height:740px;border-radius:28px;object-fit:cover;box-shadow:0 40px 120px -20px rgba(0,0,4,.8);filter:saturate(0.95) contrast(1.05)';
+stage.appendChild(vcard);
+
+function drawPhotos(t) {
+  const cardIn = spring(prog(t, 4.15, 4.85));
+  vcard.style.opacity = t < 4.1 || t > 7.3 ? 0 : clamp(cardIn * 2.5) * (1 - easeInOut(prog(t, 6.7, 7.1)));
+  vcard.style.transform = `translate(${(Math.sin(t * 0.9) * 4).toFixed(2)}px,${((1 - cardIn) * 50 + Math.cos(t * 0.7) * 3).toFixed(2)}px) scale(${(0.96 + 0.04 * cardIn + 0.03 * prog(t, 4.1, 7.1)).toFixed(4)}) rotate(${(Math.sin(t * 0.5) * 0.25 - 0.6).toFixed(3)}deg)`;
+  for (const p of PHOTOS) {
+    if (t < p.tin || t > p.tout + 0.7) { p.el.style.opacity = 0; continue; }
+    const k = prog(t, p.tin, p.tout);
+    const scale = p.punch
+      ? 1.05 + 0.1 * (1 - easeOut(prog(t, p.tin, p.tin + 0.55))) + 0.02 * k
+      : lerp(p.s[0], p.s[1], k);
+    const sway = 3.2;
+    const tx = lerp(p.x[0], p.x[1], k) + Math.sin(t * 0.9 + p.phase) * sway;
+    const ty = lerp(p.y[0], p.y[1], k) + Math.cos(t * 0.7 + p.phase) * sway * 0.7;
+    const rot = Math.sin(t * 0.55 + p.phase) * 0.12;
+    p.el.style.opacity = easeInOut(prog(t, p.tin, p.tin + p.fade));
+    p.el.style.transform = `translate(${tx.toFixed(2)}px,${ty.toFixed(2)}px) scale(${scale.toFixed(4)}) rotate(${rot.toFixed(3)}deg)`;
+  }
+}
+
+// ---------- grade: shade, warm light, vignette ----------
+const shade = make('div', `width:${W}px;height:${H}px;background:${VOID}`);
+const SHADE = [[0, 0.16], [9.2, 0.16], [9.7, 0.58], [20.9, 0.58], [21.3, 0.12], [26, 0.12]];
+const warm = make('div', `width:${W}px;height:${H}px;mix-blend-mode:soft-light;background:linear-gradient(180deg,rgba(252,165,10,.22),rgba(221,81,58,.16))`);
+const leak = make('div', `width:${W}px;height:${H}px;mix-blend-mode:screen`);
+make('div', `width:${W}px;height:${H}px;background:linear-gradient(0deg,rgba(0,0,4,.88) 0%,rgba(0,0,4,.35) 32%,rgba(0,0,4,0) 58%)`);
+make('div', `width:${W}px;height:${H}px;background:radial-gradient(ellipse at 50% 45%,rgba(0,0,4,0) 52%,rgba(0,0,4,.6) 100%)`);
+
+function drawGrade(t) {
+  let i = 0;
+  while (i < SHADE.length - 1 && SHADE[i + 1][0] <= t) i++;
+  const a = SHADE[i], b = SHADE[Math.min(i + 1, SHADE.length - 1)];
+  shade.style.opacity = lerp(a[1], b[1], b[0] === a[0] ? 1 : prog(t, a[0], b[0]));
+  // A warm light leak that drifts across the top of frame, like late sun through a window
+  const lx = 78 + Math.sin(t * 0.21) * 14, ly = 8 + Math.cos(t * 0.17) * 6;
+  leak.style.background = `radial-gradient(circle at ${lx.toFixed(1)}% ${ly.toFixed(1)}%,rgba(252,140,10,.26),rgba(252,140,10,0) 46%)`;
+}
+
+// ---------- product moments (sit on the blurred photos) ----------
+const svgNS = 'http://www.w3.org/2000/svg';
+
+// 01 voice: a call that gets picked up
+const call = make('div', `left:${960 - 330}px;top:${400 - 70}px;width:660px;height:140px;border-radius:70px;box-sizing:border-box;background:${PANEL};border:1px solid rgba(252,165,10,.35);box-shadow:0 30px 120px -30px rgba(221,81,58,.5)`);
+const orb = make('div', `left:32px;top:32px;width:76px;height:76px;border-radius:999px;background:radial-gradient(circle at 35% 30%,#fcffa4 0%,#fca50a 22%,#dd513a 48%,#932667 72%,#420a68 100%)`, '', call);
+const callLabel = make('div', `left:134px;top:38px;font-size:15px;letter-spacing:.14em;white-space:nowrap`, '', call);
+callLabel.classList.add('mono');
+make('div', `left:134px;top:64px;font-size:34px;letter-spacing:-.02em;white-space:nowrap`, 'Voice agent', call);
+const bars = Array.from({ length: 24 }, (_, i) => make('div', `left:${396 + i * 9.5}px;width:4px;border-radius:2px;background:${EMBER}`, '', call));
+
+function drawVoice(t) {
+  const on = window_(t, 9.45, 12.85, 0.01, 0.3);
+  const pop = spring(prog(t, 9.45, 10.05));
+  call.style.opacity = on * clamp(pop * 2.5);
+  call.style.transform = `scale(${0.86 + 0.14 * pop})`;
+  const answered = t >= 10.9;
+  callLabel.textContent = answered ? 'ANSWERED IN 0.8 S' : 'INCOMING CALL';
+  callLabel.style.color = answered ? EMBER : ASH;
+  orb.style.transform = `scale(${0.92 + 0.1 * Math.abs(Math.sin(t * 5))})`;
+  const speaking = t > 9.8 && t < 12.3;
+  bars.forEach((b, i) => {
+    const amp = speaking ? 0.3 + 0.7 * Math.abs(Math.sin(t * 7 + i * 0.8) * Math.cos(t * 3.1 + i * 0.37)) : 0.12;
+    const h = 8 + 56 * amp;
+    b.style.height = `${h}px`;
+    b.style.top = `${70 - h / 2}px`;
+    b.style.opacity = speaking ? 1 : 0.4;
+  });
+}
+
+// 02 agents: a hard question worked through step by step
+const ask = make('div', `left:${960 - 500}px;top:${300 - 48}px;width:1000px;height:96px;border-radius:48px;box-sizing:border-box;background:${PANEL};border:1px solid rgba(252,165,10,.35);box-shadow:0 30px 120px -30px rgba(221,81,58,.5)`);
+make('div', `left:38px;top:36px;width:22px;height:22px;border:2.5px solid ${EMBER};border-radius:999px;box-sizing:border-box`, '', ask);
+const query = make('div', `left:78px;top:27px;font-size:31px;letter-spacing:-.01em;white-space:nowrap`, '', ask);
+const caret = make('div', `top:30px;width:2px;height:36px;background:${EMBER}`, '', ask);
+const QUERY = 'Which suppliers are exposed to the Red Sea route?';
+const STEPS = ['RETRIEVE', 'TRAVERSE', 'FUSE', 'REASON'];
+const nodeX = [600, 840, 1080, 1320], nodeY = 480;
+const net = document.createElementNS(svgNS, 'svg');
+net.setAttribute('width', W); net.setAttribute('height', H);
+stage.appendChild(net);
+function path(d, stroke, width) {
+  const p = document.createElementNS(svgNS, 'path');
+  p.setAttribute('d', d); p.setAttribute('stroke', stroke); p.setAttribute('stroke-width', width); p.setAttribute('fill', 'none');
+  p.setAttribute('pathLength', '1'); p.setAttribute('stroke-dasharray', '1');
+  net.appendChild(p);
+  return p;
+}
+const drop = path(`M 960 348 C 960 420, ${nodeX[0]} 400, ${nodeX[0]} ${nodeY - 20}`, 'rgba(252,165,10,.6)', 2);
+const link = path(`M ${nodeX[0]} ${nodeY} L ${nodeX[3]} ${nodeY}`, EMBER, 2.5);
+const nodes = STEPS.map((name, i) => ({
+  dot: make('div', `width:32px;height:32px;border-radius:999px;box-sizing:border-box;left:${nodeX[i] - 16}px;top:${nodeY - 16}px;border:2px solid ${EMBER}`),
+  txt: make('div', `left:${nodeX[i] - 120}px;top:${nodeY + 36}px;width:240px;text-align:center;font-size:17px;letter-spacing:.16em`, name),
+}));
+nodes.forEach((n) => n.txt.classList.add('mono'));
+// The stack, drifting at the edges of frame
+const CHIPS = [['LangGraph', 300, 196], ['Qdrant', 1500, 206], ['Neo4j', 286, 520], ['vLLM', 1560, 500]].map(([name, x, y], i) => {
+  const e = make('div', `left:${x}px;top:${y}px;font-size:17px;letter-spacing:.08em;padding:9px 16px;border-radius:999px;background:${PANEL};border:1px solid rgba(236,233,241,.22);white-space:nowrap`, name);
+  e.classList.add('mono');
+  return { e, i };
+});
+
+function drawAgents(t) {
+  const on = window_(t, 12.95, 16.85, 0.01, 0.3);
+  const pop = spring(prog(t, 12.95, 13.5));
+  ask.style.opacity = on * clamp(pop * 2.5);
+  ask.style.transform = `scale(${0.9 + 0.1 * pop})`;
+  query.textContent = QUERY.slice(0, Math.round(QUERY.length * prog(t, 13.2, 14.15)));
+  caret.style.left = `${78 + query.offsetWidth + 6}px`;
+  caret.style.opacity = t < 14.4 ? (Math.floor(t * 2.6) % 2 ? 1 : 0.15) : 0;
+  drop.style.strokeDashoffset = 1 - easeInOut(prog(t, 14.15, 14.5));
+  drop.style.opacity = on;
+  link.style.strokeDashoffset = 1 - easeInOut(prog(t, 14.5, 15.9));
+  link.style.opacity = on;
+  nodes.forEach(({ dot, txt }, i) => {
+    const lit = spring(prog(t, 14.45 + i * 0.47, 15.0 + i * 0.47));
+    dot.style.background = `rgba(252,165,10,${0.9 * lit})`;
+    dot.style.boxShadow = `0 0 ${26 * lit}px rgba(252,165,10,${0.75 * lit})`;
+    dot.style.transform = `scale(${0.5 + 0.5 * lit})`;
+    dot.style.opacity = on * clamp(lit * 3);
+    txt.style.opacity = on * lit;
+    txt.style.transform = `translateY(${(1 - lit) * 12}px)`;
+  });
+  CHIPS.forEach(({ e, i }) => {
+    const p = easeOut(prog(t, 13.5 + i * 0.22, 14.0 + i * 0.22));
+    e.style.opacity = on * p * 0.9;
+    e.style.transform = `translate(${Math.sin(t * 0.8 + i * 2) * 10}px,${(1 - p) * 16 + Math.cos(t * 0.6 + i) * 8}px)`;
+  });
+}
+
+// 03 mlops: drift caught, retrained, back to normal
+const card = make('div', `left:${960 - 590}px;top:${390 - 210}px;width:1180px;height:420px;border-radius:30px;box-sizing:border-box;background:${PANEL};border:1px solid rgba(252,165,10,.3);box-shadow:0 30px 120px -30px rgba(221,81,58,.5)`);
+const chart = document.createElementNS(svgNS, 'svg');
+chart.setAttribute('width', 1180); chart.setAttribute('height', 420);
+card.appendChild(chart);
+const X0 = 60, X1 = 1120, THRESH = 150, N = 140;
+const pts = Array.from({ length: N }, (_, i) => {
+  const noise = Math.sin(i * 1.7) * 9 + Math.sin(i * 0.53) * 14 + Math.cos(i * 3.1) * 5;
+  let base = 310;
+  if (i > 62 && i < 104) base = 310 - Math.pow((i - 62) / 42, 1.6) * 190; // drift builds
+  if (i >= 104) base = 315; // retrained, back to normal
+  return [X0 + (i / (N - 1)) * (X1 - X0), base + noise];
+});
+const crossIndex = pts.findIndex((p, i) => i > 62 && p[1] <= THRESH);
+const series = document.createElementNS(svgNS, 'path');
+series.setAttribute('d', 'M ' + pts.map((p) => p.map((v) => v.toFixed(1)).join(' ')).join(' L '));
+series.setAttribute('stroke', INK); series.setAttribute('stroke-width', '3'); series.setAttribute('fill', 'none');
+series.setAttribute('stroke-linejoin', 'round'); series.setAttribute('pathLength', '1'); series.setAttribute('stroke-dasharray', '1');
+chart.appendChild(series);
+const thresh = document.createElementNS(svgNS, 'line');
+thresh.setAttribute('x1', X0); thresh.setAttribute('x2', X1); thresh.setAttribute('y1', THRESH); thresh.setAttribute('y2', THRESH);
+thresh.setAttribute('stroke', CORAL); thresh.setAttribute('stroke-width', '2'); thresh.setAttribute('stroke-dasharray', '8 10');
+chart.appendChild(thresh);
+const chartTitle = make('div', `left:${X0}px;top:34px;font-size:15px;letter-spacing:.14em;color:${ASH};white-space:nowrap`, 'DRIFT SCORE · PRODUCTION MODEL', card);
+chartTitle.classList.add('mono');
+const threshLabel = make('div', `left:${X0}px;top:${THRESH + 12}px;font-size:13px;letter-spacing:.12em;color:${CORAL}`, 'THRESHOLD', card);
+threshLabel.classList.add('mono');
+const alertDot = make('div', `width:18px;height:18px;border-radius:999px;background:${EMBER}`, '', card);
+const alertChip = make('div', `font-size:15px;letter-spacing:.08em;color:${VOID};background:${EMBER};border-radius:999px;padding:7px 14px;white-space:nowrap`, 'DRIFT DETECTED → RETRAIN', card);
+alertChip.classList.add('mono');
+const okChip = make('div', `left:${X1 - 300}px;top:346px;font-size:15px;letter-spacing:.08em;border:1px solid rgba(236,233,241,.3);border-radius:999px;padding:7px 14px;white-space:nowrap`, '✓ RETRAINED · REDEPLOYED', card);
+okChip.classList.add('mono');
+
+function drawMlops(t) {
+  const on = window_(t, 16.95, 21.05, 0.01, 0.3);
+  const pop = spring(prog(t, 16.95, 17.5));
+  card.style.opacity = on * clamp(pop * 2.5);
+  card.style.transform = `scale(${0.92 + 0.08 * pop})`;
+  const drawn = easeInOut(prog(t, 17.3, 20.0));
+  series.style.strokeDashoffset = 1 - drawn;
+  const reached = drawn >= crossIndex / (N - 1);
+  const [ax, ay] = pts[crossIndex];
+  const pulse = reached ? spring(prog(t, 19.05, 19.5)) : 0;
+  alertDot.style.left = `${ax - 9}px`; alertDot.style.top = `${ay - 9}px`;
+  alertDot.style.opacity = reached ? 1 : 0;
+  alertDot.style.boxShadow = `0 0 0 ${10 + 14 * Math.abs(Math.sin(t * 4))}px rgba(252,165,10,${0.2 * pulse})`;
+  alertChip.style.left = `${ax + 24}px`; alertChip.style.top = `${ay - 58}px`;
+  alertChip.style.opacity = pulse;
+  alertChip.style.transform = `translateY(${(1 - pulse) * 10}px)`;
+  const ok = easeOut(prog(t, 20.0, 20.4));
+  okChip.style.opacity = ok;
+  okChip.style.transform = `translateY(${(1 - ok) * 10}px)`;
+}
+
+// ---------- end card ----------
+const endBg = make('div', `width:${W}px;height:${H}px;background:${VOID}`);
+const glow = make('div', `left:1080px;top:60px;width:900px;height:1000px;background:radial-gradient(ellipse at 50% 45%,rgba(221,81,58,.28),rgba(147,38,103,.12) 45%,rgba(0,0,4,0) 70%)`);
+const portrait = document.createElement('img');
+portrait.className = 'abs';
+portrait.src = '../../public/assets/portrait-studio.webp';
+portrait.style.cssText = 'left:1270px;top:70px;height:1010px;width:auto;transform-origin:50% 100%';
+stage.appendChild(portrait);
+const nameLine = make('div', `left:140px;top:430px;font-size:126px;font-weight:300;letter-spacing:-.045em;line-height:1;white-space:nowrap`);
+const nameWords = ['Isuru', 'Chathuranga'].map((w) => { const s = document.createElement('span'); s.className = 'w'; s.textContent = w; nameLine.appendChild(s); return s; });
+const role = make('div', `left:146px;top:610px;font-size:19px;letter-spacing:.2em;color:${ASH};white-space:nowrap`, 'AI ENGINEER · VERACITY DIGITAL · COLOMBO');
+role.classList.add('mono');
+const cta = make('div', `left:146px;top:690px;width:220px;height:58px;border:1.5px solid ${EMBER};border-radius:999px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;gap:12px;font-size:22px`,
+  `<span style="width:20px;height:20px;border-radius:999px;background:radial-gradient(circle at 35% 30%,#fcffa4,#fca50a 25%,#dd513a 50%,#932667 75%,#420a68)"></span>Ask Axon`);
+
+function drawEnd(t) {
+  const on = easeInOut(prog(t, 26.0, 26.45));
+  endBg.style.opacity = on;
+  const p = easeOut(prog(t, 26.2, 27.3));
+  portrait.style.opacity = p;
+  portrait.style.transform = `translateY(${(1 - p) * 30}px) scale(${1.05 - 0.05 * prog(t, 26.2, 30)})`;
+  glow.style.opacity = p * (0.8 + 0.2 * Math.sin(t * 1.3));
+  nameWords.forEach((s, i) => {
+    const k = easeOut(prog(t, 27.55 + i * 0.16, 28.15 + i * 0.16));
+    s.style.opacity = k;
+    s.style.transform = `translateY(${(1 - k) * 40}px)`;
+    s.style.filter = `blur(${(1 - k) * 10}px)`;
+  });
+  const r = easeOut(prog(t, 28.25, 28.7));
+  role.style.opacity = r; role.style.transform = `translateY(${(1 - r) * 12}px)`;
+  const c = easeOut(prog(t, 28.55, 29.0));
+  cta.style.opacity = c; cta.style.transform = `translateY(${(1 - c) * 12}px)`;
+}
+
+// ---------- captions: bold caps plus one phrase in italic serif ----------
+const b = (text) => ({ text, kind: 'bold' });
+const s = (text) => ({ text, kind: 'serif' });
+function caption(lines, tin, tout, { x = 120, y = 742, size = 108, stagger = 0.11, gap = 1.06 } = {}) {
+  const spans = [];
+  lines.forEach((parts, row) => {
+    const line = make('div', `left:${x}px;top:${y + row * size * gap}px;white-space:nowrap;line-height:1;text-shadow:0 4px 34px rgba(0,0,4,.7)`);
+    parts.forEach(({ text, kind }) => text.split(' ').forEach((word) => {
+      const span = document.createElement('span');
+      span.className = `w ${kind}`;
+      span.style.fontSize = `${kind === 'serif' ? size * 1.2 : size}px`;
+      span.textContent = word;
+      line.appendChild(span);
+      spans.push(span);
+    }));
+  });
+  return (t) => spans.forEach((span, i) => {
+    const p = easeOut(prog(t, tin + i * stagger, tin + i * stagger + 0.5));
+    const q = easeInOut(prog(t, tout, tout + 0.35));
+    span.style.opacity = p * (1 - q);
+    span.style.transform = `translateY(${(1 - p) * 46 - q * 22}px)`;
+    span.style.filter = `blur(${((1 - p) * 12 + q * 8).toFixed(2)}px)`;
+  });
+}
+const CAPTIONS = [
+  caption([[b('Most AI stops')], [s('at the demo.')]], 0.65, 3.75, { stagger: 0.2 }),
+  caption([[b('Built inside')], [s('your team.')]], 4.4, 6.5, { stagger: 0.16 }),
+  caption([[b('Ships what')], [s('actually runs.')]], 6.95, 9.1, { stagger: 0.16 }),
+  caption([[b('The calls get')], [s('answered.')]], 9.85, 12.6),
+  caption([[b('Hard questions,')], [s('reasoned through.')]], 13.25, 16.6),
+  caption([[b('Models stay healthy,')], [s('long after launch.')]], 17.25, 20.8),
+  caption([[b('One'), s('engineer.')]], 26.5, 31, { x: 140, y: 286, size: 92, stagger: 0.3 }),
+];
+
+// The list: one word per cut, centred low, landing on the beat
+const LIST_WORDS = ['Support', 'Research', 'Operations', 'Data'].map((word, i) => {
+  const e = make('div', `left:0;width:${W}px;top:786px;text-align:center;font-size:176px;line-height:1;text-shadow:0 6px 44px rgba(0,0,4,.75)`,
+    `<span class="bold">${word}</span><span class="bold" style="color:${EMBER}">.</span>`);
+  return { e, tin: LIST[i], tout: i < 3 ? LIST[i + 1] : 26.0 };
+});
+function drawList(t) {
+  LIST_WORDS.forEach(({ e, tin, tout }) => {
+    const on = t >= tin && t < tout;
+    const p = spring(prog(t, tin, tin + 0.45));
+    e.style.opacity = on ? clamp(p * 3) * (1 - prog(t, tout - 0.08, tout)) : 0;
+    e.style.transform = `scale(${0.9 + 0.1 * p})`;
+  });
+}
+
+// ---------- chrome: wordmark and scene label ----------
+const mark = make('div', `left:96px;top:78px;display:flex;align-items:center;gap:14px;font-size:16px;letter-spacing:.2em;white-space:nowrap`,
+  `<span style="width:14px;height:14px;border-radius:999px;background:${EMBER};box-shadow:0 0 18px rgba(252,165,10,.8)"></span>ISURU CHATHURANGA`);
+mark.classList.add('mono');
+const label = make('div', `left:1420px;top:80px;width:404px;text-align:right;font-size:16px;letter-spacing:.2em;color:${ASH};white-space:nowrap`);
+label.classList.add('mono');
+const LABELS = [[9.5, 12.8, '01 / VOICE'], [13.0, 16.8, '02 / AGENTS'], [17.0, 21.0, '03 / MLOPS']];
+function drawChrome(t) {
+  mark.style.opacity = Math.min(easeOut(prog(t, 0.4, 1.0)), 1 - prog(t, 25.9, 26.2)) * 0.9;
+  const scene = LABELS.find(([a, z]) => t >= a - 0.1 && t <= z + 0.3);
+  label.textContent = scene ? scene[2] : '';
+  label.style.opacity = scene ? Math.min(easeOut(prog(t, scene[0], scene[0] + 0.3)), 1 - prog(t, scene[1], scene[1] + 0.3)) : 0;
+}
+
+// ---------- film grain + fades ----------
+const grain = document.createElement('canvas');
+grain.width = 480; grain.height = 270;
+grain.className = 'full';
+grain.style.cssText += 'mix-blend-mode:overlay;opacity:.06;image-rendering:auto';
+stage.appendChild(grain);
+const gctx = grain.getContext('2d');
+const gdata = gctx.createImageData(480, 270);
+function drawGrain(t) {
+  // Seeded per frame, so every render of the same time gives the same noise
+  let seed = (Math.floor(t * 30) + 1) * 2654435761 >>> 0;
+  const d = gdata.data;
+  for (let i = 0; i < d.length; i += 4) {
+    seed = (seed + 0x6d2b79f5) >>> 0;
+    let r = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+    const v = ((r ^ (r >>> 14)) >>> 0) & 255;
+    d[i] = d[i + 1] = d[i + 2] = v;
+    d[i + 3] = 255;
+  }
+  gctx.putImageData(gdata, 0, 0);
+}
+const black = make('div', `width:${W}px;height:${H}px;background:${VOID}`);
+
+window.seek = function (t) {
+  t = clamp(t, 0, DURATION - 1e-6);
+  drawPhotos(t);
+  drawGrade(t);
+  drawVoice(t);
+  drawAgents(t);
+  drawMlops(t);
+  drawEnd(t);
+  CAPTIONS.forEach((draw) => draw(t));
+  drawList(t);
+  drawChrome(t);
+  drawGrain(t);
+  // In from black, out to black, so the loop restarts cleanly
+  black.style.opacity = Math.max(1 - easeOut(prog(t, 0, 0.6)), easeInOut(prog(t, 29.6, 30)));
+};
+window.DURATION = DURATION;
+window.ready = Promise.all([document.fonts.ready, ...[...document.images].map((img) => img.decode().catch(() => {}))]);
+window.ready.then(() => seek(0));
+
+if (location.search.includes('play')) {
+  const start = performance.now();
+  const loop = () => { seek(((performance.now() - start) / 1000) % DURATION); requestAnimationFrame(loop); };
+  window.ready.then(loop);
+}
+</script>
+</body>
+</html>

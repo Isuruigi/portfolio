@@ -50,3 +50,13 @@ __pycache__/
 
 # Deployment Guides
 backend/*.md
+
+# ElevenLabs voiceover clips (regenerable, cost credits)
+scripts/reel/vo/
+
+# Cloudflare local secrets
+.dev.vars
+.wrangler/
+
+# Original photos used to render the reel (the finished reel is in public/media)
+scripts/reel/photos/

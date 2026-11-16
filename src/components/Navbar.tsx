@@ -3,16 +3,15 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import ThemeToggle from "./ThemeToggle";
+import { AGENT_NAME, openAgent } from "@/lib/agent";
 
 const navLinks = [
+    { href: "#work", label: "Work" },
+    { href: "#career", label: "Career" },
+    { href: "#teaching", label: "Teaching" },
     { href: "#about", label: "About" },
-    { href: "#services", label: "Services" },
-    { href: "#tech-stack", label: "Tech Stack" },
-    { href: "#projects", label: "Projects" },
-    { href: "#experience", label: "Experience" },
-    { href: "#blog", label: "Blog" },
-    { href: "#certifications", label: "Certifications" },
+    { href: "#blog", label: "Writing" },
+    { href: "#news", label: "News" },
     { href: "#contact", label: "Contact" },
 ];
 
@@ -121,12 +120,17 @@ export default function Navbar() {
                                 </motion.li>
                             ))}
                         </ul>
-                        <ThemeToggle />
+                        <button
+                            type="button"
+                            onClick={() => openAgent()}
+                            className="cursor-pointer rounded-full border border-ember/60 px-4 py-1.5 text-sm font-medium text-ember transition-colors hover:bg-ember hover:text-void focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+                        >
+                            Ask {AGENT_NAME}
+                        </button>
                     </div>
 
                     {/* Mobile Menu Button */}
                     <div className="flex items-center gap-4 md:hidden">
-                        <ThemeToggle />
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}

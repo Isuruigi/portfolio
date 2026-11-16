@@ -1,0 +1,47 @@
+{
+  "name": "Isuru (IG) Chathuranga",
+  "headline": "AI/ML Engineer building AI systems that hold up in production",
+  "location": "Colombo, Sri Lanka",
+  "focus": ["Voice AI agents", "RAG and GraphRAG", "Multi-agent systems", "MLOps and monitoring"],
+  "roles": [
+    { "title": "AI/ML Engineer", "org": "Veracity Digital", "from": "2026-08", "to": null },
+    { "title": "Technical Assistant, Agentic AI Bootcamp", "org": "Buildr Labs", "from": "2026-05", "to": null },
+    { "title": "Open source contributor", "org": "LangChain, PyTorch, Hugging Face, MLflow", "from": "2024-09", "to": null },
+    { "title": "Machine Learning Finalist (Top 3 of 290)", "org": "Zuu Crew AI", "from": "2025-09", "to": "2025-12" },
+    { "title": "Freelance AI Engineer", "org": "Self-employed", "from": "2024-06", "to": "2026-08" }
+  ],
+  "education": [
+    { "degree": "BSc (Hons) IT & Management", "institution": "University of Colombo", "from": "2023-05", "to": "2027-05" }
+  ],
+  "flagshipProjects": [
+    {
+      "name": "PersonaPlex",
+      "status": "shipped",
+      "summary": "Full-duplex voice agent that answers real phone calls with sub-second responses",
+      "stack": ["Python", "FastAPI", "Twilio", "Deepgram", "OpenAI", "Edge TTS"],
+      "url": "https://github.com/Isuruigi/personaplex-agent"
+    },
+    {
+      "name": "NEXUS GraphRAG",
+      "status": "in development",
+      "summary": "Hybrid dense + graph retrieval for multi-hop questions",
+      "stack": ["LangGraph", "Qdrant", "Neo4j", "Redpanda", "Dragonfly", "FastAPI"],
+      "url": null
+    },
+    {
+      "name": "Cost-Aware Fraud Detection",
+      "status": "shipped",
+      "summary": "Fraud model with a cost-based decision threshold, 92% test coverage, MLflow tracking",
+      "stack": ["Python", "XGBoost", "MLflow", "CI/CD"],
+      "url": "https://github.com/Isuruigi/fraud-detection-system"
+    }
+  ],
+  "contact": {
+    "email": "isuruigic@gmail.com",
+    "linkedin": "https://linkedin.com/in/isuruig",
+    "github": "https://github.com/Isuruigi",
+    "x": "https://x.com/Isuru_ig",
+    "website": "https://isuruig.com"
+  },
+  "humanReadable": "https://isuruig.com/llms.txt"
+}

@@ -1,5 +1,5 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter, Host_Grotesk, Martian_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import Chatbot from "@/components/Chatbot";
 import "./globals.css";
@@ -9,6 +9,24 @@ const inter = Inter({
   display: "swap",
   variable: "--font-inter",
 });
+
+// Brand display face (hero and headings) and a mono reserved for real numbers
+const hostGrotesk = Host_Grotesk({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-host-grotesk",
+});
+
+const martianMono = Martian_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-martian-mono",
+});
+
+export const viewport: Viewport = {
+  themeColor: "#000004",
+  colorScheme: "dark",
+};
 
 export const metadata: Metadata = {
   title: "Isuru Chathuranga | AI/ML Engineer @ Veracity Digital",
@@ -60,11 +78,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
+      <body className={`${inter.variable} ${hostGrotesk.variable} ${martianMono.variable} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
+          forcedTheme="dark"
+          enableSystem={false}
           disableTransitionOnChange={false}
         >
           {children}

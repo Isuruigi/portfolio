@@ -1,157 +1,86 @@
-"use client";
+import { socials } from "@/lib/socials";
 
-import { motion } from "framer-motion";
-import { Linkedin, Github, Mail, Link as LinkIcon } from "lucide-react";
-
-// Custom X (Twitter) icon component
-const XIcon = ({ className }: { className?: string }) => (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-    </svg>
-);
-
-const quickLinks = [
-    { name: "About", href: "#about" },
-    { name: "Tech Stack", href: "#tech-stack" },
-    { name: "Projects", href: "#projects" },
-    { name: "Experience", href: "#experience" },
-    { name: "Blog", href: "#blog" },
-    { name: "Certifications", href: "#certifications" },
-    { name: "Contact", href: "#contact" },
+const sections = [
+    { label: "Work", href: "#work" },
+    { label: "Career", href: "#career" },
+    { label: "Teaching", href: "#teaching" },
+    { label: "About", href: "#about" },
+    { label: "Writing", href: "#blog" },
+    { label: "News", href: "#news" },
+    { label: "Contact", href: "#contact" },
 ];
 
-const socialLinks = [
-    { icon: Linkedin, href: "https://www.linkedin.com/in/isuruig", label: "LinkedIn" },
-    { icon: Github, href: "https://github.com/Isuruigi", label: "GitHub" },
-    { icon: XIcon, href: "https://x.com/Isuru_ig", label: "X" },
-    { icon: Mail, href: "mailto:isuruigic@gmail.com", label: "Email" },
-    { icon: LinkIcon, href: "https://linktr.ee/isuruig", label: "Linktree" },
+const elsewhere = [...socials, { label: "Email", href: "mailto:isuruigic@gmail.com" }];
+
+const forAgents = [
+    { label: "llms.txt", href: "/llms.txt" },
+    { label: "profile.json", href: "/profile.json" },
 ];
+
+const linkClass =
+    "text-sm text-ink/80 transition-colors hover:text-ember focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember";
 
 export default function Footer() {
-    const scrollToSection = (href: string) => {
-        if (href.startsWith("#")) {
-            const element = document.getElementById(href.slice(1));
-            if (element) {
-                element.scrollIntoView({ behavior: "smooth" });
-            }
-        }
-    };
-
     return (
-        <footer className="border-t border-border bg-card">
-            <div className="max-w-[1200px] mx-auto px-5 py-16">
-                {/* Top Section - 3 Columns */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-                    {/* Column 1 - Brand */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5 }}
-                    >
-                        <h3 className="text-xl font-bold text-foreground mb-2">
-                            Isuru (IG) Chathuranga
-                        </h3>
-                        <p className="text-primary font-medium mb-1">
-                            Shipping Production AI Systems
+        <footer className="border-t border-white/10 bg-void text-ink">
+            <div className="mx-auto max-w-[1280px] px-5 py-16 lg:px-10">
+                <div className="grid grid-cols-2 gap-10 md:grid-cols-[minmax(0,2fr)_1fr_1fr_1fr]">
+                    <div className="col-span-2 md:col-span-1">
+                        <p className="font-display text-2xl font-light tracking-[-0.02em]">Isuru (IG) Chathuranga</p>
+                        <p className="mt-2 max-w-xs text-sm leading-relaxed text-ash">
+                            AI/ML engineer in Colombo, building AI systems that hold up in production.
                         </p>
-                        <p className="text-sm text-muted">
-                            AI/ML Engineer @ Veracity Digital | TA @ Buildr Labs
-                        </p>
-                    </motion.div>
-
-
-                    {/* Column 2 - Quick Links */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                    >
-                        <h4 className="text-sm uppercase tracking-wider text-muted mb-4">
-                            Navigate
-                        </h4>
-                        <nav className="grid grid-cols-2 gap-2">
-                            {quickLinks.map((link) => (
-                                <button
-                                    key={link.name}
-                                    onClick={() => scrollToSection(link.href)}
-                                    className="text-left text-muted hover:text-foreground transition-colors cursor-pointer"
-                                >
-                                    {link.name}
-                                </button>
-                            ))}
-                        </nav>
-                    </motion.div>
-
-                    {/* Column 3 - Connect */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                    >
-                        <h4 className="text-sm uppercase tracking-wider text-muted mb-4">
-                            Connect
-                        </h4>
-                        <div className="space-y-2">
-                            {socialLinks.map((link) => (
-                                <a
-                                    key={link.label}
-                                    href={link.href}
-                                    target={link.href.startsWith("mailto") ? undefined : "_blank"}
-                                    rel="noopener noreferrer"
-                                    className="flex items-center gap-2 text-muted hover:text-foreground transition-colors"
-                                >
-                                    <link.icon className="w-4 h-4" />
-                                    {link.label}
-                                </a>
-                            ))}
-                        </div>
-                    </motion.div>
-                </div>
-
-                {/* Divider */}
-                <div className="border-t border-border my-8" />
-
-                {/* Bottom Section */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                    className="text-center space-y-4"
-                >
-                    {/* Social Icons */}
-                    <div className="flex justify-center gap-4">
-                        {socialLinks.slice(0, 3).map((link) => (
-                            <motion.a
-                                key={link.label}
-                                href={link.href}
-                                target={link.href.startsWith("mailto") ? undefined : "_blank"}
-                                rel="noopener noreferrer"
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.95 }}
-                                className="w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all duration-200"
-                                aria-label={link.label}
-                            >
-                                <link.icon className="w-4 h-4" />
-                            </motion.a>
-                        ))}
                     </div>
 
-                    {/* Copyright */}
-                    <p className="text-sm text-muted">
-                        © {new Date().getFullYear()} Isuru (IG) Chathuranga. All rights reserved.
-                    </p>
+                    <nav aria-label="Sections">
+                        <p className="text-sm text-ash">On this page</p>
+                        <ul className="mt-4 space-y-2.5">
+                            {sections.map((l) => (
+                                <li key={l.label}>
+                                    <a href={l.href} className={linkClass}>
+                                        {l.label}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </nav>
 
-                    {/* Tech Stack */}
-                    <p className="text-xs text-muted/70">
-                        Built with Next.js • TypeScript • Tailwind CSS • Framer Motion
-                    </p>
+                    <div>
+                        <p className="text-sm text-ash">Elsewhere</p>
+                        <ul className="mt-4 space-y-2.5">
+                            {elsewhere.map((l) => (
+                                <li key={l.label}>
+                                    <a
+                                        href={l.href}
+                                        target={l.href.startsWith("mailto") ? undefined : "_blank"}
+                                        rel="noopener noreferrer"
+                                        className={linkClass}
+                                    >
+                                        {l.label}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
-                </motion.div>
+                    <div>
+                        <p className="text-sm text-ash">For AI agents</p>
+                        <ul className="mt-4 space-y-2.5">
+                            {forAgents.map((l) => (
+                                <li key={l.label}>
+                                    <a href={l.href} className={`${linkClass} font-mono text-xs`} translate="no">
+                                        {l.label}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+
+                <div className="mt-14 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-ash sm:flex-row sm:justify-between">
+                    <p>© {new Date().getFullYear()} Isuru Chathuranga</p>
+                    <p>Some studio portraits on this site are AI-generated from real photos.</p>
+                </div>
             </div>
         </footer>
     );

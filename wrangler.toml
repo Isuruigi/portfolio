@@ -1,0 +1,29 @@
+# Cloudflare Pages: the static site (Next.js export in out/) plus Axon's API in functions/api/.
+# Secrets are NOT set here. Add them in the dashboard (Settings -> Variables and Secrets) or with
+#   npx wrangler pages secret put GROQ_API_KEY
+# For local development put them in .dev.vars (git-ignored), then:
+#   npm run build && npx wrangler pages dev
+name = "isuruig-portfolio"
+pages_build_output_dir = "out"
+compatibility_date = "2026-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ALLOWED_ORIGINS = "https://isuruig.com,https://www.isuruig.com"
+GROQ_MODEL = "openai/gpt-oss-120b"
+GROQ_FALLBACK_MODEL = "openai/gpt-oss-20b"
+VOICE_MODEL = "gemini-3.8-live"
+VOICE_NAME = "Aoede"
+VOICE_LANGUAGES = "en"
+VOICE_MAX_SECONDS = "180"
+VOICE_DAILY_CAP = "150"
+
+# Optional, recommended in production: shared rate limits across Cloudflare's network.
+# Create it with `npx wrangler kv namespace create AXON_KV` and paste the id here.
+# [[kv_namespaces]]
+# binding = "AXON_KV"
+# id = ""
+
+# Optional last-resort model when Groq is down (Workers AI, free tier).
+# [ai]
+# binding = "AI"

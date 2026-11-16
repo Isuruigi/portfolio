@@ -1,62 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import {
-    Mail,
-    Phone,
-    MapPin,
-    Clock,
-    Send,
-    Check,
-    Linkedin,
-    Github,
-    Copy,
-    AlertCircle,
-    Link as LinkIcon
-} from "lucide-react";
-
-// Custom X (Twitter) icon component
-const XIcon = ({ className }: { className?: string }) => (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-    </svg>
-);
+import { Send, Check, Copy, AlertCircle } from "lucide-react";
+import { socials } from "@/lib/socials";
 
 const contactInfo = [
-    {
-        icon: Mail,
-        label: "Email",
-        value: "isuruigic@gmail.com",
-        copyable: true,
-    },
-    {
-        icon: Phone,
-        label: "Phone",
-        value: "+94 77 050 0424",
-        copyable: true,
-    },
-    {
-        icon: MapPin,
-        label: "Location",
-        value: "Colombo, Sri Lanka",
-        subtext: "Remote Ready • Available Globally",
-    },
-    {
-        icon: Clock,
-        label: "Response Time",
-        value: "Within 24 hours",
-        subtext: "Usually faster for interesting projects",
-    },
+    { label: "Email", value: "isuruigic@gmail.com", copyable: true },
+    { label: "Phone", value: "+94 77 050 0424", copyable: true },
+    { label: "Based in", value: "Colombo, Sri Lanka. Works remotely across time zones." },
+    { label: "Replies", value: "Usually within 24 hours" },
 ];
 
-const socialLinks = [
-    { icon: Linkedin, href: "https://www.linkedin.com/in/isuruig", label: "LinkedIn" },
-    { icon: Github, href: "https://github.com/Isuruigi", label: "GitHub" },
-    { icon: XIcon, href: "https://x.com/Isuru_ig", label: "X" },
-    { icon: Mail, href: "mailto:isuruigic@gmail.com", label: "Email" },
-    { icon: LinkIcon, href: "https://linktr.ee/isuruig", label: "Linktree" },
-];
+const elsewhere = socials;
+
+// Shared input styling; the border turns warm on error
+const fieldClass = (invalid?: boolean) =>
+    `w-full rounded-xl border bg-white/[0.03] px-4 py-3 text-ink placeholder:text-ash/60 transition-colors focus:outline-none focus-visible:border-ember focus-visible:ring-2 focus-visible:ring-ember/30 ${
+        invalid ? "border-inferno-3" : "border-white/10"
+    }`;
 
 
 const subjectOptions = [
@@ -64,15 +26,15 @@ const subjectOptions = [
     "Freelance Project",
     "Collaboration Opportunity",
     "Open Source Discussion",
+    "Teaching or Mentoring",
     "General Inquiry",
 ];
 
-const workOn = [
-    "Agentic AI systems & multi-agent workflows",
-    "RAG and GraphRAG retrieval pipelines",
-    "Voice AI agents and real-time speech",
-    "Workflow automation with n8n",
-    "MLOps: deployment, drift detection, monitoring",
+// The three doors at the top of the section; each preselects a subject
+const doors = [
+    { id: "hire", title: "Hire me", line: "A full-time role, remote or in Colombo.", subject: "Full-time Remote Role" },
+    { id: "build", title: "Build with me", line: "A freelance project or a system that has to ship.", subject: "Freelance Project" },
+    { id: "learn", title: "Learn with me", line: "Workshops, mentoring or a bootcamp session.", subject: "Teaching or Mentoring" },
 ];
 
 interface FormData {
@@ -104,6 +66,21 @@ export default function Contact() {
     const [touched, setTouched] = useState<Record<string, boolean>>({});
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
     const [copiedField, setCopiedField] = useState<string | null>(null);
+
+    const chooseDoor = (subject: string) => {
+        setFormData((prev) => ({ ...prev, subject }));
+        document.getElementById("contact-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+
+    // The voice agent can open a door for the caller ("I want to hire him")
+    useEffect(() => {
+        const onDoor = (e: Event) => {
+            const door = doors.find((d) => d.id === (e as CustomEvent<string>).detail);
+            if (door) setFormData((prev) => ({ ...prev, subject: door.subject }));
+        };
+        window.addEventListener("contact-door", onDoor);
+        return () => window.removeEventListener("contact-door", onDoor);
+    }, []);
 
     const validateEmail = (email: string) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -219,120 +196,95 @@ export default function Contact() {
     };
 
     return (
-        <section id="contact" className="py-24 px-5">
-            <div className="max-w-[1000px] mx-auto">
+        <section id="contact" className="scroll-mt-16 bg-void py-28 text-ink">
+            <div className="mx-auto max-w-[1280px] px-5 lg:px-10">
                 {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.5 }}
-                    className="text-center mb-12"
+                    className="mb-14"
                 >
-                    <p className="text-sm uppercase tracking-wider text-muted mb-2">
-                        Get In Touch
-                    </p>
-                    <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                        Let&apos;s Build Production AI Together
+                    <h2 className="font-display text-[clamp(2.4rem,5vw,4rem)] font-light leading-[1] tracking-[-0.04em] text-ink">
+                        Pick a door
                     </h2>
-                    <p className="text-lg text-muted max-w-[600px] mx-auto">
-                        Working on something in this space, or have a question? Send a message.
+                    <p className="mt-5 max-w-[36rem] text-lg leading-relaxed text-ash">
+                        Three ways to work together. Choose one and the form below is ready for you.
                     </p>
+                    <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-3">
+                        {doors.map((d) => {
+                            const chosen = formData.subject === d.subject;
+                            return (
+                                <button
+                                    key={d.title}
+                                    type="button"
+                                    onClick={() => chooseDoor(d.subject)}
+                                    aria-pressed={chosen}
+                                    className={`cursor-pointer rounded-2xl border p-6 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember ${
+                                        chosen ? "border-ember bg-ember/10" : "border-white/10 hover:border-ember/50 hover:bg-white/[0.03]"
+                                    }`}
+                                >
+                                    <span className="block font-display text-2xl font-light tracking-[-0.02em] text-ink">{d.title}</span>
+                                    <span className="mt-2 block text-sm leading-relaxed text-ash">{d.line}</span>
+                                </button>
+                            );
+                        })}
+                    </div>
                 </motion.div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     {/* Left Column - Contact Information */}
-                    <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                    >
-                        {/* What I work on */}
-                        <div className="mb-8">
-                            <h3 className="text-lg font-semibold text-foreground mb-4">
-                                What I work on:
-                            </h3>
-                            <ul className="space-y-2">
-                                {workOn.map((item) => (
-                                    <li key={item} className="flex items-start gap-2 text-muted">
-                                        <span className="text-primary mt-1">•</span>
-                                        {item}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-
-                        {/* Contact Details */}
-                        <div className="space-y-4 mb-8">
+                    <div>
+                        <h3 className="font-display text-2xl font-light tracking-[-0.02em]">Or reach out directly</h3>
+                        <dl className="mt-6 border-t border-white/10">
                             {contactInfo.map((info) => (
-                                <div
-                                    key={info.label}
-                                    className="flex items-start gap-4 p-4 rounded-lg border border-border bg-card"
-                                >
-                                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                                        <info.icon className="w-5 h-5 text-primary" />
-                                    </div>
-                                    <div className="flex-1">
-                                        <p className="text-xs text-muted uppercase tracking-wider mb-1">
-                                            {info.label}
-                                        </p>
-                                        <div className="flex items-center gap-2">
-                                            <p className="text-foreground font-medium">{info.value}</p>
-                                            {info.copyable && (
-                                                <button
-                                                    onClick={() => copyToClipboard(info.value, info.label)}
-                                                    className="p-1 hover:bg-secondary rounded transition-colors cursor-pointer"
-                                                    title="Copy"
-                                                >
-                                                    {copiedField === info.label ? (
-                                                        <Check className="w-4 h-4 text-green-500" />
-                                                    ) : (
-                                                        <Copy className="w-4 h-4 text-muted" />
-                                                    )}
-                                                </button>
-                                            )}
-                                        </div>
-                                        {info.subtext && (
-                                            <p className="text-sm text-muted">{info.subtext}</p>
+                                <div key={info.label} className="grid grid-cols-[6.5rem_minmax(0,1fr)] gap-4 border-b border-white/10 py-4">
+                                    <dt className="text-sm text-ash">{info.label}</dt>
+                                    <dd className="flex min-w-0 items-center gap-2 text-[15px]">
+                                        <span className="break-words">{info.value}</span>
+                                        {info.copyable && (
+                                            <button
+                                                type="button"
+                                                onClick={() => copyToClipboard(info.value, info.label)}
+                                                aria-label={`Copy ${info.label.toLowerCase()}`}
+                                                className="shrink-0 cursor-pointer rounded p-1 text-ash transition-colors hover:bg-white/10 hover:text-ink focus-visible:outline-2 focus-visible:outline-ember"
+                                            >
+                                                {copiedField === info.label ? (
+                                                    <Check className="h-4 w-4 text-ember" aria-hidden="true" />
+                                                ) : (
+                                                    <Copy className="h-4 w-4" aria-hidden="true" />
+                                                )}
+                                            </button>
                                         )}
-                                    </div>
+                                        {copiedField === info.label && (
+                                            <span className="text-xs text-ember" role="status">
+                                                Copied
+                                            </span>
+                                        )}
+                                    </dd>
                                 </div>
                             ))}
-                        </div>
-
-                        {/* Social Links */}
-                        <div>
-                            <h3 className="text-sm font-medium text-muted mb-4">
-                                Connect with me
-                            </h3>
-                            <div className="flex gap-4">
-                                {socialLinks.map((link) => (
-                                    <motion.a
-                                        key={link.label}
-                                        href={link.href}
+                        </dl>
+                        <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+                            {elsewhere.map((l) => (
+                                <li key={l.label}>
+                                    <a
+                                        href={l.href}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        whileHover={{ scale: 1.1 }}
-                                        whileTap={{ scale: 0.95 }}
-                                        className="w-12 h-12 rounded-full bg-card border border-border flex items-center justify-center hover:bg-primary hover:border-primary hover:text-white transition-all duration-200"
-                                        title={link.label}
+                                        className="text-sm font-medium underline decoration-inferno-3 underline-offset-[6px] transition-colors hover:text-ember focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ember"
                                     >
-                                        <link.icon className="w-5 h-5" />
-                                    </motion.a>
-                                ))}
-                            </div>
-                        </div>
-                    </motion.div>
+                                        {l.label}
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
                     {/* Right Column - Contact Form */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                    >
-                        <form onSubmit={handleSubmit} className="space-y-5">
+                    <div>
+                        <form id="contact-form" onSubmit={handleSubmit} className="scroll-mt-24 space-y-5">
                             {/* Honeypot */}
                             <input
                                 type="text"
@@ -346,8 +298,8 @@ export default function Contact() {
 
                             {/* Name */}
                             <div>
-                                <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
-                                    Name <span className="text-primary">*</span>
+                                <label htmlFor="name" className="mb-2 block text-sm text-ash">
+                                    Name <span className="text-ember" aria-hidden="true">*</span>
                                 </label>
                                 <input
                                     type="text"
@@ -355,16 +307,14 @@ export default function Contact() {
                                     value={formData.name}
                                     onChange={(e) => handleChange("name", e.target.value)}
                                     onBlur={() => handleBlur("name")}
-                                    placeholder="Your name"
-                                    className={`
-                    w-full px-4 py-3 rounded-lg border bg-card text-foreground
-                    focus:outline-none focus:border-primary transition-colors
-                    ${touched.name && errors.name ? "border-red-500" : "border-border"}
-                  `}
+                                    placeholder="Jane Perera"
+                                    name="name"
+                                    autoComplete="name"
+                                    className={fieldClass(!!(touched.name && errors.name))}
                                 />
                                 {touched.name && errors.name && (
-                                    <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
-                                        <AlertCircle className="w-4 h-4" />
+                                    <p className="mt-1.5 flex items-center gap-1.5 text-sm text-inferno-3">
+                                        <AlertCircle className="h-4 w-4" aria-hidden="true" />
                                         {errors.name}
                                     </p>
                                 )}
@@ -372,8 +322,8 @@ export default function Contact() {
 
                             {/* Email */}
                             <div>
-                                <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-                                    Email <span className="text-primary">*</span>
+                                <label htmlFor="email" className="mb-2 block text-sm text-ash">
+                                    Email <span className="text-ember" aria-hidden="true">*</span>
                                 </label>
                                 <input
                                     type="email"
@@ -381,16 +331,15 @@ export default function Contact() {
                                     value={formData.email}
                                     onChange={(e) => handleChange("email", e.target.value)}
                                     onBlur={() => handleBlur("email")}
-                                    placeholder="your.email@company.com"
-                                    className={`
-                    w-full px-4 py-3 rounded-lg border bg-card text-foreground
-                    focus:outline-none focus:border-primary transition-colors
-                    ${touched.email && errors.email ? "border-red-500" : "border-border"}
-                  `}
+                                    placeholder="jane@company.com"
+                                    name="email"
+                                    autoComplete="email"
+                                    spellCheck={false}
+                                    className={fieldClass(!!(touched.email && errors.email))}
                                 />
                                 {touched.email && errors.email && (
-                                    <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
-                                        <AlertCircle className="w-4 h-4" />
+                                    <p className="mt-1.5 flex items-center gap-1.5 text-sm text-inferno-3">
+                                        <AlertCircle className="h-4 w-4" aria-hidden="true" />
                                         {errors.email}
                                     </p>
                                 )}
@@ -398,7 +347,7 @@ export default function Contact() {
 
                             {/* Company */}
                             <div>
-                                <label htmlFor="company" className="block text-sm font-medium text-foreground mb-2">
+                                <label htmlFor="company" className="mb-2 block text-sm text-ash">
                                     Company
                                 </label>
                                 <input
@@ -406,28 +355,27 @@ export default function Contact() {
                                     id="company"
                                     value={formData.company}
                                     onChange={(e) => handleChange("company", e.target.value)}
-                                    placeholder="Your company (optional)"
-                                    className="w-full px-4 py-3 rounded-lg border border-border bg-card text-foreground focus:outline-none focus:border-primary transition-colors"
+                                    placeholder="Optional"
+                                    name="company"
+                                    autoComplete="organization"
+                                    className={fieldClass()}
                                 />
                             </div>
 
                             {/* Subject */}
                             <div>
-                                <label htmlFor="subject" className="block text-sm font-medium text-foreground mb-2">
-                                    Subject <span className="text-primary">*</span>
+                                <label htmlFor="subject" className="mb-2 block text-sm text-ash">
+                                    Subject <span className="text-ember" aria-hidden="true">*</span>
                                 </label>
                                 <select
                                     id="subject"
                                     value={formData.subject}
                                     onChange={(e) => handleChange("subject", e.target.value)}
                                     onBlur={() => handleBlur("subject")}
-                                    className={`
-                    w-full px-4 py-3 rounded-lg border bg-card text-foreground
-                    focus:outline-none focus:border-primary transition-colors cursor-pointer
-                    ${touched.subject && errors.subject ? "border-red-500" : "border-border"}
-                  `}
+                                    name="subject"
+                                    className={`${fieldClass(!!(touched.subject && errors.subject))} cursor-pointer bg-[#0b0a12] text-ink`}
                                 >
-                                    <option value="">Select a subject...</option>
+                                    <option value="">Choose a subject…</option>
                                     {subjectOptions.map((option) => (
                                         <option key={option} value={option}>
                                             {option}
@@ -435,8 +383,8 @@ export default function Contact() {
                                     ))}
                                 </select>
                                 {touched.subject && errors.subject && (
-                                    <p className="text-sm text-red-500 mt-1 flex items-center gap-1">
-                                        <AlertCircle className="w-4 h-4" />
+                                    <p className="mt-1.5 flex items-center gap-1.5 text-sm text-inferno-3">
+                                        <AlertCircle className="h-4 w-4" aria-hidden="true" />
                                         {errors.subject}
                                     </p>
                                 )}
@@ -444,30 +392,27 @@ export default function Contact() {
 
                             {/* Message */}
                             <div>
-                                <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
-                                    Message <span className="text-primary">*</span>
+                                <label htmlFor="message" className="mb-2 block text-sm text-ash">
+                                    Message <span className="text-ember" aria-hidden="true">*</span>
                                 </label>
                                 <textarea
                                     id="message"
                                     value={formData.message}
                                     onChange={(e) => handleChange("message", e.target.value)}
                                     onBlur={() => handleBlur("message")}
-                                    placeholder="Tell me about the opportunity, project, or what you'd like to discuss..."
+                                    placeholder="What are you working on, and how can I help?"
                                     rows={6}
-                                    className={`
-                    w-full px-4 py-3 rounded-lg border bg-card text-foreground resize-none
-                    focus:outline-none focus:border-primary transition-colors
-                    ${touched.message && errors.message ? "border-red-500" : "border-border"}
-                  `}
+                                    name="message"
+                                    className={`${fieldClass(!!(touched.message && errors.message))} resize-none`}
                                 />
                                 <div className="flex justify-between items-center mt-1">
                                     {touched.message && errors.message ? (
-                                        <p className="text-sm text-red-500 flex items-center gap-1">
-                                            <AlertCircle className="w-4 h-4" />
+                                        <p className="flex items-center gap-1.5 text-sm text-inferno-3">
+                                            <AlertCircle className="h-4 w-4" aria-hidden="true" />
                                             {errors.message}
                                         </p>
                                     ) : (
-                                        <span className="text-xs text-muted">
+                                        <span className="font-mono text-[11px] tabular-nums text-ash">
                                             {formData.message.length} / 50 minimum
                                         </span>
                                     )}
@@ -475,52 +420,41 @@ export default function Contact() {
                             </div>
 
                             {/* Submit Button */}
-                            <motion.button
+                            <button
                                 type="submit"
                                 disabled={status === "loading" || status === "success"}
-                                whileHover={{ scale: status === "idle" ? 1.01 : 1 }}
-                                whileTap={{ scale: status === "idle" ? 0.99 : 1 }}
-                                className={`
-                  w-full h-12 rounded-lg font-medium flex items-center justify-center gap-2
-                  transition-all duration-200 cursor-pointer
-                  ${status === "success"
-                                        ? "bg-green-500 text-white"
-                                        : status === "error"
-                                            ? "bg-red-500 text-white"
-                                            : "bg-primary text-white hover:opacity-90"
-                                    }
-                  disabled:opacity-70 disabled:cursor-not-allowed
-                `}
+                                className="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-ember font-medium text-void transition-colors hover:bg-inferno-5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember disabled:cursor-not-allowed disabled:opacity-70"
                             >
                                 {status === "loading" && (
                                     <>
-                                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                        Sending...
+                                        <span className="h-4 w-4 animate-spin rounded-full border-2 border-void/30 border-t-void" aria-hidden="true" />
+                                        Sending…
                                     </>
                                 )}
                                 {status === "success" && (
                                     <>
-                                        <Check className="w-5 h-5" />
-                                        Sent!
+                                        <Check className="h-4 w-4" aria-hidden="true" />
+                                        Sent
                                     </>
                                 )}
-                                {status === "error" && "Try Again"}
+                                {status === "error" && "Try again"}
                                 {status === "idle" && (
                                     <>
-                                        <Send className="w-5 h-5" />
-                                        Send Message
+                                        <Send className="h-4 w-4" aria-hidden="true" />
+                                        Send message
                                     </>
                                 )}
-                            </motion.button>
+                            </button>
 
                             {/* Success Message */}
                             {status === "success" && (
                                 <motion.div
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="p-4 rounded-lg bg-green-500/10 border border-green-500/20 text-green-600 dark:text-green-400"
+                                    role="status"
+                                    className="rounded-xl border border-ember/30 bg-ember/10 p-4 text-ink"
                                 >
-                                    <p className="font-medium">Message sent successfully!</p>
+                                    <p className="font-medium">Message sent.</p>
                                     <p className="text-sm mt-1">
                                         I&apos;ll respond within 24 hours. For urgent matters, reach me on LinkedIn.
                                     </p>
@@ -532,7 +466,8 @@ export default function Contact() {
                                 <motion.div
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400"
+                                    role="alert"
+                                    className="rounded-xl border border-inferno-3/40 bg-inferno-3/10 p-4 text-ink"
                                 >
                                     <p className="font-medium">Something went wrong.</p>
                                     <p className="text-sm mt-1">
@@ -541,7 +476,7 @@ export default function Contact() {
                                 </motion.div>
                             )}
                         </form>
-                    </motion.div>
+                    </div>
                 </div>
             </div>
         </section>

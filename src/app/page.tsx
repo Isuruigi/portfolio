@@ -1,11 +1,12 @@
 import Hero from "@/components/sections/Hero";
+import ProofStrip from "@/components/sections/ProofStrip";
+import Reel from "@/components/sections/Reel";
+import Work from "@/components/sections/Work";
+import Career from "@/components/sections/Career";
+import InTheRoom from "@/components/sections/InTheRoom";
 import About from "@/components/sections/About";
-import Services from "@/components/sections/Services";
-import TechStack from "@/components/sections/TechStack";
-import Projects from "@/components/sections/Projects";
-import Experience from "@/components/sections/Experience";
 import Blog from "@/components/sections/Blog";
-import Certifications from "@/components/sections/Certifications";
+import Newsroom from "@/components/sections/Newsroom";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/sections/Footer";
 import Navbar from "@/components/Navbar";
@@ -15,13 +16,14 @@ export default function Home() {
     <main className="min-h-screen bg-background">
       <Navbar />
       <Hero />
+      <ProofStrip />
+      <Reel />
+      <Work />
+      <Career />
+      <InTheRoom />
       <About />
-      <Services />
-      <TechStack />
-      <Projects />
-      <Experience />
       <Blog />
-      <Certifications />
+      <Newsroom />
       <Contact />
       <Footer />
     </main>

@@ -1,261 +1,100 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {
-    Github,
-    ArrowDown,
-    Mail,
-    Code,
-    Briefcase,
-    GraduationCap
-} from "lucide-react";
-import TechIcon from "@/components/ui/TechIcon";
-import HeroCards from "@/components/sections/HeroCards";
+import { useRef } from "react";
+import { motion } from "framer-motion";
+import ForwardPass from "@/components/hero/ForwardPass";
+import { openAgent } from "@/lib/agent";
+import { socials } from "@/lib/socials";
 
-const titles = [
-    "AI/ML Engineer",
-    "Agentic AI Engineer",
-    "AI Automation Engineer",
-    "MLOps Specialist",
-    "Multi-Agent Systems Developer",
-    "Production ML Engineer",
-];
-
-const metrics = [
-    { icon: Code, text: "Open Source Contributor" },
-    { icon: Briefcase, text: "TA @ Buildr Labs" },
-    { icon: GraduationCap, text: "BSc IT & Management" },
-];
-
-const techStack = [
-    { name: "pytorch", displayName: "PyTorch" },
-    { name: "python", displayName: "Python" },
-    { name: "langchain", displayName: "LangChain" },
-    { name: "fastapi", displayName: "FastAPI" },
-    { name: "docker", displayName: "Docker" },
-    { name: "kubernetes", displayName: "Kubernetes" },
-    { name: "amazonaws", displayName: "AWS" },
-    { name: "googlecloud", displayName: "GCP" },
-    { name: "postgresql", displayName: "PostgreSQL" },
-];
-
-const fadeInUp = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-};
+const PORTRAIT_SRC = "/assets/portrait-studio.webp";
+const PORTRAIT_ALT = "Isuru Chathuranga in a navy suit, seated on a studio stool";
 
 export default function Hero() {
-    const [titleIndex, setTitleIndex] = useState(0);
+    // The network's output neuron is anchored to this portrait
+    const portraitRef = useRef<HTMLImageElement>(null);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setTitleIndex((prev) => (prev + 1) % titles.length);
-        }, 3000);
-        return () => clearInterval(interval);
-    }, []);
-
-    const scrollToSection = (id: string) => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.scrollIntoView({ behavior: "smooth" });
-        }
-    };
 
     return (
-        <section
-            id="hero"
-            className="min-h-screen flex items-center py-20 px-5"
-        >
-            <div className="max-w-[1200px] mx-auto w-full">
-                <div className="flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-8">
+        <section id="hero" className="relative isolate min-h-[100svh] overflow-hidden bg-void text-ink">
+            <ForwardPass anchorRef={portraitRef} />
 
-                    {/* Left Side - Content */}
-                    <motion.div
-                        className="flex-1 lg:pr-8 text-center lg:text-left"
-                        initial="initial"
-                        animate="animate"
-                        variants={{
-                            animate: {
-                                transition: { staggerChildren: 0.1 },
-                            },
-                        }}
-                    >
-                        {/* Current role */}
-                        <motion.div
-                            variants={fadeInUp}
-                            transition={{ duration: 0.5 }}
-                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20 mb-6"
-                        >
-                            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                            <span className="text-sm text-green-600 dark:text-green-400 font-medium">
-                                AI/ML Engineer @ Veracity Digital
-                            </span>
-                        </motion.div>
+            <motion.img
+                ref={portraitRef}
+                src={PORTRAIT_SRC}
+                alt={PORTRAIT_ALT}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1.1, delay: 0.25, ease: "easeOut" }}
+                className="pointer-events-none absolute bottom-0 right-[3%] hidden h-[88%] w-auto select-none lg:block"
+            />
 
-                        {/* Tagline with animated underline */}
-                        <motion.div
-                            variants={fadeInUp}
-                            transition={{ duration: 0.5, delay: 0.08 }}
-                            className="inline-block mb-4"
-                        >
-                            <p className="text-base md:text-lg italic text-primary/90 font-medium leading-none">
-                                AI that ships.
-                            </p>
-                            <motion.div
-                                initial={{ scaleX: 0 }}
-                                animate={{ scaleX: 1 }}
-                                transition={{ duration: 0.9, delay: 0.7, ease: "easeOut" }}
-                                style={{ transformOrigin: "left" }}
-                                className="h-px mt-1.5 bg-gradient-to-r from-primary via-primary/60 to-transparent"
-                            />
-                        </motion.div>
-
-                        {/* Name */}
-                        <motion.h1
-                            variants={fadeInUp}
-                            transition={{ duration: 0.5, delay: 0.1 }}
-                            className="text-5xl md:text-6xl lg:text-[64px] font-bold text-foreground mb-4 leading-[1.05] tracking-tight"
-                        >
-                            Isuru <span className="text-primary">(IG)</span> Chathuranga
-                        </motion.h1>
-
-                        {/* Animated Title */}
-                        <motion.div
-                            variants={fadeInUp}
-                            transition={{ duration: 0.5, delay: 0.15 }}
-                            className="h-10 mb-6"
-                        >
-                            <AnimatePresence mode="wait">
-                                <motion.h2
-                                    key={titleIndex}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
-                                    transition={{ duration: 0.3 }}
-                                    className="text-[22px] md:text-[28px] font-semibold text-primary"
-                                >
-                                    {titles[titleIndex]}
-                                </motion.h2>
-                            </AnimatePresence>
-                        </motion.div>
-
-                        {/* Value Proposition */}
-                        <motion.p
-                            variants={fadeInUp}
-                            transition={{ duration: 0.5, delay: 0.2 }}
-                            className="text-lg text-muted max-w-[600px] mb-8 mx-auto lg:mx-0 leading-relaxed"
-                        >
-                            <span className="text-foreground font-medium">I ship AI systems that hold up in production, not just notebooks.</span>{" "}
-                            AI/ML Engineer at Veracity Digital, building agentic workflows, RAG systems, and automation pipelines that survive real traffic.
-                        </motion.p>
-
-                        {/* Key Metrics */}
-                        <motion.div
-                            variants={fadeInUp}
-                            transition={{ duration: 0.5, delay: 0.3 }}
-                            className="flex flex-wrap justify-center lg:justify-start gap-6 md:gap-8 mb-8"
-                        >
-                            {metrics.map((metric) => (
-                                <div key={metric.text} className="flex items-center gap-2">
-                                    <metric.icon className="w-5 h-5 text-primary" />
-                                    <span className="text-sm text-muted">{metric.text}</span>
-                                </div>
-                            ))}
-                        </motion.div>
-
-                        {/* CTA Buttons */}
-                        <motion.div
-                            variants={fadeInUp}
-                            transition={{ duration: 0.5, delay: 0.35 }}
-                            className="flex flex-wrap justify-center lg:justify-start gap-3"
-                        >
-                            {/* Primary - GitHub Profile */}
-                            <motion.a
-                                href="https://github.com/Isuruigi"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                whileHover={{ y: -2, boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}
-                                whileTap={{ scale: 0.98 }}
-                                className="inline-flex items-center gap-2 h-11 px-6 bg-primary text-white rounded-lg font-medium transition-all duration-200"
-                            >
-                                <Github className="w-4 h-4" />
-                                GitHub Profile
-                            </motion.a>
-
-                            {/* Secondary - View Projects */}
-                            <motion.button
-                                onClick={() => scrollToSection("projects")}
-                                whileHover={{ y: -2, boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
-                                whileTap={{ scale: 0.98 }}
-                                className="inline-flex items-center gap-2 h-11 px-6 border border-border rounded-lg font-medium text-foreground hover:bg-secondary transition-all duration-200 cursor-pointer"
-                            >
-                                <ArrowDown className="w-4 h-4" />
-                                View Projects
-                            </motion.button>
-
-                            {/* Tertiary - Contact */}
-                            <motion.button
-                                onClick={() => scrollToSection("contact")}
-                                whileHover={{ y: -2 }}
-                                whileTap={{ scale: 0.98 }}
-                                className="inline-flex items-center gap-2 h-11 px-6 font-medium text-muted hover:text-foreground transition-all duration-200 cursor-pointer"
-                            >
-                                <Mail className="w-4 h-4" />
-                                Contact Me
-                            </motion.button>
-                        </motion.div>
-                    </motion.div>
-
-                    {/* Right Side - Profile Image */}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.5, delay: 0.4 }}
-                        className="flex-shrink-0"
-                    >
-                        <div
-                            className="w-[200px] h-[200px] lg:w-[300px] lg:h-[300px] rounded-full bg-gradient-to-br from-primary/20 to-accent/20 border-4 border-primary/30 overflow-hidden shadow-xl"
-                        >
-                            <img
-                                src="/assets/profile.jpg"
-                                alt="Isuru (IG) Chathuranga - AI/ML Engineer"
-                                className="w-full h-full object-cover object-top"
-                            />
-                        </div>
-                    </motion.div>
-
-                </div>
-
-                {/* Card deck — roles and shipped work, one at a time */}
-                <HeroCards />
-
-                {/* Tech Stack Preview */}
+            <div className="relative z-10 mx-auto flex min-h-[100svh] max-w-[1280px] flex-col justify-center px-5 pb-16 pt-28 lg:px-10">
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.5 }}
-                    className="mt-16 lg:mt-24"
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    className="max-w-[34rem] lg:max-w-[36%]"
                 >
-                    <p className="text-xs uppercase tracking-wider text-muted mb-6 text-center">
-                        Core Tech Stack
+                    <p className="text-[15px] text-ash">AI/ML Engineer at Veracity Digital, Colombo</p>
+
+                    <h1 className="mt-5 font-display text-[clamp(3.25rem,6vw,5.75rem)] font-light leading-[0.92] tracking-[-0.045em]">
+                        Isuru
+                        <br />
+                        Chathuranga
+                    </h1>
+
+                    <p className="mt-7 font-display text-[clamp(1.25rem,1.8vw,1.6rem)] font-normal leading-snug tracking-[-0.01em]">
+                        I build AI systems that hold up in production.
+                    </p>
+                    <p className="mt-3 max-w-[30rem] text-base leading-relaxed text-ash">
+                        Voice agents, retrieval and multi-agent systems, shipped with the monitoring to prove they keep working.
                     </p>
 
-                    <div className="flex gap-6 overflow-x-auto pb-4 justify-center scrollbar-hide">
-                        {techStack.map((tech, index) => (
-                            <motion.div
-                                key={tech.name}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.3, delay: 0.5 + index * 0.05 }}
-                                className="flex-shrink-0 grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300"
-                            >
-                                <TechIcon name={tech.name} size={32} />
-                            </motion.div>
-                        ))}
+                    <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
+                        <a
+                            href="#work"
+                            className="rounded-full bg-ember px-6 py-3 font-medium text-void transition-colors hover:bg-inferno-5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ember"
+                        >
+                            See the work
+                        </a>
+                        <button
+                            type="button"
+                            onClick={() => openAgent()}
+                            className="cursor-pointer py-3 font-medium text-ink underline decoration-inferno-3 decoration-1 underline-offset-[6px] transition-colors hover:text-ember focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ember"
+                        >
+                            Ask my agent
+                        </button>
                     </div>
+
+                    <ul className="mt-8 flex items-center gap-2" aria-label="Profiles">
+                        {socials.map(({ label, href, icon: Icon }) => (
+                            <li key={label}>
+                                <a
+                                    href={href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label={label}
+                                    title={label}
+                                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-ash transition-colors hover:border-ember/60 hover:text-ember focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+                                >
+                                    <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
                 </motion.div>
+
+                {/* eslint-disable-next-line @next/next/no-img-element -- static export serves images unoptimized */}
+                <img
+                    src={PORTRAIT_SRC}
+                    alt={PORTRAIT_ALT}
+                    className="mx-auto mt-12 h-[26rem] w-auto select-none lg:hidden"
+                />
             </div>
+
+            <p className="pointer-events-none absolute bottom-8 left-[47%] z-10 hidden text-sm text-ash lg:block">
+                Hover a neuron to trace a project
+            </p>
         </section>
     );
 }

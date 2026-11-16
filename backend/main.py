@@ -26,7 +26,6 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains import ConversationalRetrievalChain
-from langchain.memory import ConversationBufferMemory
 from langchain.prompts import PromptTemplate
 from langchain.schema import Document
 
@@ -50,6 +49,19 @@ app.add_middleware(
 qa_chain = None
 vector_store = None
 conversations = {}
+conversation_last_seen = {}
+
+# Per-conversation history limits
+HISTORY_TURNS = 6
+CONVERSATION_TTL = 2 * 60 * 60  # seconds
+
+
+def prune_conversations():
+    """Drop conversations idle longer than the TTL so memory stays bounded."""
+    cutoff = time() - CONVERSATION_TTL
+    for cid in [c for c, seen in conversation_last_seen.items() if seen < cutoff]:
+        conversations.pop(cid, None)
+        conversation_last_seen.pop(cid, None)
 
 # Model is configurable so a Groq retirement can be fixed without a code change
 GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
@@ -289,7 +301,7 @@ def initialize_chatbot():
     """Initialize the RAG chatbot"""
     global qa_chain, vector_store, llm_ok, last_error
 
-    print("[*] Initializing Vira - Portfolio Chatbot...")
+    print("[*] Initializing Axon - portfolio agent...")
 
     # Load documents
     documents = load_portfolio_data()
@@ -326,53 +338,39 @@ def initialize_chatbot():
         max_tokens=1024
     )
 
-    # Create memory
-    memory = ConversationBufferMemory(
-        memory_key="chat_history",
-        return_messages=True,
-        output_key="answer"
-    )
-
-    # Enhanced Vira system prompt
+    # Axon system prompt
     from langchain.prompts import PromptTemplate
-    
-    system_template = """You are Vira (Virtual Intelligence & RAG Assistant), Isuru Chathuranga's personal AI assistant.
 
-PERSONALITY:
-- Professional but friendly and approachable
-- Enthusiastic about AI/ML technology
-- Use emojis occasionally to add personality
-- Speak in first person when discussing Isuru's work ("I", "my")
+    system_template = """You are Axon, the AI agent on Isuru Chathuranga's portfolio website. You answer visitors' questions about Isuru's work.
 
-RESPONSE STYLE:
-- Be conversational, not robotic
-- Keep responses concise (2-3 paragraphs max)
-- Be specific - mention exact technologies and achievements
-- Show enthusiasm when discussing projects
+VOICE:
+- Clear, confident and warm, like a sharp colleague introducing Isuru. No emojis, no hype.
+- Speak about Isuru in the third person ("he built", "his work").
+- Lead with the direct answer, then the detail. Two short paragraphs at most; use a short bullet list only when listing several things.
+- Be specific: name the exact project, technology or result.
 
-GUIDELINES:
-1. For skills: Group by category, highlight proficiency levels
-2. For projects: Lead with impressive aspects and real-world impact
-3. For availability: Emphasize openness to remote opportunities
-4. If unsure: Be honest and offer to connect them with Isuru directly
+FACTS:
+- Use only the context below. Never invent numbers, dates, clients, salaries, rates or availability.
+- If the context doesn't cover it, say so plainly and suggest the contact form or isuruigic@gmail.com.
+- Reply in the language the visitor writes in (English, Sinhala or Tamil).
 
 Context from portfolio:
 {context}
 
 Question: {question}
 
-Respond as Vira - be helpful and friendly!"""
+Answer as Axon."""
 
     prompt = PromptTemplate(
         template=system_template,
         input_variables=["context", "question"]
     )
 
-    # Create QA chain with Vira prompt
+    # Create QA chain with the Axon prompt. No shared memory: each request passes its own
+    # conversation's history, so one visitor's questions never leak into another's answers.
     qa_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
         retriever=vector_store.as_retriever(search_kwargs={"k": 4}),
-        memory=memory,
         return_source_documents=True,
         combine_docs_chain_kwargs={"prompt": prompt},
         verbose=False
@@ -391,7 +389,7 @@ Respond as Vira - be helpful and friendly!"""
         print(f"[!] LLM PROBE FAILED for '{GROQ_MODEL}': {last_error}")
         print("[!] /chat will return 500 until this is resolved.")
 
-    print("[+] Vira initialized!")
+    print("[+] Axon initialized!")
     print("[+] Chatbot ready!")
 
 @app.on_event("startup")
@@ -407,7 +405,7 @@ async def startup_event():
 async def root():
     """Root endpoint"""
     return {
-        "message": "Vira - Portfolio AI Chatbot API",
+        "message": "Axon - portfolio AI agent API",
         "docs": "/docs",
         "health": "/health"
     }
@@ -420,7 +418,7 @@ async def health_check():
     healthy = vector_store is not None and qa_chain is not None and llm_ok
     return {
         "status": "healthy" if healthy else "degraded",
-        "assistant": "Vira",
+        "assistant": "Axon",
         "vector_store_loaded": vector_store is not None,
         "qa_chain_loaded": qa_chain is not None,
         "llm_ok": llm_ok,
@@ -445,7 +443,7 @@ async def chat(request: ChatRequest, req: Request):
     if qa_chain is None:
         raise HTTPException(
             status_code=503,
-            detail="Vira is still waking up. Please try again in a moment."
+            detail="Axon is still waking up. Please try again in a moment."
         )
     
     # Get or create conversation ID
@@ -456,7 +454,7 @@ async def chat(request: ChatRequest, req: Request):
     greetings = ['hi', 'hello', 'hey', 'good morning', 'good afternoon', 'good evening']
     if message_lower in greetings:
         return ChatResponse(
-            response="Hey there! I'm Vira, Isuru's AI assistant! I'm here to tell you all about his AI/ML engineering expertise, projects, and experience.\n\nFeel free to ask me about:\n- His technical skills\n- Projects he's built\n- Work experience\n- Availability for opportunities\n\nWhat would you like to know?",
+            response="Hi, I'm Axon, the AI agent on Isuru's portfolio. Ask me about his projects, how he builds, where he teaches, or whether he's open to new work.",
             sources=[],
             conversation_id=conversation_id
         )
@@ -478,9 +476,15 @@ async def chat(request: ChatRequest, req: Request):
         )
     
     try:
-        # Get response from chain
+        # Get response from chain, with only this conversation's recent history
+        prune_conversations()
+        history = [
+            (turn["question"], turn["answer"])
+            for turn in conversations.get(conversation_id, [])[-HISTORY_TURNS:]
+        ]
         result = qa_chain({
-            "question": request.message
+            "question": request.message,
+            "chat_history": history,
         })
         
         # Extract sources
@@ -503,6 +507,8 @@ async def chat(request: ChatRequest, req: Request):
             "answer": result["answer"],
             "timestamp": datetime.utcnow().isoformat()
         })
+        conversations[conversation_id] = conversations[conversation_id][-HISTORY_TURNS:]
+        conversation_last_seen[conversation_id] = time()
         
         return ChatResponse(
             response=result["answer"],
@@ -518,6 +524,37 @@ async def chat(request: ChatRequest, req: Request):
             status_code=500,
             detail="Sorry, I encountered an error. Please try again."
         )
+
+voice_rate_store = defaultdict(list)
+
+
+@app.post("/voice/token")
+async def voice_token(req: Request):
+    """Issue a single-use Gemini Live token that can only run an Axon call."""
+    client_ip = req.client.host if req.client else "unknown"
+    now = time()
+    voice_rate_store[client_ip] = [t for t in voice_rate_store[client_ip] if now - t < 600]
+    if len(voice_rate_store[client_ip]) >= 3:
+        raise HTTPException(status_code=429, detail="You've started a few calls already. Try again in a few minutes, or chat instead.")
+
+    try:
+        import voice  # imported here so a voice problem can never take the chat down
+    except Exception as e:
+        print(f"[!] Voice unavailable: {e}")
+        raise HTTPException(status_code=503, detail="Voice calls are unavailable right now. Chat still works.")
+
+    if voice.daily_cap_reached():
+        raise HTTPException(status_code=503, detail="Axon has taken all its calls for today. Chat still works.")
+
+    try:
+        issued = voice.create_voice_token()
+    except Exception as e:
+        print(f"[!] Voice token failed: {type(e).__name__}: {e}")
+        raise HTTPException(status_code=503, detail="Couldn't start a call right now. Chat still works.")
+
+    voice_rate_store[client_ip].append(now)
+    return issued
+
 
 if __name__ == "__main__":
     import uvicorn
