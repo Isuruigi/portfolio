@@ -1,0 +1,172 @@
+{
+  "domain": "codex-harness",
+  "org": "OpenAI",
+  "title": "How the Codex harness runs one coding-agent turn",
+  "subtitle": "OpenAI's open-source Rust harness: context building, tool calls, sandboxing, auto review and compaction.",
+  "hook": "Escalations go to a second, read-only agent that reads the transcript and judges whether you asked for it.",
+  "metric": null,
+  "sources": [
+    {
+      "title": "How Codex Works",
+      "speaker": "Dominik Kundel",
+      "org": "OpenAI",
+      "videoId": "shRR1e2HXMk",
+      "url": "https://www.youtube.com/watch?v=shRR1e2HXMk",
+      "kind": "talk"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "user",
+      "label": "Developer",
+      "role": "Sends the task",
+      "kind": "person",
+      "tool": "Codex app",
+      "toolFromTalk": true,
+      "col": 0,
+      "row": 1,
+      "detail": "A developer types a message in the Codex app or another client. Everything that follows starts when that message is sent.",
+      "tradeoff": "The same open protocol also powers community clients and even a plugin that puts Codex inside Claude Code.",
+      "cite": "02:45"
+    },
+    {
+      "id": "appserver",
+      "label": "App server",
+      "role": "UI-to-harness protocol",
+      "kind": "gateway",
+      "tool": "Codex",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 1,
+      "detail": "The app server protocol carries messages from any UI into the harness. OpenAI uses the same server to power the Codex app.",
+      "tradeoff": "It is built for an open ecosystem: you can build your own agent interface on top of the Codex harness.",
+      "cite": "02:17"
+    },
+    {
+      "id": "context",
+      "label": "Context builder",
+      "role": "Packs the window",
+      "kind": "service",
+      "tool": "Codex",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 0,
+      "detail": "Assembles model instructions, the skills list and the tool registry. Deferred tools stay out of the window and are found later through tool search.",
+      "tradeoff": "The skills list is capped at 2% of the context window; more context means more contradictions and confusion.",
+      "cite": "05:59"
+    },
+    {
+      "id": "harness",
+      "label": "Harness loop",
+      "role": "Runs the agent turn",
+      "kind": "service",
+      "tool": "Codex",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 1,
+      "detail": "Open-source harness written in Rust. It calls the model, runs the tools it asks for, and loops. In /goal mode it injects a continuation prompt with your objective.",
+      "tradeoff": "A /goal run only ends when the model calls an update-goal tool, so concrete, checkable goals work best.",
+      "cite": "18:01"
+    },
+    {
+      "id": "model",
+      "label": "Responses API",
+      "role": "Inference and built-ins",
+      "kind": "model",
+      "tool": "OpenAI",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 0,
+      "detail": "The harness talks to the model over the Responses API, which adds agent features like tool search, apply patch and server-side compaction.",
+      "tradeoff": "At 1,000 tokens per second the network became the bottleneck, so a WebSocket mode sends only what changed.",
+      "cite": "15:43"
+    },
+    {
+      "id": "tools",
+      "label": "Tool calls",
+      "role": "Edits, shell, browser, subagents",
+      "kind": "tool",
+      "tool": "Playwright",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 1,
+      "detail": "apply_patch edits files, a shell tool searches with ripgrep, a persistent Node REPL scripts the browser, and spawn_agent starts subagents.",
+      "tradeoff": "The model reaches for ripgrep from training, so the harness ships ripgrep in case you lack it.",
+      "cite": "10:37"
+    },
+    {
+      "id": "sandbox",
+      "label": "Sandbox",
+      "role": "Fences every action",
+      "kind": "cluster",
+      "tool": "Bubblewrap",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 1,
+      "detail": "All file system interactions go through a sandbox layer: Seatbelt on macOS, Bubblewrap on Linux, and a custom open-source sandbox on Windows.",
+      "tradeoff": "Sandboxes bring approval fatigue, and many users switch on full access, which security teams dislike.",
+      "cite": "11:05"
+    },
+    {
+      "id": "review",
+      "label": "Auto review",
+      "role": "Judges escalations",
+      "kind": "eval",
+      "tool": null,
+      "col": 4,
+      "row": 0,
+      "detail": "When an action needs to escape the sandbox, a separate read-only subagent gets the transcript, the tool call and a risk taxonomy, then judges user authorization and impact.",
+      "tradeoff": "Context decides: deleting a .git folder is fine if you asked for it and wrong if you did not.",
+      "cite": "14:19"
+    },
+    {
+      "id": "compaction",
+      "label": "Auto compaction",
+      "role": "Resets a full window",
+      "kind": "service",
+      "tool": "OpenAI",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 2,
+      "detail": "For runs of hours or days, compaction swaps the old context window for a new one holding a compaction item with what the agent needs.",
+      "tradeoff": "It runs server side in a way the model was trained on, so performance stays the same.",
+      "cite": "18:58"
+    }
+  ],
+  "edges": [
+    { "from": "user", "to": "appserver", "label": "sends message" },
+    { "from": "appserver", "to": "harness", "label": "starts turn" },
+    { "from": "context", "to": "harness", "label": "assembled context" },
+    { "from": "harness", "to": "model", "label": "next step?" },
+    { "from": "model", "to": "tools", "label": "tool call" },
+    { "from": "tools", "to": "sandbox", "label": "runs inside" },
+    { "from": "sandbox", "to": "review", "label": "escalation" },
+    { "from": "review", "to": "harness", "label": "approve or deny" },
+    { "from": "harness", "to": "compaction", "label": "window full" },
+    { "from": "compaction", "to": "context", "label": "compaction item" }
+  ],
+  "flow": [
+    { "node": "user", "text": "Asks Codex to delete a file the project no longer needs." },
+    { "node": "appserver", "text": "The app server protocol carries the message into the harness." },
+    { "node": "context", "text": "Packs instructions and skills, leaving deferred tools out of the window." },
+    { "node": "model", "text": "Over the Responses API, the model replies with a delete tool call." },
+    { "node": "tools", "text": "The harness runs the call through its shell tool." },
+    { "node": "sandbox", "text": "The sandbox blocks the delete, so the agent asks to escalate." },
+    { "node": "review", "text": "A read-only review subagent sees you asked for it and approves." },
+    { "node": "harness", "text": "Only the tool result goes back over the WebSocket, and the loop continues." }
+  ],
+  "takeaways": [
+    {
+      "text": "With inference at 1,000 tokens per second, the network became the bottleneck, not the model.",
+      "cite": "15:43"
+    },
+    {
+      "text": "Write short, checkable /goal prompts: the harness loops until the model itself marks the goal achieved.",
+      "cite": "18:30"
+    },
+    {
+      "text": "Tool search, apply patch, WebSockets and server-side compaction live in the Responses API, usable from any harness.",
+      "cite": "19:53"
+    }
+  ]
+}

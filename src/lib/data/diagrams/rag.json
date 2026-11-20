@@ -1,0 +1,239 @@
+{
+  "domain": "rag",
+  "title": "How GraphRAG retrieves connected context",
+  "subtitle": "Documents become a knowledge graph; questions are answered from vector, keyword and graph search, with sources.",
+  "org": "Neo4j & Hornet",
+  "hook": "Three or more hops need a graph, and agents' long, exact queries brought BM25 back.",
+  "metric": null,
+  "sources": [
+    {
+      "title": "RAG Needs a Map: Using GraphRAG to Retrieve Connected Context",
+      "speaker": "Nyah Macklin",
+      "org": "Neo4j",
+      "videoId": "LJ2a9nX3vlo",
+      "url": "https://www.youtube.com/watch?v=LJ2a9nX3vlo",
+      "kind": "talk"
+    },
+    {
+      "title": "The unreasonable effectiveness of BM25 for agentic search",
+      "speaker": "Jo Kristian Bergum",
+      "org": "Hornet.dev",
+      "videoId": "fZH97QHHYjY",
+      "url": "https://www.youtube.com/watch?v=fZH97QHHYjY",
+      "kind": "talk"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "chunk",
+      "label": "Chunk and embed",
+      "role": "Prepares the documents",
+      "kind": "service",
+      "tool": "neo4j-graphrag",
+      "toolFromTalk": true,
+      "col": 0,
+      "row": 0,
+      "detail": "Splits the source PDFs and CSVs into fixed-size chunks of 500 and turns each chunk into an embedding vector.",
+      "tradeoff": "Chunks overlap a little, so a fact cut at a chunk boundary is not lost.",
+      "cite": "49:01"
+    },
+    {
+      "id": "extract",
+      "label": "Entity extraction",
+      "role": "Finds things and links",
+      "kind": "model",
+      "tool": "OpenAI",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 0,
+      "detail": "An LLM reads each chunk and returns the entities and relationships it finds as JSON, which become graph nodes and edges.",
+      "tradeoff": "Giving the LLM a fixed list of node and relationship types stops it from inventing new ones.",
+      "cite": "50:03"
+    },
+    {
+      "id": "store",
+      "label": "Knowledge graph",
+      "role": "Stores chunks and entities",
+      "kind": "store",
+      "tool": "Neo4j Aura",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 0,
+      "detail": "Holds the chunks, their embeddings and the extracted entities in one graph, with a vector index on the chunk embeddings.",
+      "tradeoff": "Re-running ingestion without deduplication doubled the lessons, so the agent counted 30 instead of 15.",
+      "cite": "46:00"
+    },
+    {
+      "id": "agent",
+      "label": "Agent",
+      "role": "Takes the question",
+      "kind": "service",
+      "tool": "Aura Agent",
+      "toolFromTalk": true,
+      "col": 0,
+      "row": 1,
+      "detail": "Receives the user's question and picks a tool: similarity search over chunks, or turning the question into a Cypher query.",
+      "tradeoff": "Graph paths make each answer traceable, which matters in regulated fields like finance, medicine and law.",
+      "cite": "11:01"
+    },
+    {
+      "id": "vector",
+      "label": "Vector search",
+      "role": "Finds similar chunks",
+      "kind": "store",
+      "tool": "Neo4j",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 1,
+      "detail": "Embeds the question with the same model used at ingest (OpenAI text-embedding-3-small, 1536 dimensions) and returns the top 5 chunks.",
+      "tradeoff": "Enough for search-engine style questions, but falls short when the answer needs several hops.",
+      "cite": "41:00"
+    },
+    {
+      "id": "keyword",
+      "label": "Keyword search",
+      "role": "Matches exact terms",
+      "kind": "tool",
+      "tool": "Hornet",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 2,
+      "detail": "BM25 scores each document by how the query's words match its words, so exact names, entities, zip codes and SKUs are found.",
+      "tradeoff": "Cheap next to running embedding models, but its two tuning parameters can make it look terrible or strong.",
+      "cite": "11:00",
+      "src": 1
+    },
+    {
+      "id": "traverse",
+      "label": "Graph traversal",
+      "role": "Follows relationships",
+      "kind": "gateway",
+      "tool": "Cypher",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 1,
+      "detail": "A Cypher query hops from the matched chunks along relationships to the connected entities, returning that connected graph data.",
+      "tradeoff": "Plain RAG is usually bad at counting across documents; a graph query answers 'how many lessons' directly.",
+      "cite": "46:00"
+    },
+    {
+      "id": "combine",
+      "label": "Combine context",
+      "role": "Merges what was found",
+      "kind": "service",
+      "tool": "neo4j-graphrag",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 1,
+      "detail": "Joins the search hits and their graph neighbours into one context; the retrieval query must return each node with its score.",
+      "tradeoff": "The graph adds to the vector layer rather than replacing it, so you get the benefits of both.",
+      "cite": "43:00"
+    },
+    {
+      "id": "answer",
+      "label": "Answer with sources",
+      "role": "Writes the reply",
+      "kind": "model",
+      "tool": "OpenAI",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 1,
+      "detail": "The LLM answers only from the retrieved graph context and lists the sources the answer came from.",
+      "tradeoff": "Because answers come from linked nodes, you can trace and explain how the system reached them.",
+      "cite": "45:31"
+    }
+  ],
+  "edges": [
+    {
+      "from": "chunk",
+      "to": "extract",
+      "label": "chunks"
+    },
+    {
+      "from": "extract",
+      "to": "store",
+      "label": "nodes, edges"
+    },
+    {
+      "from": "store",
+      "to": "vector",
+      "label": "vector index"
+    },
+    {
+      "from": "store",
+      "to": "traverse",
+      "label": "relationships"
+    },
+    {
+      "from": "agent",
+      "to": "vector",
+      "label": "question"
+    },
+    {
+      "from": "agent",
+      "to": "keyword",
+      "label": "query terms"
+    },
+    {
+      "from": "vector",
+      "to": "traverse",
+      "label": "seed chunks"
+    },
+    {
+      "from": "traverse",
+      "to": "combine",
+      "label": "connected data"
+    },
+    {
+      "from": "keyword",
+      "to": "combine",
+      "label": "exact matches"
+    },
+    {
+      "from": "combine",
+      "to": "answer",
+      "label": "context"
+    }
+  ],
+  "flow": [
+    {
+      "node": "agent",
+      "text": "Gets the question: how does temperature affect an LLM?"
+    },
+    {
+      "node": "vector",
+      "text": "Embeds the question and fetches the five closest lesson chunks."
+    },
+    {
+      "node": "keyword",
+      "text": "Finds chunks that contain the exact word 'temperature'."
+    },
+    {
+      "node": "traverse",
+      "text": "Follows relationships from those chunks to connected concepts and lessons."
+    },
+    {
+      "node": "combine",
+      "text": "Merges the hits and their neighbours into one scored context."
+    },
+    {
+      "node": "answer",
+      "text": "Answers from that context only and names the lessons it used."
+    }
+  ],
+  "takeaways": [
+    {
+      "text": "Vector RAG suits search-style questions; questions needing three or more hops, or aggregation, need a graph.",
+      "cite": "13:01"
+    },
+    {
+      "text": "Use graph and vector together: the knowledge graph adds to your vector layer instead of replacing it.",
+      "cite": "14:31"
+    },
+    {
+      "text": "BM25 is back because LLM agents write long, precise queries, and exact terms like names and SKUs matter.",
+      "cite": "11:00",
+      "src": 1
+    }
+  ]
+}

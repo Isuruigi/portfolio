@@ -2,7 +2,22 @@
   "permissions": {
     "allow": [
       "Bash(pip install:*)",
-      "Bash(python main.py:*)"
+      "Bash(python main.py:*)",
+      "Bash(Get-ChildItem -Recurse -Depth 2)",
+      "Bash(Select-Object FullName)",
+      "Bash(npm run *)",
+      "Bash(Select-String -Pattern \"error|warning|Compiled|Failed\" -Context 0,1)",
+      "Read(//c/Users/IPK/Documents/portfolio-chatbot-backend/**)",
+      "Read(//c/Users/IPK/Documents/**)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(python -c ' *)",
+      "Bash(npx tsc *)",
+      "Bash(npx eslint *)",
+      "Bash(grep -vE \"no-img-element|slower LCP|^\\\\s*$|^[A-Za-z]:\\\\\\\\\\\\\\\\\")",
+      "Bash(npx next *)",
+      "Bash(grep -E \"^[A-Za-z]:\\\\\\\\\\\\\\\\|^\\\\s+[0-9]+:[0-9]+\\\\s+\\(error|warning\\)\")"
     ],
     "deny": [],
     "ask": []

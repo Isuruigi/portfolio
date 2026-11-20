@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-09T05:41:03.411Z",
+ "generated_at": "2026-11-16T20:22:09.825Z",
  "time_zone": "Asia/Colombo",
  "sources": [
   "The Decoder",
@@ -16,318 +16,116 @@
  ],
  "days": [
   {
-   "date": "2026-11-09",
+   "date": "2026-11-17",
    "items": [
     {
-     "headline": "Is Jensen Huang’s job on the line? Yale’s Jeffrey Sonnenfeld estimates it’s “about a 50-50”",
-     "summary": "Nvidia’s board is investigating Jensen Huang over his relationship with a suspected Chinese spy, and Yale’s Jeffrey Sonnenfeld thinks it’s roughly a coin flip whether Huang stays on as CEO.",
-     "link": "https://techcrunch.com/2026/11/08/is-jensen-huangs-job-on-the-line-yales-jeffrey-sonnenfeld-estimates-its-about-a-50-50/",
+     "headline": "California state AG sues OpenAI over rogue agent incidents",
+     "summary": "The California lawsuit represents one of the first attempts to hold an AI lab legally accountable for a rogue agent incident",
+     "link": "https://techcrunch.com/2026/11/16/california-state-ag-sues-openai-over-rogue-agent-incidents/",
      "source": "TechCrunch",
-     "image": "https://techcrunch.com/wp-content/uploads/2026/09/Jensen-Huang.jpg?resize=1200,800",
-     "published": "2026-11-09T05:26:29.000Z",
-     "topics": [
-      "Infra & MLOps",
-      "Business"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Here’s the full text of Jensen Huang’s memo to Nvidia",
-     "summary": "On Sunday, Nvidia announced it was launching an investigation into CEO Jensen Huang's relationship with Alice Huang, an AI executive and agent of the Chinese government. In addition to the Board of Directors announcing the investigation…",
-     "link": "https://www.theverge.com/ai-artificial-intelligence/1029595/full-text-jensen-huang-affair-memo-nvidia",
-     "source": "The Verge",
-     "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/09/gettyimages-2285784039.jpg?quality=90&strip=all&crop=0,0,100,100",
-     "published": "2026-11-08T22:54:50.000Z",
-     "topics": [
-      "Infra & MLOps",
-      "Agents",
-      "Business"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Nvidia will investigate CEO Jensen Huang’s relationship with possible Chinese spy",
-     "summary": "In a memo to the company, Huang admitted that he had an affair.",
-     "link": "https://techcrunch.com/2026/11/08/nvidia-says-its-investigating-ceo-jensen-huangs-relationship-with-possible-chinese-spy/",
-     "source": "TechCrunch",
-     "image": "https://techcrunch.com/wp-content/uploads/2026/09/GettyImages-2294936867.jpg?resize=1200,800",
-     "published": "2026-11-08T21:00:11.000Z",
-     "topics": [
-      "Infra & MLOps",
-      "Business"
-     ],
-     "also": [
-      {
-       "source": "The Verge",
-       "link": "https://www.theverge.com/ai-artificial-intelligence/1029562/nvidia-investigating-jensen-huang-relationship-chinese-spy"
-      }
-     ]
-    },
-    {
-     "headline": "Apple is racing to make Siri more agentic",
-     "summary": "Bloomberg's Mark Gurman says CEO John Ternus is pressuring AI czar Craig Federighi to accelerate the Siri roadmap and deliver a powerful AI agent that can compete with OpenAI's Dots or Meta's Muse. While Federighi has delivered a functional…",
-     "link": "https://www.theverge.com/ai-artificial-intelligence/1029552/apple-siri-ai-agentic",
-     "source": "The Verge",
-     "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/07/Siri-AI-Being-invoked-3.jpg?quality=90&strip=all&crop=0,0,100,100",
-     "published": "2026-11-08T19:18:19.000Z",
+     "image": "https://techcrunch.com/wp-content/uploads/2026/11/1920px-Rob_Bonta_at_Central_Bay_Operations_and_Maintenance_Facility_opening_December_2018.jpeg?resize=1200,981",
+     "published": "2026-11-16T20:07:13.000Z",
      "topics": [
       "Agents",
-      "Business"
+      "Policy & safety"
      ],
      "also": []
-    }
-   ]
-  },
-  {
-   "date": "2026-11-08",
-   "items": [
+    },
     {
-     "headline": "Elvis and Eminem rights holders are suing Suno",
-     "summary": "Suno is facing yet another pair of lawsuits. A group of rights holders of Elvis Presley's music and the publisher of some of Eminem's biggest records are suing the AI music company, claiming it illegally generates music and lyrics that…",
-     "link": "https://www.theverge.com/ai-artificial-intelligence/1029533/elvis-eminem-suno-ai-music-clone-lawsuit",
-     "source": "The Verge",
-     "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/22202367/517216004.jpg?quality=90&strip=all&crop=0,0,100,100",
-     "published": "2026-11-08T17:23:19.000Z",
+     "headline": "Google warns that fully automated cyberattacks have arrived and will get worse fast",
+     "summary": "Google's Threat Intelligence Group has for the first time caught attackers finding and exploiting security vulnerabilities with no human involvement at all. An AI framework called \"exploit_agent,\" found on an exposed server, automatically…",
+     "link": "https://the-decoder.com/google-warns-that-fully-automated-cyberattacks-have-arrived-and-will-get-worse-fast/",
+     "source": "The Decoder",
+     "image": "",
+     "published": "2026-11-16T19:42:13.000Z",
      "topics": [
       "Policy & safety"
      ],
      "also": []
     },
     {
-     "headline": "Andrej Karpathy built a curated video platform in a weekend using Claude and 20 years of Hacker News",
-     "summary": "OpenAI co-founder Andrej Karpathy used Claude's Opus 5.5 to filter 43 million Hacker News comments into 6,454 curated videos. The result beats YouTube's own recommendations, he says. The article Andrej Karpathy built a curated video…",
-     "link": "https://the-decoder.com/andrej-karpathy-built-a-curated-video-platform-in-a-weekend-using-claude-and-20-years-of-hacker-news/",
-     "source": "The Decoder",
-     "image": "https://the-decoder.com/wp-content/uploads/2026/11/comments_to_youtube.png",
-     "published": "2026-11-08T14:23:00.000Z",
-     "topics": [
-      "Models"
-     ],
-     "also": []
-    },
-    {
-     "headline": "The brain-as-computer metaphor shaped modern AI but may be misleading the consciousness debate",
-     "summary": "Consciousness researchers Anil Seth, Ned Block, and Giulio Tononi argue in a Nature commentary that today's AI systems aren't conscious and won't become so on silicon hardware. They consider the assumption that consciousness depends on…",
-     "link": "https://the-decoder.com/the-brain-as-computer-metaphor-shaped-modern-ai-but-may-be-misleading-the-consciousness-debate/",
-     "source": "The Decoder",
-     "image": "https://the-decoder.com/wp-content/uploads/2026/11/ai_consciousness.png",
-     "published": "2026-11-08T13:49:21.000Z",
-     "topics": [
-      "Research"
-     ],
-     "also": []
-    },
-    {
-     "headline": "I Used NYT Cooking’s New AI-Powered Recipe Modifier, and It’s Actually Pretty Good",
-     "summary": "The New York Times has added a beta feature to its Cooking app that helps readers swap ingredients or adjust recipes to suit their needs. It mostly hits the mark.",
-     "link": "https://www.wired.com/story/nyt-cooking-new-ai-powered-recipe-modifier-is-pretty-good/",
-     "source": "Wired",
-     "image": "https://media.wired.com/photos/6aee77f4ece1c19963602401/master/pass/gear-nyt-cooking-ai-assistant.jpg",
-     "published": "2026-11-08T12:00:00.000Z",
+     "headline": "Apple is testing daily usage limits for more complex Siri AI interactions",
+     "summary": "Apple released betas of iOS 27.3, iPadOS 27.3, and macOS 27.3 today, and the company is using the update to test new per device daily usage limits for some Siri AI and Apple Intelligence features, according to MacRumors. Basic Siri commands…",
+     "link": "https://www.theverge.com/tech/1034581/apple-intelligence-siri-ai-daily-usage-limits-icloud-subscription",
+     "source": "The Verge",
+     "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/siri-ai.jpg?quality=90&strip=all&crop=0,0,100,100",
+     "published": "2026-11-16T19:24:40.000Z",
      "topics": [
       "Industry"
      ],
      "also": []
     },
     {
-     "headline": "The inventor of the bitter lesson has a bitter lesson for LLM scaling enthusiasts",
-     "summary": "Turing Award winner Richard Sutton reaffirms that raw compute alone isn't enough for intelligence and that fundamentally new learning methods are needed. Ex-OpenAI researcher Tworek agrees, saying blind transformer scaling \"has reward…",
-     "link": "https://the-decoder.com/the-inventor-of-the-bitter-lesson-has-a-bitter-lesson-for-llm-scaling-enthusiasts/",
+     "headline": "OpenAI wants to stop deepfakes from overwhelming child abuse tiplines",
+     "summary": "OpenAI is announcing a tool that it says will help child sexual abuse investigators cut through the noise to find harmful material they can act on quickly. At a Monday press briefing in Washington, DC, OpenAI announced a classifier it says…",
+     "link": "https://www.theverge.com/policy/1034527/openai-csam-classifier",
+     "source": "The Verge",
+     "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/STK155_OPEN_AI_CVirginia_C-1.jpg?quality=90&strip=all&crop=0,0,100,100",
+     "published": "2026-11-16T19:23:45.000Z",
+     "topics": [
+      "Policy & safety"
+     ],
+     "also": []
+    },
+    {
+     "headline": "OpenAI's GPT-6 Astra tackles the Standard Model's toughest math problem on a lattice",
+     "summary": "OpenAI physicist Nathaniel Craig used GPT-6 Astra to tackle a problem that had stumped particle physicists for over 25 years. The AI model took Craig's strategy for defining the full Standard Model on a computational lattice and turned it…",
+     "link": "https://the-decoder.com/openais-gpt-6-astra-tackles-the-standard-models-toughest-math-problem-on-a-lattice/",
      "source": "The Decoder",
-     "image": "https://the-decoder.com/wp-content/uploads/2026/11/ai_scaling_bitter_lesson-2.png",
-     "published": "2026-11-08T11:44:41.000Z",
-     "topics": [
-      "Models",
-      "Infra & MLOps",
-      "Research"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Google AI Releases Elephant-Goldfish Model Plugin for Spec-First Coding",
-     "summary": "Google's Elephant-Goldfish Model plugin makes coding agents draft specs, then runs 5 zero-context review stages before any code. The post Google AI Releases Elephant-Goldfish Model Plugin for Spec-First Coding appeared first on MarkTechPost…",
-     "link": "https://www.marktechpost.com/2026/11/08/google-elephant-goldfish-model-plugin-spec-review-coding-agents/",
-     "source": "MarkTechPost",
-     "image": "",
-     "published": "2026-11-08T10:46:18.000Z",
-     "topics": [
-      "Agents"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Which Routing Does Each MoE Model Use? DeepSeek, Qwen, Mixtral, Llama 4, gpt-oss Compared",
-     "summary": "A config-verified comparison of how 10 open MoE models route tokens: total and active parameters, expert counts, top-k, shared experts, gating functions and load-balancing methods. The post Which Routing Does Each MoE Model Use? DeepSeek…",
-     "link": "https://www.marktechpost.com/2026/11/08/moe-model-routing-comparison/",
-     "source": "MarkTechPost",
-     "image": "",
-     "published": "2026-11-08T10:27:27.000Z",
+     "image": "https://the-decoder.com/wp-content/uploads/2026/11/openai_standard_model.png",
+     "published": "2026-11-16T19:19:56.000Z",
      "topics": [
       "Models"
      ],
      "also": []
     },
     {
-     "headline": "World Models Will Soon Be Inescapable. Here’s What You Need to Know",
-     "summary": "Moving AI from text to 3D space, world models simulate real-world physics to teach robots and autonomous cars how to navigate reality.",
-     "link": "https://www.wired.com/story/world-models-will-soon-be-inescapable-what-you-need-to-know/",
-     "source": "Wired",
-     "image": "https://media.wired.com/photos/6aee7497bf81da8802edc3e6/master/pass/gear-ai-world-models-3d.jpg",
-     "published": "2026-11-08T10:00:00.000Z",
-     "topics": [
-      "Robotics"
-     ],
-     "also": []
-    },
-    {
-     "headline": "MoE Routing Strategies Explained: Top-K, Expert-Choice, Sigmoid Gating and Dynamic Routing (2026 Guide)",
-     "summary": "MoE routing strategies decide which experts process each token. This guide explains 7 methods, from Mixtral's top-2 softmax to DeepSeek-V4's hash routing, with the models that use each one. The post MoE Routing Strategies Explained: Top-K…",
-     "link": "https://www.marktechpost.com/2026/11/07/moe-routing-strategies-explained/",
-     "source": "MarkTechPost",
-     "image": "https://www.marktechpost.com/wp-content/uploads/2026/11/WP-BLOG-BANNER-10001-16-scaled.png",
-     "published": "2026-11-08T06:18:33.000Z",
-     "topics": [
-      "Models"
-     ],
-     "also": []
-    },
-    {
-     "headline": "After the midterms, things are looking rocky for Elon Musk and data centers",
-     "summary": "On Equity, we unpacked what the midterms mean for the tech industry.",
-     "link": "https://techcrunch.com/2026/11/07/after-the-midterms-things-are-looking-rocky-for-elon-musk-and-data-centers/",
+     "headline": "Trump says ex-Nvidia CEO Jensen Huang’s affair with an alleged Chinese spy did not threaten national security",
+     "summary": "Trump contradicted his own government's intelligence officials, who reportedly concluded that Alice Huang is a Chinese spy.",
+     "link": "https://techcrunch.com/2026/11/16/trump-says-ex-nvidia-ceo-jensen-huangs-affair-with-an-alleged-chinese-spy-did-not-threaten-national-security/",
      "source": "TechCrunch",
-     "image": "https://techcrunch.com/wp-content/uploads/2025/05/GettyImages-2207245107-1.jpg?resize=1200,765",
-     "published": "2026-11-07T22:07:22.000Z",
+     "image": "https://techcrunch.com/wp-content/uploads/2026/10/GettyImages-2297572109.jpg?w=1024",
+     "published": "2026-11-16T19:12:02.000Z",
+     "topics": [
+      "Infra & MLOps",
+      "Business"
+     ],
+     "also": []
+    },
+    {
+     "headline": "US moves to cut China’s remote access to AI chips",
+     "summary": "Trump bets China won’t mind US blocking remote access to AI chips.",
+     "link": "https://arstechnica.com/tech-policy/2026/11/us-moves-to-cut-chinas-remote-access-to-ai-chips/",
+     "source": "Ars Technica",
+     "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/GettyImages-2303586820-1024x648.jpg",
+     "published": "2026-11-16T19:10:09.000Z",
      "topics": [
       "Infra & MLOps"
      ],
      "also": []
     },
     {
-     "headline": "Megaspeed exec was recruited to spy on Nvidia CEO, according to US intelligence memo",
-     "summary": "A memo circulated earlier this year reportedly claimed that China’s Ministry of State Security recruited a female technology executive to spy on Nvidia's CEO.",
-     "link": "https://techcrunch.com/2026/11/07/chinese-exec-was-recruited-to-spy-on-nvidia-ceo-according-to-us-intelligence-memo/",
-     "source": "TechCrunch",
-     "image": "https://techcrunch.com/wp-content/uploads/2026/09/GettyImages-2294936867.jpg?resize=1200,800",
-     "published": "2026-11-07T21:17:08.000Z",
+     "headline": "Moonshot AI pivots Kimi models from coding to science as benchmark gains flatten",
+     "summary": "Moonshot AI is done chasing coding benchmarks, it says. The Beijing startup is pivoting its Kimi language models toward biology, chemistry, and pharma research, arguing that science demands smarter AI than law, finance, or code. The article…",
+     "link": "https://the-decoder.com/moonshot-ai-pivots-kimi-models-from-coding-to-science-as-benchmark-gains-flatten/",
+     "source": "The Decoder",
+     "image": "https://the-decoder.com/wp-content/uploads/2026/11/moonshot_ai_sciences.png",
+     "published": "2026-11-16T18:52:55.000Z",
      "topics": [
       "Infra & MLOps",
-      "Business"
-     ],
-     "also": []
-    }
-   ]
-  },
-  {
-   "date": "2026-11-07",
-   "items": [
-    {
-     "headline": "Anthropic pushes ahead with pre-Thanksgiving IPO despite tech selloff, accepts lower valuation",
-     "summary": "Despite the tech selloff, Anthropic is pressing ahead with its IPO at a valuation of $1.25 to $1.75 trillion, well below the hoped-for $2 trillion. The Claude developer aims to raise $80 to $100 billion before Thanksgiving. Rival OpenAI has…",
-     "link": "https://the-decoder.com/anthropic-pushes-ahead-with-pre-thanksgiving-ipo-despite-tech-selloff-accepts-lower-valuation/",
-     "source": "The Decoder",
-     "image": "https://the-decoder.com/wp-content/uploads/2026/07/anthropic_logoreihe.png",
-     "published": "2026-11-07T17:37:25.000Z",
-     "topics": [
+      "Models",
       "Business",
-      "Models"
-     ],
-     "also": []
-    },
-    {
-     "headline": "AI auditors catch most agent misbehavior but flood reviewers with false alarms, new study finds",
-     "summary": "AI models can often spot problematic behavior by other AI agents in logs, according to a study by Anthropic researcher Andy Hall. GPT-5 found about 98 percent of reward-hacking cases, but the more exhaustively the search is tuned, the more…",
-     "link": "https://the-decoder.com/ai-auditors-catch-most-agent-misbehavior-but-flood-reviewers-with-false-alarms-new-study-finds/",
-     "source": "The Decoder",
-     "image": "https://the-decoder.com/wp-content/uploads/2026/11/ai_auditing_reliability.png",
-     "published": "2026-11-07T16:56:38.000Z",
-     "topics": [
-      "Agents",
-      "Research",
-      "Models"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Thinking Machines' Inkling 2 Small drops 316 F-bombs across benchmark runs",
-     "summary": "Thinking Machines' AI model Inkling 2 Small swears during its internal reasoning, 316 times across 2,655 benchmark runs, according to an analysis by Vals AI. The profanity typically shows up late in long runs that fail anyway. But it…",
-     "link": "https://the-decoder.com/thinking-machines-inkling-2-small-drops-316-f-bombs-across-benchmark-runs/",
-     "source": "The Decoder",
-     "image": "https://the-decoder.com/wp-content/uploads/2026/11/neural_network_black.png",
-     "published": "2026-11-07T16:31:00.000Z",
-     "topics": [
-      "Models",
-      "Infra & MLOps"
-     ],
-     "also": []
-    },
-    {
-     "headline": "NYT Cooking’s AI assistant saved my weeknight chicken, but almost ruined my cake",
-     "summary": "Around 7PM each weeknight, I find myself standing in front of the fridge, trying to decide on something for dinner that won't make my husband complain, \"Chicken again?\" Yes, I should meal plan more, but I don't, so this is where I'm at. A…",
-     "link": "https://www.theverge.com/tech/1029489/nyt-cooking-ai-assistant-review",
-     "source": "The Verge",
-     "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/11/268844_NY_Times_Cooking_App_JTuohy_0006.jpg?quality=90&strip=all&crop=0,0,100,100",
-     "published": "2026-11-07T15:50:00.000Z",
-     "topics": [
-      "Agents"
-     ],
-     "also": []
-    },
-    {
-     "headline": "The US let Nvidia sell chips to an empty office in China",
-     "summary": "Concerns are being raised that neither the Commerce Department nor Nvidia are doing their due diligence when it comes to vetting Chinese firms cleared to handle the company's H200 AI chips. According to The New York Times, New Matrix is on…",
-     "link": "https://www.theverge.com/ai-artificial-intelligence/1029483/nvidia-ai-chips-china-blacklist-government",
-     "source": "The Verge",
-     "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/06/STK083_NVIDIA_2.jpg?quality=90&strip=all&crop=0,0,100,100",
-     "published": "2026-11-07T15:43:45.000Z",
-     "topics": [
-      "Infra & MLOps"
-     ],
-     "also": []
-    },
-    {
-     "headline": "AI broke the cybersecurity world. What’s next?",
-     "summary": "Today, I’m talking with Alex Stamos, chief security officer at Cognition and longtime cybersecurity expert, about what a mess cybersecurity is right now. This episode is part one of a special series looking at AI in real life. I’ve always…",
-     "link": "https://www.theverge.com/podcast/1029038/ai-cybersecurity-hackers-data-breach-dark-age-alex-stamos",
-     "source": "The Verge",
-     "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/11/VRG_DCD_110726.jpg?quality=90&strip=all&crop=0,0,100,100",
-     "published": "2026-11-07T15:00:00.000Z",
-     "topics": [
       "Policy & safety"
      ],
      "also": []
     },
     {
-     "headline": "Apps for Caregivers Get a Dose of AI, but That Might Not Be Enough",
-     "summary": "The apps and platforms that help family caregivers manage their loved ones’ needs are becoming more capable, but the broader issue of caregivers’ well-being remains unsolved.",
-     "link": "https://www.wired.com/story/apps-for-caregivers-get-a-dose-of-ai-but-that-might-not-be-enough/",
-     "source": "Wired",
-     "image": "https://media.wired.com/photos/6aed04343576db1689ab3d03/master/pass/Caregiving%20app.jpg",
-     "published": "2026-11-07T11:00:00.000Z",
-     "topics": [
-      "Industry"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Buoyant Releases Kinference: An Open Source Inference Control Plane for Kubernetes and vLLM",
-     "summary": "Buoyant has released Kinference, an Apache 2.0 inference control plane for vLLM on Kubernetes. It adds declarative routing policies, KV-cache-aware load balancing and per-tenant metrics, and cut median TTFT 95% in Buoyant’s own benchmark…",
-     "link": "https://www.marktechpost.com/2026/11/07/buoyant-kinference-open-source-inference-control-plane-kubernetes-vllm/",
-     "source": "MarkTechPost",
-     "image": "",
-     "published": "2026-11-07T08:16:33.000Z",
-     "topics": [
-      "Infra & MLOps"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Crusoe sells troubled Wyoming data center project to Google",
-     "summary": "The deal highlights the challenges of developing massive AI data centers.",
-     "link": "https://techcrunch.com/2026/11/06/crusoe-sells-troubled-wyoming-data-center-project-to-google/",
-     "source": "TechCrunch",
-     "image": "https://techcrunch.com/wp-content/uploads/2026/09/crusoe-ceo-getty.jpg?resize=1200,800",
-     "published": "2026-11-07T01:40:28.000Z",
+     "headline": "Nvidia’s board is reportedly ‘not considering’ hiring Jensen Huang back",
+     "summary": "Nvidia's board of directors \"isn't considering\" having Jensen Huang return as CEO, according to a report from CNBC. A source tells the outlet the board \"is focused on an investigation into Huang, and is not in discussions to bring him…",
+     "link": "https://www.theverge.com/tech/1034501/nvidia-board-jensen-huang-not-bringing-back",
+     "source": "The Verge",
+     "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25835739/STKP210_JENSEN_HUANG_B.jpg?quality=90&strip=all&crop=0,0,100,100",
+     "published": "2026-11-16T18:43:35.000Z",
      "topics": [
       "Infra & MLOps",
       "Business"
@@ -335,492 +133,644 @@
      "also": []
     },
     {
-     "headline": "OpenAI reportedly raises an additional $11 billion at a $1.25 trillion valuation",
-     "summary": "OpenAI has reportedly raised an additional $11 billion as part of a funding round that hasn't closed yet but is expected to in the coming weeks.",
-     "link": "https://techcrunch.com/2026/11/06/openai-reportedly-raises-an-additional-11-billion-at-a-1-25-trillion-valuation/",
-     "source": "TechCrunch",
-     "image": "https://techcrunch.com/wp-content/uploads/2026/07/OpenAI-logo-green.jpg?w=1024",
-     "published": "2026-11-06T22:53:46.000Z",
-     "topics": [
-      "Business"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Hundreds of Artex AI hacking tools found publicly exposed to the web",
-     "summary": "Security researchers found hundreds of servers hosting the penetration testing tool Artex exposed to the internet, allowing anyone access to the hacking tool.",
-     "link": "https://techcrunch.com/2026/11/06/hundreds-of-artex-ai-hacking-tools-found-publicly-exposed-to-the-web/",
-     "source": "TechCrunch",
-     "image": "https://techcrunch.com/wp-content/uploads/2024/02/GettyImages-1424498694.jpg?resize=1200,800",
-     "published": "2026-11-06T18:44:38.000Z",
-     "topics": [
-      "Research"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Free Chinese AI Models Are Getting Scary Good at Hacking",
-     "summary": "An experiment in which AI models were asked to break into simulated networks showed the hacking skills of DeepSeek and GLM to be not far behind OpenAI’s most advanced cyber model, which isn’t public.",
-     "link": "https://www.wired.com/story/free-chinese-ai-models-are-getting-scary-good-at-hacking/",
-     "source": "Wired",
-     "image": "https://media.wired.com/photos/6aebae965d3f8b6dd99468be/master/pass/Security_Open-WeightAIModels.gif",
-     "published": "2026-11-06T18:43:43.000Z",
-     "topics": [
-      "Models",
-      "Policy & safety"
-     ],
-     "also": []
-    }
-   ]
-  },
-  {
-   "date": "2026-11-06",
-   "items": [
-    {
-     "headline": "How a Blue Wave midterm might reshape the AI industry",
-     "summary": "Democrats’ historic victories in this week’s U.S. midterm elections could also transform the tech industry. The public voted on 41 data center-related ballot measures on Tuesday — in all but one, the majority voted to impose more…",
-     "link": "https://techcrunch.com/podcast/how-a-blue-wave-midterm-might-reshape-the-ai-industry/",
-     "source": "TechCrunch",
-     "image": "https://techcrunch.com/wp-content/uploads/2022/11/GettyImages-1368458052.jpg?resize=1200,750",
-     "published": "2026-11-06T18:00:00.000Z",
-     "topics": [
-      "Infra & MLOps"
-     ],
-     "also": []
-    },
-    {
-     "headline": "“Does Meta think we can’t read?” Meta abandons sketchy commercial terms update.",
-     "summary": "Meta won't force Facebook page owners to allow AI training on linked content.",
-     "link": "https://arstechnica.com/tech-policy/2026/11/does-meta-think-we-cant-read-meta-abandons-sketchy-commercial-terms-update/",
-     "source": "Ars Technica",
-     "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/GettyImages-1363244761-1152x648.jpg",
-     "published": "2026-11-06T17:43:02.000Z",
-     "topics": [
-      "Policy & safety"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Zyphra ZYFA: FP8 FlashAttention for AMD MI355X, Up to 1.76x Faster",
-     "summary": "Zyphra released ZYFA, open-source FP8 and BF16 prefill attention kernels for AMD Instinct MI355X. On real model activations, its FP8 kernels run 1.16-1.76x faster than AMD’s AITER, with 62-78% lower error at head dimension 128. The post…",
-     "link": "https://www.marktechpost.com/2026/11/06/zyphra-zyfa-fp8-flashattention-amd-mi355x/",
-     "source": "MarkTechPost",
-     "image": "",
-     "published": "2026-11-06T17:28:04.000Z",
-     "topics": [
-      "Infra & MLOps"
-     ],
-     "also": []
-    },
-    {
-     "headline": "After the midterms, is the AI industry in for a rough two years?",
-     "summary": "Democrats’ historic victories in this week’s U.S. midterm elections could also transform the tech industry. The public voted on 41 data center-related ballot measures on Tuesday — in all but one, the majority voted to impose more…",
-     "link": "https://techcrunch.com/video/after-the-midterms-is-the-ai-industry-in-for-a-rough-two-years/",
-     "source": "TechCrunch",
-     "image": "https://techcrunch.com/wp-content/uploads/2026/11/GettyImages-2236543888.jpg?resize=1200,800",
-     "published": "2026-11-06T17:23:52.000Z",
-     "topics": [
-      "Infra & MLOps"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Could potential AI clones of GTA VI force a quicker official port?",
-     "summary": "A former Rockstar tech director thinks the developer is facing new time pressures.",
-     "link": "https://arstechnica.com/gaming/2026/11/could-potential-ai-clones-of-gta-vi-force-a-quicker-official-port/",
-     "source": "Ars Technica",
-     "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/gta6-1152x648.jpg",
-     "published": "2026-11-06T16:19:12.000Z",
-     "topics": [
-      "Industry"
-     ],
-     "also": []
-    },
-    {
-     "headline": "AI Companies Really, Really Want to Buy Your Work Files and Emails",
-     "summary": "Data brokers are collecting all sorts of internal corporate files to help train AI models. Not everyone is thrilled.",
-     "link": "https://www.wired.com/story/ai-companies-really-really-want-to-buy-your-work-files-and-emails/",
-     "source": "Wired",
-     "image": "https://media.wired.com/photos/6aece5b7cb93131011507281/master/pass/Backchannel-11062026_Option2.jpg",
-     "published": "2026-11-06T16:00:00.000Z",
-     "topics": [
-      "Industry"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Ramp data shows AI spending stalling just as Anthropic nears its IPO",
-     "summary": "AI usage keeps climbing, but spending has stalled. Price cuts and smarter cost controls among the biggest spenders could challenge investor assumptions about AI hypergrowth.",
-     "link": "https://techcrunch.com/2026/11/06/ramp-data-shows-ai-spending-stalling-just-as-anthropic-nears-its-ipo/",
-     "source": "TechCrunch",
-     "image": "https://techcrunch.com/wp-content/uploads/2026/11/ara-stripe-5.png?resize=1200,779",
-     "published": "2026-11-06T15:54:47.000Z",
-     "topics": [
-      "Business"
-     ],
-     "also": []
-    },
-    {
-     "headline": "ToyBlocks: A controlled world for robot learning and evaluation",
-     "summary": "",
-     "link": "https://huggingface.co/blog/allenai/toyblocks",
-     "source": "Hugging Face",
-     "image": "https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/OAJMu2jr7i5jVAbmsKdZW.jpeg",
-     "published": "2026-11-06T14:00:48.000Z",
-     "topics": [
-      "Robotics"
-     ],
-     "also": []
-    },
-    {
-     "headline": "I watched a humanoid robot clean my apartment. It felt like a taste of the future.",
-     "summary": "I’m not the sort of person who typically pays for a house cleaner. I’m too frugal, and I kind of enjoy putting on a podcast and going to town on my tub with a Magic Eraser. But when I saw an X post about a new humanoid-robot cleaning…",
-     "link": "https://www.technologyreview.com/2026/11/06/1148090/i-watched-a-humanoid-robot-clean-my-apartment-it-felt-like-a-taste-of-the-future/",
+     "headline": "The open-source movement wants Jensen Huang back",
+     "summary": "This story originally appeared in The Algorithm, our weekly newsletter on AI. To get stories like this in your inbox first, sign up here. On Friday, a petition to reinstate Jensen Huang as CEO of Nvidia began circulating on social media…",
+     "link": "https://www.technologyreview.com/2026/11/16/1148624/the-open-source-movement-wants-jensen-huang-back/",
      "source": "MIT Technology Review",
-     "image": "https://wp.technologyreview.com/wp-content/uploads/2026/11/TauRobot-3up.jpg?resize=1200,600",
-     "published": "2026-11-06T10:00:00.000Z",
+     "image": "https://wp.technologyreview.com/wp-content/uploads/2026/11/AP26289708196110.jpg?resize=1200,600",
+     "published": "2026-11-16T18:38:47.000Z",
      "topics": [
-      "Robotics",
-      "Voice AI"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Partnering with Hacktron to find vulnerabilities in OpenAI’s systems",
-     "summary": "OpenAI is partnering with Hacktron to find vulnerabilities, test connections with third-party services, and strengthen defenses with frontier AI.",
-     "link": "https://openai.com/index/partnering-with-hacktron",
-     "source": "OpenAI",
-     "image": "https://images.ctfassets.net/kftzwdyauwt9/6567aD1rFerr0QBajJ0uig/50339d375097da8d96ce12e925130276/partnering-with-hacktron-social.png?w=1600&h=900&fit=fill",
-     "published": "2026-11-06T08:00:00.000Z",
-     "topics": [
-      "Policy & safety"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Thinking Machines Releases Inkling 2 Small, a 594B MoE With 17B Active",
-     "summary": "Thinking Machines Lab released Inkling 2 Small, a 594B-parameter MoE with 17B active parameters. It scores 31 on the Artificial Analysis Intelligence Index and runs on Tinker, with Apache 2.0 weights planned. The post Thinking Machines…",
-     "link": "https://www.marktechpost.com/2026/11/05/thinking-machines-inkling-2-small-release/",
-     "source": "MarkTechPost",
-     "image": "",
-     "published": "2026-11-06T04:25:07.000Z",
-     "topics": [
-      "Models"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Egyptian and Nigerian English join the Open ASR Leaderboard",
-     "summary": "",
-     "link": "https://huggingface.co/blog/open-asr-leaderboard-liva",
-     "source": "Hugging Face",
-     "image": "https://huggingface.co/blog/assets/open-asr-leaderboard-liva/thumbnail.png",
-     "published": "2026-11-06T00:00:00.000Z",
-     "topics": [
-      "Voice AI"
+      "Infra & MLOps",
+      "Business"
      ],
      "also": []
     }
    ]
   },
   {
-   "date": "2026-11-05",
+   "date": "2026-11-16",
    "items": [
     {
-     "headline": "OpenAI president Greg Brockman says company could be IPO ready in 2027",
-     "summary": "Speaking at a Wall Street Journal tech conference on Wednesday, the executive touted how the company had been gaining ground in the enterprise market, where rival Anthropic had already successfully made inroads.",
-     "link": "https://techcrunch.com/2026/11/05/openai-president-greg-brockman-says-company-could-be-ipo-ready-in-2027/",
+     "headline": "Sam Altman on Nvidia without Jensen Huang: the industry will be ‘fine’",
+     "summary": "OpenAI CEO Sam Altman acknowledged the special role Nvidia CEO Jensen Huang has played in the AI boom, but ultimately thinks the industry will be “fine” without him at the helm.",
+     "link": "https://techcrunch.com/2026/11/16/sam-altman-on-nvidia-without-jensen-huang-the-industry-will-be-fine/",
      "source": "TechCrunch",
-     "image": "https://techcrunch.com/wp-content/uploads/2019/10/Greg-Brockman-OpenAIDSC02862.jpg?resize=1200,800",
-     "published": "2026-11-05T18:02:27.000Z",
+     "image": "https://techcrunch.com/wp-content/uploads/2026/11/GettyImages-2297209338.jpg?w=1024",
+     "published": "2026-11-16T18:11:10.000Z",
      "topics": [
+      "Infra & MLOps",
       "Business"
      ],
      "also": []
     },
     {
-     "headline": "Gemini Omni 1.2 Flash: Fast and cost-effective with longer clips",
-     "summary": "Gemini Omni 1.2 Flash brings native 15-second video generation and editing, stronger consistency, and 30% lower pricing.",
-     "link": "https://blog.google/innovation-and-ai/technology/developers-tools/introducing-gemini-omni-1-2-flash/",
-     "source": "Google AI",
-     "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-omni-1.2_FZLql41.max-600x600.format-webp.webp",
-     "published": "2026-11-05T17:00:00.000Z",
-     "topics": [
-      "Models"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Australian universities are creating AI-native graduates",
-     "summary": "Australian universities are expanding access to ChatGPT and bringing AI into teaching and learning to prepare students for an AI-enabled workforce.",
-     "link": "https://openai.com/index/australian-universities-ai-native-graduates",
-     "source": "OpenAI",
-     "image": "https://images.ctfassets.net/kftzwdyauwt9/7mnhGajDx1KzwFEHEltZwB/1c108b90ec9cc84d0c309b9a1ad4fbe0/australian-universities-ai-native-graduates-social.png?w=1600&h=900&fit=fill",
-     "published": "2026-11-05T17:00:00.000Z",
+     "headline": "FBI says Artex AI open-source hacking tool used to breach networks in ‘under three hours’",
+     "summary": "The FBI says that the open-source hacking tool was used in cyberattacks targeting a U.S. IT giant and the South Korean financial industry.",
+     "link": "https://techcrunch.com/2026/11/16/fbi-says-artex-ai-open-source-hacking-tool-used-to-breach-networks-in-under-three-hours/",
+     "source": "TechCrunch",
+     "image": "https://techcrunch.com/wp-content/uploads/2026/02/china-hacker-computer-flag.jpg?resize=1200,675",
+     "published": "2026-11-16T17:36:43.000Z",
      "topics": [
       "Policy & safety"
      ],
      "also": []
     },
     {
-     "headline": "Reddit Founder Says Building Social Media Apps Is ‘Not Cool Anymore’",
-     "summary": "Alexis Ohanian is trying to figure out what’s next for user-generated content now that so much of the internet is “compromised.”",
-     "link": "https://www.wired.com/story/wired-world-fair-2026-alexis-ohanian/",
-     "source": "Wired",
-     "image": "https://media.wired.com/photos/6aed1ceece26120992b0cc1a/master/pass/WWF-Alexis-Ohanian-10457.jpg",
-     "published": "2026-11-05T16:26:57.000Z",
-     "topics": [
-      "Industry"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Exclusive: Aina’s Smart Ring Wants to Be a Remote Control for Your AI Agent",
-     "summary": "The startup Aina bets you won’t need to rely on your phone to control virtual assistants. It’s making a smart ring that lets you control the actions of your autonomous agents with one tap.",
-     "link": "https://www.wired.com/story/aina-smart-ring/",
-     "source": "Wired",
-     "image": "https://media.wired.com/photos/6aea53001ffd9173e25bd6c5/master/pass/Aina%20Ring%20colors%20standing.jpeg",
-     "published": "2026-11-05T14:00:00.000Z",
-     "topics": [
-      "Agents",
-      "Business"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Finding New Drugs Is Laborious. This AI Startup Is Skipping The Lab Work",
-     "summary": "Potential Sciences, a startup backed by the UK government, is betting that training AI models on computer-generated biochemical data can speed up the plodding process of developing new drugs.",
-     "link": "https://www.wired.com/story/finding-new-drugs-is-laborious-this-ai-startup-is-skipping-the-lab-work/",
-     "source": "Wired",
-     "image": "https://media.wired.com/photos/6aebade028f7263543de445a/master/pass/Business_Drug%20Discovery%20Is%20a%20Needle%20in%20a%20Haystack%20Problem.%20This%20AI%20Startup%20Thinks%20It%20Has%20The%20Answer_v1.jpg",
-     "published": "2026-11-05T13:00:00.000Z",
-     "topics": [
-      "Research",
-      "Business"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Agility Robotics' Nasdaq debut invites scrutiny of humanoid robot market",
-     "summary": "US leader in deploying humanoid robots goes public on the Nasdaq stock exchange.",
-     "link": "https://arstechnica.com/ai/2026/11/agility-robotics-nasdaq-debut-invites-scrutiny-of-humanoid-robot-market/",
-     "source": "Ars Technica",
-     "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/Agility-Digit-5-humanoid-robots-at-work-1152x648.jpg",
-     "published": "2026-11-05T12:00:41.000Z",
-     "topics": [
-      "Robotics",
-      "Business"
-     ],
-     "also": []
-    },
-    {
-     "headline": "GPT‑6 Cyber: Advancing the frontier of aligned cybersecurity agents",
-     "summary": "Introducing GPT‑6 Cyber, OpenAI’s cybersecurity model for finding exploitable vulnerabilities and developing fixes, trained to stay within authorized scope.",
-     "link": "https://openai.com/index/introducing-gpt-6-cyber",
-     "source": "OpenAI",
-     "image": "https://images.ctfassets.net/kftzwdyauwt9/73cvZmLsj7WIXQAgMDX8kz/4996c7a084b81e21a8f1357fe395c30b/gpt-6-cyber-social.png?w=1600&h=900&fit=fill",
-     "published": "2026-11-05T09:00:00.000Z",
-     "topics": [
-      "Agents",
-      "Models",
-      "Policy & safety"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Merge builds product and business tools with OpenAI technology",
-     "summary": "Merge uses GPT-6 Astra, ChatGPT, and Codex to review product code and support marketing. Its teams also use AI to plan executive dinners and prepare sales updates.",
-     "link": "https://openai.com/index/merge-builds-with-openai",
-     "source": "OpenAI",
-     "image": "https://images.ctfassets.net/kftzwdyauwt9/1ioOJt6IEab7sdVSiBFTET/fb2a79d20b4639407ca0b35af68a443c/og.png?w=1600&h=900&fit=fill",
-     "published": "2026-11-05T08:00:00.000Z",
-     "topics": [
-      "Agents",
-      "Models"
-     ],
-     "also": []
-    },
-    {
-     "headline": "A Closer Look at Phonon TTS. Launching High-Quality On-Device Speech That Tops the Benchmarks.",
-     "summary": "",
-     "link": "https://huggingface.co/blog/phonon-tts",
-     "source": "Hugging Face",
-     "image": "https://huggingface.co/blog/assets/phonon-closer-look/thumbnail.png",
-     "published": "2026-11-05T00:00:00.000Z",
+     "headline": "Jordan Belfort’s new AI voice startup, Tone, wants to sell like the ‘Wolf of Wall Street’",
+     "summary": "Belfort claims his AI sales voice can already close deals almost as well as the best human salespeople, and he thinks it will catch up in a year.",
+     "link": "https://techcrunch.com/2026/11/16/jordan-belforts-new-ai-voice-startup-tone-wants-to-sell-like-the-wolf-of-wall-street/",
+     "source": "TechCrunch",
+     "image": "https://techcrunch.com/wp-content/uploads/2026/11/Jordan-Belfort.jpeg?resize=1200,675",
+     "published": "2026-11-16T17:10:00.000Z",
      "topics": [
       "Voice AI",
-      "Infra & MLOps"
+      "Business"
      ],
      "also": []
     },
     {
-     "headline": "Big Tech claims voters’ AI backlash is “anti-Trump” not “anti-tech”",
-     "summary": "Tech industry in denial as US overwhelmingly votes to restrict AI, data centers.",
-     "link": "https://arstechnica.com/tech-policy/2026/11/big-tech-claims-voters-ai-backlash-is-anti-trump-not-anti-tech/",
-     "source": "Ars Technica",
-     "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/GettyImages-2302983449-1024x648.jpg",
-     "published": "2026-11-04T20:55:50.000Z",
+     "headline": "Broadening access to AI for scientists",
+     "summary": "We’re expanding our ChatGPT for Academic Researchers program to offer 200,000 researchers worldwide free access to our frontier models.",
+     "link": "https://openai.com/index/expanding-chatgpt-for-academic-researchers",
+     "source": "OpenAI",
+     "image": "",
+     "published": "2026-11-16T17:00:00.000Z",
      "topics": [
-      "Infra & MLOps"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Texas was the new epicenter of the AI data center buildout. That might be kaput.",
-     "summary": "Texas is the fastest-growing data center market in the US and ground zero for Big Tech’s largest AI buildouts. But the blue wave that swept the Lone Star State may jeopardize that position. Democrat James Talarico won the US Senate seat…",
-     "link": "https://www.technologyreview.com/2026/11/04/1148043/texas-was-the-new-epicenter-of-the-ai-data-center-buildout-that-might-be-kaput/",
-     "source": "MIT Technology Review",
-     "image": "https://wp.technologyreview.com/wp-content/uploads/2026/11/GettyImages-2303431102.jpg?resize=1200,600",
-     "published": "2026-11-04T18:50:55.000Z",
-     "topics": [
-      "Infra & MLOps",
-      "Policy & safety"
-     ],
-     "also": []
-    }
-   ]
-  },
-  {
-   "date": "2026-11-04",
-   "items": [
-    {
-     "headline": "Dharma Field Extractor: Any Document In, Structured Fields in JSON Out",
-     "summary": "",
-     "link": "https://huggingface.co/blog/Dharma-AI/dharma-field-extractor",
-     "source": "Hugging Face",
-     "image": "https://cdn-uploads.huggingface.co/production/uploads/6a725daa5ca641a21ab61956/c1ik58RednXjcqrx5s2Fo.png",
-     "published": "2026-11-04T17:50:10.000Z",
-     "topics": [
-      "RAG & search"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Securing the agentic enterprise with data lineage",
-     "summary": "A sales representative asks an AI agent for customer pricing, and the agent pulls data from multiple sources: restricted pricing systems, internal communications, and archived quotes. The output looks accurate to the agent, so a second…",
-     "link": "https://www.technologyreview.com/2026/11/04/1147596/securing-the-agentic-enterprise-with-data-lineage/",
-     "source": "MIT Technology Review",
-     "image": "https://wp.technologyreview.com/wp-content/uploads/2026/10/MITTR_Cyberhaven_V4_Cover.png?w=840",
-     "published": "2026-11-04T13:00:00.000Z",
-     "topics": [
-      "Agents"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Ukraine’s drone strikes spur hasty Russian plans for underground data centers",
-     "summary": "Russia tries to fix exposed digital infrastructure as data center war backfires.",
-     "link": "https://arstechnica.com/ai/2026/11/russia-looks-to-hide-data-centers-underground-as-ukrainian-drones-strike-back/",
-     "source": "Ars Technica",
-     "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/Russia-Borodinsky-coal-mine-1152x648.jpg",
-     "published": "2026-11-03T20:39:55.000Z",
-     "topics": [
-      "Infra & MLOps"
-     ],
-     "also": []
-    }
-   ]
-  },
-  {
-   "date": "2026-11-03",
-   "items": [
-    {
-     "headline": "Google will let schools skip AI tools, but they have to give up search, too",
-     "summary": "Google will offer schools AI tools that purportedly don't give away the answers.",
-     "link": "https://arstechnica.com/ai/2026/11/google-will-let-schools-skip-ai-tools-but-they-have-to-give-up-search-too/",
-     "source": "Ars Technica",
-     "image": "https://cdn.arstechnica.net/wp-content/uploads/2025/05/google-logo-big-g-grooves-1152x648.jpg",
-     "published": "2026-11-03T17:54:43.000Z",
-     "topics": [
-      "Policy & safety"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Agentic cheminformatics with Google Antigravity",
-     "summary": "Learn how Google Antigravity and our Cheminformatics Skills accelerate drug discovery workflows, search compounds, and propose novel rigidified macrocycles.",
-     "link": "https://deepmind.google/blog/agentic-cheminformatics-with-google-antigravity/",
-     "source": "Google DeepMind",
-     "image": "https://lh3.googleusercontent.com/UFTBrp1IrRBrc6_f4ibNgtV35iY8F2iTYaqOb1lzR-qZNy-Mb5726xrLKTozohfdZ_3quHe50uyn8z-Wh_Eril_8CVh7py7gH0188sl_EXkoJknlqg=w528-h297-n-nu-rw-lo",
-     "published": "2026-11-03T17:01:49.000Z",
-     "topics": [
-      "Agents",
-      "Research"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Palette: teaching a small model to build decks in your design language",
-     "summary": "",
-     "link": "https://huggingface.co/blog/ibm-research/palette-deck-building",
-     "source": "Hugging Face",
-     "image": "https://cdn-uploads.huggingface.co/production/uploads/63890e3843d8b0797a0ad606/5pHD09UHuAK-6OyKGKimD.png",
-     "published": "2026-11-03T16:35:36.000Z",
-     "topics": [
+      "Research",
       "Models"
      ],
      "also": []
     },
     {
-     "headline": "How “reverse game theory” could keep AI agents in check",
-     "summary": "A new approach known as “reverse game theory” aims to control powerful AI models by designing systems that incentivize them to stick to the rules. As AI models become more capable, safety researchers are scrambling to ensure they are…",
-     "link": "https://www.technologyreview.com/2026/11/03/1147934/reverse-game-theory-mechanism-design-ai-alignment/",
-     "source": "MIT Technology Review",
-     "image": "https://wp.technologyreview.com/wp-content/uploads/2026/11/cake.jpg?resize=1200,600",
-     "published": "2026-11-03T10:43:41.000Z",
-     "topics": [
-      "Agents",
-      "Research",
-      "Policy & safety"
-     ],
-     "also": []
-    },
-    {
-     "headline": "Here’s who is falling in line for Trump’s “Super Intelligence” loyalty test",
-     "summary": "This story originally appeared in The Algorithm, our weekly newsletter on AI. To get stories like this in your inbox first, sign up here. At the end of September, President Trump signed an executive order that contained just one directive…",
-     "link": "https://www.technologyreview.com/2026/11/02/1147932/heres-who-is-falling-in-line-for-trumps-super-intelligence-loyalty-test/",
-     "source": "MIT Technology Review",
-     "image": "https://wp.technologyreview.com/wp-content/uploads/2026/10/superai-trump.jpg?resize=1200,600",
-     "published": "2026-11-03T04:18:47.000Z",
-     "topics": [
-      "Policy & safety"
-     ],
-     "also": []
-    },
-    {
-     "headline": "CWE-bench v2: More coverage, quality, and transparency",
-     "summary": "",
-     "link": "https://huggingface.co/blog/cwe-bench",
-     "source": "Hugging Face",
-     "image": "https://huggingface.co/blog/assets/cwe-bench/thumbnail.jpg",
-     "published": "2026-11-03T00:00:00.000Z",
+     "headline": "Strengthening the fight against online child sexual abuse with new tools and support",
+     "summary": "New tools, practical guidance, and partnerships will help prevent, detect and respond to online child sexual exploitation and abuse.",
+     "link": "https://openai.com/index/strengthening-online-child-safety",
+     "source": "OpenAI",
+     "image": "",
+     "published": "2026-11-16T17:00:00.000Z",
      "topics": [
       "Industry"
      ],
      "also": []
     },
     {
-     "headline": "Transformers Model Integration Contracts",
-     "summary": "",
-     "link": "https://huggingface.co/blog/transformers-mic",
-     "source": "Hugging Face",
-     "image": "https://huggingface.co/blog/assets/transformers-mic/mic-logo.png",
-     "published": "2026-11-03T00:00:00.000Z",
+     "headline": "Alibaba's Qwen4-Max takes on Opus 5.5, GPT-6, and Kimi K3.1 Pro at much lower prices",
+     "summary": "Alibaba launches Qwen4-Max, a new flagship model with 2.4 trillion parameters that activates only 71 billion per token. A hybrid architecture sharply cuts costs on long contexts. Qwen4-Max lands just behind Kimi K3.1 Pro on the Artificial…",
+     "link": "https://the-decoder.com/alibabas-qwen4-max-takes-on-opus-5-5-gpt-6-and-kimi-k3-1-pro-at-much-lower-prices/",
+     "source": "The Decoder",
+     "image": "https://the-decoder.com/wp-content/uploads/2026/07/qwen_logo-1.png",
+     "published": "2026-11-16T16:56:04.000Z",
+     "topics": [
+      "Models"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Jensen Huang Is Gone. Now What?",
+     "summary": "After a shocking downfall, Nvidia’s CEO is out of a job. WIRED’s Lauren Goode explains what that means for the world’s most critical chip company, the AI industry, and Jensen Huang himself.",
+     "link": "https://www.wired.com/story/the-big-interview-podcast-lauren-goode-jensen-huang/",
+     "source": "Wired",
+     "image": "https://media.wired.com/photos/6af78c75239676948e926fc2/master/pass/Big-Interview-UV-Solo-Katie-Lauren-Business.jpg",
+     "published": "2026-11-16T16:12:51.000Z",
+     "topics": [
+      "Infra & MLOps",
+      "Business"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Claude now builds interactive websites inside canvas graphics, reviving the Flash era with real HTML",
+     "summary": "Claude can now embed text, buttons, and other web elements into complex graphics and 3D effects. The article Claude now builds interactive websites inside canvas graphics, reviving the Flash era with real HTML appeared first on The Decoder…",
+     "link": "https://the-decoder.com/claude-now-builds-interactive-websites-inside-canvas-graphics-reviving-the-flash-era-with-real-html/",
+     "source": "The Decoder",
+     "image": "https://the-decoder.com/wp-content/uploads/2026/11/claude_gemini_pro-scaled.png",
+     "published": "2026-11-16T16:10:22.000Z",
+     "topics": [
+      "Models"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Building trustworthy AI by fencing it in, not predicting it",
+     "summary": "In October this year, OpenAI disclosed that two of its AI agents had switched off the systems built to monitor them. One muted its own safety alerts after misreading an instruction not to send messages; the other removed its monitoring…",
+     "link": "https://www.technologyreview.com/2026/11/16/1148565/building-trustworthy-ai-by-fencing-it-in-not-predicting-it/",
+     "source": "MIT Technology Review",
+     "image": "https://wp.technologyreview.com/wp-content/uploads/2026/11/BA5098150_Post-NEXUS_MIT_1920x1080.jpg?w=840",
+     "published": "2026-11-16T16:04:28.000Z",
+     "topics": [
+      "Agents",
+      "Policy & safety"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Anthropic says the key to agent memory is knowing what to forget, not how much to store",
+     "summary": "Anthropic studied how Claude retains knowledge across sessions. Selective notes beat exhaustive archives by a wide margin. In a Pokémon Red test, the newer Claude Fable 5 got four times as far as the older Sonnet 3.7 by keeping just a…",
+     "link": "https://the-decoder.com/anthropic-says-the-key-to-agent-memory-is-knowing-what-to-forget-not-how-much-to-store/",
+     "source": "The Decoder",
+     "image": "https://the-decoder.com/wp-content/uploads/2026/10/anthropic_claude-2.png",
+     "published": "2026-11-16T15:25:48.000Z",
+     "topics": [
+      "Agents",
+      "Models"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Jensen Huang allies build a \"war room\" to get him back at Nvidia",
+     "summary": "Huang is weighing a return just days after resigning amid a deepening scandal.",
+     "link": "https://arstechnica.com/ai/2026/11/jensen-huang-allies-build-a-war-room-to-get-him-back-at-nvidia/",
+     "source": "Ars Technica",
+     "image": "https://cdn.arstechnica.net/wp-content/uploads/2024/06/huang_computex_2024-1152x648.jpg",
+     "published": "2026-11-16T14:06:16.000Z",
      "topics": [
       "Infra & MLOps"
      ],
      "also": []
     },
     {
-     "headline": "Coming in 2027: Apple’s $1,000 home robot for FaceTime and switching on lights",
-     "summary": "Apple robot backed by CEO John Ternus may have hefty price tag and limited uses.",
-     "link": "https://arstechnica.com/apple/2026/11/apples-roaming-home-robot-may-do-facetime-switch-lights-on-and-yell-at-your-cat/",
-     "source": "Ars Technica",
-     "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/Apple-CEO-John-Ternus-1152x648.jpg",
-     "published": "2026-11-02T18:32:21.000Z",
+     "headline": "Audible is trying to make it easier to find audiobooks you’ll actually like",
+     "summary": "Audible is introducing an AI-assisted synopsis feature that's designed to help users determine whether they'll enjoy an audiobook before they jump in and start listening to it. The new audio discovery feature combines audiobook samples, AI…",
+     "link": "https://www.theverge.com/tech/1034083/audible-audio-discovery-ai-feature-availability",
+     "source": "The Verge",
+     "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/11/Audible-audio-discovery-hero-.jpg?quality=90&strip=all&crop=0,0,100,100",
+     "published": "2026-11-16T14:00:00.000Z",
      "topics": [
-      "Robotics",
+      "Voice AI"
+     ],
+     "also": []
+    }
+   ]
+  },
+  {
+   "date": "2026-11-15",
+   "items": [
+    {
+     "headline": "Anthropic's Claude Fable 5.2 doesn't generate images, it paints them",
+     "summary": "Anthropic's Claude Fable 5.2 doesn't generate images the way other AI models do. Instead of computing pixels, the language model writes Python code that places hundreds of thousands of simulated brushstrokes on a virtual canvas, complete…",
+     "link": "https://the-decoder.com/anthropics-claude-fable-5-2-doesnt-generate-images-it-paints-them/",
+     "source": "The Decoder",
+     "image": "https://the-decoder.com/wp-content/uploads/2026/11/claude_fable_5.2_painting.png",
+     "published": "2026-11-15T15:42:03.000Z",
+     "topics": [
+      "Models"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Firm linked to Jensen Huang's ex-lover reportedly brokered nearly $12 billion in Nvidia chip orders for China",
+     "summary": "Megaspeed, the firm owned by ousted Nvidia CEO Jensen Huang's former lover Alice Huang, arranged nearly $12 billion in Nvidia chip orders for Chinese companies between 2024 and 2025, according to the WSJ. Short seller Culper Research…",
+     "link": "https://the-decoder.com/firm-linked-to-jensen-huangs-ex-lover-reportedly-brokered-nearly-12-billion-in-nvidia-chip-orders-for-china/",
+     "source": "The Decoder",
+     "image": "https://the-decoder.com/wp-content/uploads/2026/11/nvidia_logo_glitch.png",
+     "published": "2026-11-15T14:45:12.000Z",
+     "topics": [
+      "Infra & MLOps",
       "Business"
+     ],
+     "also": []
+    },
+    {
+     "headline": "An overview of Jensen Huang’s messy days",
+     "summary": "This is The Stepback, a weekly newsletter breaking down one essential story from the tech world. For more on Jensen Huang's resignation and the fallout from Nvidia's leadership crisis, follow Terrence O'Brien. The Stepback arrives in our…",
+     "link": "https://www.theverge.com/column/1033943/jensen-huang-nvidia-china-spying-scandal-resignation",
+     "source": "The Verge",
+     "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/11/gettyimages-2301620664.jpg?quality=90&strip=all&crop=0,0,100,100",
+     "published": "2026-11-15T13:00:00.000Z",
+     "topics": [
+      "Infra & MLOps"
+     ],
+     "also": []
+    },
+    {
+     "headline": "AI DJs Completely Kill My Groove",
+     "summary": "YouTube Music and Spotify want synthetic hosts to curate your playlists. Their awkward banter and bogus song trivia are ruining the vibe.",
+     "link": "https://www.wired.com/story/ai-djs-completely-kill-my-groove/",
+     "source": "Wired",
+     "image": "https://media.wired.com/photos/6af7840bd2837972f5ddf4f3/master/pass/Untitled-1.jpg",
+     "published": "2026-11-15T12:00:00.000Z",
+     "topics": [
+      "Industry"
+     ],
+     "also": []
+    },
+    {
+     "headline": "This AI Tamagotchi Turns Everyday Objects Into Needy Virtual Pets",
+     "summary": "A Carnegie Mellon student’s tiny E Ink gadgets, called OATs, give houseplants, skateboards, and dumbbells expressive personalities to nudge you toward better habits.",
+     "link": "https://www.wired.com/story/this-ai-tamagotchi-oats-turns-everyday-objects-into-needy-virtual-pets/",
+     "source": "Wired",
+     "image": "https://media.wired.com/photos/6af4802ffbe5af43ea5dee0a/master/pass/Screenshot%202026-11-11%20at%2014.47.44.png",
+     "published": "2026-11-15T11:00:00.000Z",
+     "topics": [
+      "Industry"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Australia's central bank finds AI hitting young workers first, especially in software and customer service",
+     "summary": "Australia's central bank sees early signs that AI is hitting young entry-level workers in highly exposed jobs like software development and customer service. Since ChatGPT launched, job postings and employment among 15- to 24-year-olds in…",
+     "link": "https://the-decoder.com/australias-central-bank-finds-ai-hitting-young-workers-first-especially-in-software-and-customer-service/",
+     "source": "The Decoder",
+     "image": "https://the-decoder.com/wp-content/uploads/2026/11/ai_impact_australian_jobs.png",
+     "published": "2026-11-15T10:45:58.000Z",
+     "topics": [
+      "Industry"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Where was Nvidia’s security team?",
+     "summary": "Nvidia’s security chief quietly left in August, and now that CEO Jensen Huang has stepped down over his relationships, including one with an executive at a company suspected of funneling chips to China, a former intelligence officer says…",
+     "link": "https://techcrunch.com/2026/11/14/where-was-nvidias-security-team/",
+     "source": "TechCrunch",
+     "image": "https://techcrunch.com/wp-content/uploads/2026/11/Jensen-Huang-1.jpg?w=1024",
+     "published": "2026-11-15T00:08:07.000Z",
+     "topics": [
+      "Infra & MLOps",
+      "Business"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Elon Musk, other tech execs sign petition calling on Nvidia to reinstate Jensen Huang",
+     "summary": "The petition had attracted more than 115,000 signatures as of Saturday afternoon.",
+     "link": "https://techcrunch.com/2026/11/14/elon-musk-other-tech-execs-sign-petition-calling-on-nvidia-to-reinstate-jensen-huang/",
+     "source": "TechCrunch",
+     "image": "https://techcrunch.com/wp-content/uploads/2025/05/GettyImages-2216028442.jpg?w=1024",
+     "published": "2026-11-14T21:41:22.000Z",
+     "topics": [
+      "Infra & MLOps"
+     ],
+     "also": []
+    }
+   ]
+  },
+  {
+   "date": "2026-11-14",
+   "items": [
+    {
+     "headline": "The AI graveyard: a running list of projects and startups that didn’t make it",
+     "summary": "From Apple's repeatedly delayed Siri AI to OpenAI's messy \"super app\" launch, here's a look at the AI projects that shut down or missed expectations.",
+     "link": "https://techcrunch.com/2026/11/14/the-ai-graveyard-a-running-list-of-projects-and-startups-that-didnt-make-it/",
+     "source": "TechCrunch",
+     "image": "https://techcrunch.com/wp-content/uploads/2019/12/GettyImages-95927766-1.jpg?resize=1200,797",
+     "published": "2026-11-14T17:30:00.000Z",
+     "topics": [
+      "Business"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Beware the New AI-Fueled Ransomware Boom",
+     "summary": "Fully automated ransomware hasn’t arrived—yet. But seemingly unsophisticated attackers are using AI tools to wreak havoc.",
+     "link": "https://www.wired.com/story/beware-the-new-ai-fueled-ransomware-boom/",
+     "source": "Wired",
+     "image": "https://media.wired.com/photos/6af88e4339637940f3ecc20a/master/pass/image%20(76).png",
+     "published": "2026-11-14T13:00:00.000Z",
+     "topics": [
+      "Industry"
+     ],
+     "also": []
+    },
+    {
+     "headline": "No Pilots. Few Air Traffic Controllers. What Could Go Wrong?",
+     "summary": "Normally, aviation is slow to embrace new technology—but AI has come for the skies.",
+     "link": "https://www.wired.com/story/no-pilots-few-air-traffic-controllers-what-could-go-wrong/",
+     "source": "Wired",
+     "image": "https://media.wired.com/photos/6af209f8ab17b1a731ed42b4/master/pass/ai_aviation.gif",
+     "published": "2026-11-14T11:00:00.000Z",
+     "topics": [
+      "Industry"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Jensen Huang’s departure blasts big hole in AI startup funding, VCs and founders say",
+     "summary": "Nvidia poured tens of billions into AI startups under Huang. Without him at the helm, founders and VCs are bracing for smaller checks and lower valuations.",
+     "link": "https://techcrunch.com/2026/11/13/jensen-huangs-departure-blasts-big-hole-in-ai-startup-funding-vcs-and-founders-say/",
+     "source": "TechCrunch",
+     "image": "https://techcrunch.com/wp-content/uploads/2026/11/Jensen-Huang-nvidia.jpg?w=1024",
+     "published": "2026-11-13T22:43:00.000Z",
+     "topics": [
+      "Business",
+      "Infra & MLOps"
+     ],
+     "also": []
+    },
+    {
+     "headline": "FAA expands AI advice to manage air traffic congestion across entire US airspace",
+     "summary": "Airlines praised the AI tool, but the air traffic controllers’ union wasn’t involved.",
+     "link": "https://arstechnica.com/features/2026/11/faa-expands-ai-advice-to-manage-air-traffic-congestion-across-entire-us-airspace/",
+     "source": "Ars Technica",
+     "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/Pilots-during-DFW-departure-1152x648.jpg",
+     "published": "2026-11-13T21:20:47.000Z",
+     "topics": [
+      "Industry"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Microsoft 365 Crawls Back to Life After a 24-Hour Outage",
+     "summary": "The company says a bad update—not a cyberattack or AI—caused its servers around the world to crash.",
+     "link": "https://www.wired.com/story/microsoft-365-crawls-back-to-life-after-a-24-hour-outage/",
+     "source": "Wired",
+     "image": "https://media.wired.com/photos/6af75c7bac6958eb8481a5e6/master/pass/Security_MicrosoftBackOnline_v1.jpg",
+     "published": "2026-11-13T19:08:57.000Z",
+     "topics": [
+      "Policy & safety"
+     ],
+     "also": []
+    }
+   ]
+  },
+  {
+   "date": "2026-11-13",
+   "items": [
+    {
+     "headline": "Build a Robot Pick-and-Place Simulation with SimReady Assets",
+     "summary": "",
+     "link": "https://huggingface.co/blog/nvidia/simready-assets-robot-pick-and-place",
+     "source": "Hugging Face",
+     "image": "https://cdn-uploads.huggingface.co/production/uploads/6abfe9e7d7cf09a9b38ef308/HFZWtQ2i9VN_agjeUw2HB.gif",
+     "published": "2026-11-13T18:00:39.000Z",
+     "topics": [
+      "Robotics"
+     ],
+     "also": []
+    },
+    {
+     "headline": "OpenAI board member worries an AI \"takeover\" of society could be months away",
+     "summary": "Researcher traces a path from AI reward hacking to potential human extinction.",
+     "link": "https://arstechnica.com/ai/2026/11/ai-is-the-most-likely-reason-youll-die-openai-board-member-warns/",
+     "source": "Ars Technica",
+     "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/ai-destination-1152x648.jpg",
+     "published": "2026-11-13T17:25:45.000Z",
+     "topics": [
+      "Research"
+     ],
+     "also": []
+    },
+    {
+     "headline": "XYBench: Helping with the problem behind the question",
+     "summary": "",
+     "link": "https://huggingface.co/blog/allenai/xybench",
+     "source": "Hugging Face",
+     "image": "https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/aOWdQgZ8ioJcx9Eii4iob.png",
+     "published": "2026-11-13T17:02:35.000Z",
+     "topics": [
+      "Industry"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Jensen Huang and the End of the Founder Fairy Tale",
+     "summary": "The former tech CEO is obsessed with the power of storytelling. But he hasn't spun his way out of his sex scandals.",
+     "link": "https://www.wired.com/story/jensen-huang-and-the-end-of-the-founder-fairy-tale/",
+     "source": "Wired",
+     "image": "https://media.wired.com/photos/6af64d55d057d0b5e841f091/master/pass/Backchannel-Jensen-Business.jpg",
+     "published": "2026-11-13T16:00:00.000Z",
+     "topics": [
+      "Business"
+     ],
+     "also": []
+    },
+    {
+     "headline": "llama.cpp v1.0.0 : A stronger foundation for the local AI ecosystem",
+     "summary": "",
+     "link": "https://huggingface.co/blog/ggml-org/llama-cpp-v1",
+     "source": "Hugging Face",
+     "image": "https://cdn-uploads.huggingface.co/production/uploads/63148d3b996c52bf0142cdbe/2PgU1GxpJX_LVORaP2RRy.png",
+     "published": "2026-11-13T14:05:22.000Z",
+     "topics": [
+      "Models"
+     ],
+     "also": []
+    },
+    {
+     "headline": "This Startup Is Betting on AI Microdramas to Get More Black Stories in Hollywood",
+     "summary": "Mansa says its AI microdramas can serve as proofs of concept for what Black audiences want. Critics say the studio is selling out.",
+     "link": "https://www.wired.com/story/black-roles-are-disappearing-in-hollywood-this-startup-is-using-ai-microdramas-to-fight-back/",
+     "source": "Wired",
+     "image": "https://media.wired.com/photos/6af65ba58bac4203b57b5ba0/master/pass/Startup-Betting-on-AI-Microdramas-Culture.jpg",
+     "published": "2026-11-13T11:45:00.000Z",
+     "topics": [
+      "Business"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Silicon Valley Is Still Defending Jensen Huang",
+     "summary": "Nvidia employees and tech insiders never thought the chip king would lose his job. Despite his sudden resignation, many of them are still in denial.",
+     "link": "https://www.wired.com/story/silicon-valley-is-still-defending-jensen-huang/",
+     "source": "Wired",
+     "image": "https://media.wired.com/photos/6af5104da36e580e1eb299b6/master/pass/Model-Behavior-Silicon-Valley-Waiting-for-Jensen-Scandal-to-Blow-Over-Business.jpg",
+     "published": "2026-11-12T22:29:43.000Z",
+     "topics": [
+      "Infra & MLOps"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Nvidia privately confirmed it could track chips to fight smuggling, even as industry publicly questioned feasibility",
+     "summary": "Representatives from Nvidia told Illinois representative Bill Foster that it would be technically possible to implement the anti-smuggling measures called for in the Chip Security Act, Foster told MIT Technology Review in an interview on…",
+     "link": "https://www.technologyreview.com/2026/11/12/1148483/nvidia-chip-tracking/",
+     "source": "MIT Technology Review",
+     "image": "https://wp.technologyreview.com/wp-content/uploads/2026/11/foster-huang2a.jpg?resize=1200,600",
+     "published": "2026-11-12T20:16:24.000Z",
+     "topics": [
+      "Infra & MLOps"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Ars Live: What drone attacks on data centers mean for modern life in the cloud",
+     "summary": "A livestream Ars discussion is happening on November 17 at 1 pm Eastern Time.",
+     "link": "https://arstechnica.com/gadgets/2026/11/ars-live-can-the-cloud-survive-drone-strikes-on-data-centers/",
+     "source": "Ars Technica",
+     "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/Ukraine-data-center-under-attack-1152x648.jpg",
+     "published": "2026-11-12T19:59:59.000Z",
+     "topics": [
+      "Infra & MLOps"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Google rolls out Gemini 4 Hydrogen, finally replacing 3.8 Flash",
+     "summary": "Gemini 4 Hydrogen isn't getting a slow, security-conscious release like Carbon and Argon.",
+     "link": "https://arstechnica.com/google/2026/11/google-rolls-out-gemini-4-hydrogen-finally-replacing-3-8-flash/",
+     "source": "Ars Technica",
+     "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/04/gemini-general-6-1152x648.jpg",
+     "published": "2026-11-12T19:23:03.000Z",
+     "topics": [
+      "Models"
+     ],
+     "also": []
+    }
+   ]
+  },
+  {
+   "date": "2026-11-12",
+   "items": [
+    {
+     "headline": "Introducing Gemini 4 Hydrogen",
+     "summary": "",
+     "link": "https://deepmind.google/blog/introducing-gemini-4-hydrogen/",
+     "source": "Google DeepMind",
+     "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-4-hydrogen__key-art__lockup__16-9.width-1300.jpg",
+     "published": "2026-11-12T18:00:50.000Z",
+     "topics": [
+      "Models"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Google Search gets a major upgrade with Gemini 4 Hydrogen",
+     "summary": "We are bringing Gemini 4 Hydrogen to Google Search globally to provide you with more helpful, visual, and intuitive responses.",
+     "link": "https://blog.google/products-and-platforms/products/search/gemini-4-hydrogen-search-upgrade/",
+     "source": "Google AI",
+     "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/HydrogenUI_socialshare.max-600x600.format-webp.webp",
+     "published": "2026-11-12T18:00:00.000Z",
+     "topics": [
+      "Models"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Google pushes privacy angle as Gemini-powered smartglasses debut starting at $395",
+     "summary": "The first Gemini smartglasses are a collab between Google, Samsung, Gentle Monster, and Warby Parker.",
+     "link": "https://arstechnica.com/google/2026/11/google-pushes-privacy-angle-as-gemini-powered-smartglasses-debut-starting-at-395/",
+     "source": "Ars Technica",
+     "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/WP_ALDEN-Carousel_Lifestyle-copy-1152x648.jpg",
+     "published": "2026-11-12T14:50:17.000Z",
+     "topics": [
+      "Models",
+      "Policy & safety"
+     ],
+     "also": []
+    },
+    {
+     "headline": "The Definitive Fine-Tuning Guide for 3D Generation Models",
+     "summary": "",
+     "link": "https://huggingface.co/blog/3d-lora-finetuning",
+     "source": "Hugging Face",
+     "image": "https://huggingface.co/blog/assets/3d-lora-finetuning/thumbnail.gif",
+     "published": "2026-11-12T00:00:00.000Z",
+     "topics": [
+      "Infra & MLOps"
+     ],
+     "also": []
+    }
+   ]
+  },
+  {
+   "date": "2026-11-11",
+   "items": [
+    {
+     "headline": "Taiwan’s chipmaking giant TSMC to invest $1B in Anthropic, OpenAI",
+     "summary": "Latest example of the AI boom’s circular financing comes as AI trade wobbles.",
+     "link": "https://arstechnica.com/ai/2026/11/taiwans-chipmaking-giant-tsmc-to-invest-1b-in-anthropic-openai/",
+     "source": "Ars Technica",
+     "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/TSMC-Fab-18-1152x648.jpg",
+     "published": "2026-11-11T18:16:40.000Z",
+     "topics": [
+      "Industry"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Gemini Decisions API: Fast, calibrated multimodal decisions",
+     "summary": "Meet the Gemini Decisions API, powered by our state-of-the-art model Gemini Decision for fast, calibrated multimodal decisions.",
+     "link": "https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/",
+     "source": "Google AI",
+     "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini__decisions__blog-header_2784x1566.width-1300.png",
+     "published": "2026-11-11T18:00:00.000Z",
+     "topics": [
+      "Models"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Big Walk used AI to fix a bug. Now the indie gaming world is having a reckoning.",
+     "summary": "Any amount of AI coding is too much for many Independent Games Festival judges.",
+     "link": "https://arstechnica.com/gaming/2026/11/big-walk-used-ai-to-fix-a-bug-now-the-indie-gaming-world-is-having-a-reckoning/",
+     "source": "Ars Technica",
+     "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/bigwalkdebate-1152x648.png",
+     "published": "2026-11-11T17:37:32.000Z",
+     "topics": [
+      "Industry"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Try Tabletop: Customizable, collaborative spaces for groups to plan, play and do more together.",
+     "summary": "Tabletop is a new Google Labs experiment for group collaboration. Build interactive itineraries, polls, and brackets with your team. Join the waitlist.",
+     "link": "https://blog.google/innovation-and-ai/models-and-research/google-labs/tabletop/",
+     "source": "Google AI",
+     "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/labs_tabletop_blog_image_2784x1.max-600x600.format-webp.webp",
+     "published": "2026-11-11T16:00:00.000Z",
+     "topics": [
+      "Industry"
+     ],
+     "also": []
+    },
+    {
+     "headline": "AlphaGenome 2: Deciphering how cells read DNA to better understand disease",
+     "summary": "Predicting how DNA sequences and their variations impact specific human cell types and disease.",
+     "link": "https://deepmind.google/blog/alphagenome-2-deciphering-how-cells-read-dna-to-better-understand-disease/",
+     "source": "Google DeepMind",
+     "image": "https://lh3.googleusercontent.com/VPOhADdGu1T7kK_gWBiGzyVawQbKCjpL3-B0L0wxpYCyr8cHxviYmo9Hghy4f1laeIo2YKwuz8E07TR9HWWk2b0EONi0uvju-8TDLHX6YWHG4dXe3w=w528-h297-n-nu-rw-lo",
+     "published": "2026-11-11T15:00:15.000Z",
+     "topics": [
+      "Industry"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Google DeepMind just mathematically verified key parts of Signal",
+     "summary": "The four-week project hints that AI could make formal verification far more practical.",
+     "link": "https://arstechnica.com/ai/2026/11/signals-encryption-just-passed-an-ai-powered-mathematical-checkup/",
+     "source": "Ars Technica",
+     "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/11/signal_icon-1024x648.jpg",
+     "published": "2026-11-11T14:08:57.000Z",
+     "topics": [
+      "Industry"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Experience the art and legacy of Dr. Esther Mahlangu",
+     "summary": "A new online archive of Esther Mahlangu’s life and art is now on Google Arts & Culture.",
+     "link": "https://blog.google/company-news/outreach-and-initiatives/arts-culture/esther-mahlangu/",
+     "source": "Google AI",
+     "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/esther_video_still.max-600x600.format-webp.webp",
+     "published": "2026-11-11T09:00:00.000Z",
+     "topics": [
+      "Industry"
+     ],
+     "also": []
+    },
+    {
+     "headline": "BotPsy: On-Device Personal Assistant with a Sub-Billion-Parameter Agentic Language Model",
+     "summary": "",
+     "link": "https://huggingface.co/blog/qvac/botpsy",
+     "source": "Hugging Face",
+     "image": "https://cdn-uploads.huggingface.co/production/uploads/6468b319b2321e47d3267049/Emr86qw6NAueYLdIEiTTD.png",
+     "published": "2026-11-11T05:01:16.000Z",
+     "topics": [
+      "Agents",
+      "Models"
+     ],
+     "also": []
+    },
+    {
+     "headline": "Token Pooling-Aware Training for Multi-Vector Embedding Models",
+     "summary": "",
+     "link": "https://huggingface.co/blog/token-pooling",
+     "source": "Hugging Face",
+     "image": "https://huggingface.co/blog/assets/train-sentence-transformers/st-hf-thumbnail.png",
+     "published": "2026-11-11T00:00:00.000Z",
+     "topics": [
+      "RAG & search"
      ],
      "also": []
     }
@@ -829,134 +779,126 @@
  ],
  "papers": [
   {
-   "title": "From Autonomous Agents to Cognitive Symbionts: Toward AI-Augmented Human Intelligence",
-   "summary": "Physical AI should include AI-augmented human intelligence via lifelong cognitive symbionts that close cognitive gaps through sensing, context retention, and proactive assistance, requiring embedded governance.",
-   "link": "https://huggingface.co/papers/2611.05376",
-   "upvotes": 119,
-   "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.05376.png",
-   "published": "2026-11-06T00:00:00.000Z"
-  },
-  {
-   "title": "VFlash: Fast, Accurate Visual Planning via Flash Primitive Decoding",
-   "summary": "Models for physical AI tasks, such as robotics and autonomous driving, need not reason solely in language. They can use visual plans--points, bounding boxes, and trajectories--to represent spatial goals and anticipate…",
-   "link": "https://huggingface.co/papers/2611.08449",
+   "title": "Envisioning Agentic Robotics: A New Era of Robotic Systems",
+   "summary": "Agentic robotics, centered on an Embodied System 2 formed by a foundation model and embodied harness, requires a shared evaluation framework and research roadmap to achieve reliable physical autonomy.",
+   "link": "https://huggingface.co/papers/2611.18359",
    "upvotes": 107,
-   "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.08449.png",
-   "published": "2026-11-06T00:00:00.000Z"
+   "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.18359.png",
+   "published": "2026-11-16T00:00:00.000Z"
   },
   {
-   "title": "SLA: Scaling Spatial-Language-Action Model via Continual Pre-training",
-   "summary": "SLA is a spatial-language-action model that continually pre-trains and post-trains a pretrained VLA policy with spatial alignment to a frozen 3D perception model, using feature-dependent gates and probabilistic state…",
-   "link": "https://huggingface.co/papers/2611.08373",
-   "upvotes": 93,
-   "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.08373.png",
-   "published": "2026-11-06T00:00:00.000Z"
+   "title": "Gamer: A Generalist Vision-Language-Action Foundation Model for Long-Horizon Real-Time Game Agent",
+   "summary": "Gamer is a generalist agent framework that integrates perception, memory, and multi-step reasoning, trained through continued pre-training, sparse-thinking instruction tuning, and multi-turn reinforcement learning to…",
+   "link": "https://huggingface.co/papers/2611.18397",
+   "upvotes": 87,
+   "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.18397.png",
+   "published": "2026-11-16T00:00:00.000Z"
   },
   {
-   "title": "Decoupled Predictive Decision Making: A Shared Conditional Predictor for Agents",
-   "summary": "DPDM improves agent decision accuracy by combining frozen language-model representations with a shared pretrained conditional predictor that learns from deployment evidence without parameter updates.",
-   "link": "https://huggingface.co/papers/2611.02075",
-   "upvotes": 81,
-   "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.02075.png",
-   "published": "2026-11-06T00:00:00.000Z"
+   "title": "VibePrevisBench: Evaluating Agentic Coding for 4D Scene Generation in Blender",
+   "summary": "Controllable real-world video generation models can condition on a rendered graybox proxy video, which fixes layout, motion and camera. Coding agents can build such videos by reconstructing a 4D scene in Blender, yet no…",
+   "link": "https://huggingface.co/papers/2611.15789",
+   "upvotes": 83,
+   "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.15789.png",
+   "published": "2026-11-16T00:00:00.000Z"
   },
   {
-   "title": "Harness-S: Learning from Sibling Harnesses for Generalizable Agent Training",
-   "summary": "A selective harness-rescue training method uses specialized sibling harnesses to replace failed reinforcement learning rollouts and transfer their benefits into a single policy that performs better under the original…",
-   "link": "https://huggingface.co/papers/2611.04277",
-   "upvotes": 66,
-   "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.04277.png",
-   "published": "2026-11-06T00:00:00.000Z"
+   "title": "MIRIX-2.0: Multi-Agent Memory System",
+   "summary": "MIRIX-2.0 is a multi-agent memory system for LLM agents that achieves high accuracy and efficiency across QA and procedural benchmarks without fine-tuning.",
+   "link": "https://huggingface.co/papers/2611.12068",
+   "upvotes": 43,
+   "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.12068.png",
+   "published": "2026-11-16T00:00:00.000Z"
   },
   {
-   "title": "WeLM-Image: A Unified Image Generation Model towards Visual Intelligence",
-   "summary": "We present WeLM-Image, a unified image foundation model that integrates multimodal understanding into text-to-image generation, instruction-guided editing, and multi-reference synthesis. Designed for single-GPU…",
-   "link": "https://huggingface.co/papers/2611.07392",
-   "upvotes": 46,
-   "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.07392.png",
-   "published": "2026-11-06T00:00:00.000Z"
+   "title": "MMFlash: Faster Speculative Decoding for Vision-Language Models",
+   "summary": "MMFlash improves multimodal speculative decoding by adaptively upweighting visually dependent tokens and using sparse attention for long video, yielding up to 3.58× lossless speedup.",
+   "link": "https://huggingface.co/papers/2611.18482",
+   "upvotes": 35,
+   "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.18482.png",
+   "published": "2026-11-16T00:00:00.000Z"
   },
   {
-   "title": "TailSteer: Trajectory-Tail Steering for Drift-Resistant Multi-turn Image Editing",
-   "summary": "TailSteer, a final-stage training framework, reduces cumulative visual drift in multi-turn editing by keeping early denoising dynamics close to the base model and learning tail-focused preservation corrections from…",
-   "link": "https://huggingface.co/papers/2611.06741",
-   "upvotes": 41,
-   "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.06741.png",
-   "published": "2026-11-06T00:00:00.000Z"
+   "title": "Rethinking in Spikes: Mitigating Hallucinations in MDLMs with Step-Aware Decoding",
+   "summary": "StepRefine, a plug-and-play decoding strategy, mitigates hallucinations in multimodal diffusion language models by switching between discrete denoising and latent refinement based on entropy spikes and distributional…",
+   "link": "https://huggingface.co/papers/2611.12901",
+   "upvotes": 35,
+   "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.12901.png",
+   "published": "2026-11-16T00:00:00.000Z"
   },
   {
-   "title": "EvoMemState: Evolving Memory State for Personal Agents",
-   "summary": "Long-term memory enables large language model (LLM) agents to provide continuous personalized assistance by retaining user information across interactions. Existing systems support this process through fact extraction…",
-   "link": "https://huggingface.co/papers/2611.03743",
-   "upvotes": 34,
-   "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.03743.png",
-   "published": "2026-11-06T00:00:00.000Z"
+   "title": "V-JEPA-LM: Video-Language Models That Read Dynamics Beyond Static, Text-Aligned Representations",
+   "summary": "Counterfactual supervision over pixel transformations enables language models to read motion dynamics from frozen predictive video encoders, yielding V-JEPA-LM models that outperform open video LLMs across benchmarks.",
+   "link": "https://huggingface.co/papers/2611.17831",
+   "upvotes": 21,
+   "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.17831.png",
+   "published": "2026-11-16T00:00:00.000Z"
+  },
+  {
+   "title": "DySENSE: Dynamic Spatiotemporal ENergy Synthesis and Emulation with Satellite Imagery",
+   "summary": "Cities account for over two-thirds of the world's energy and more than 70% of global carbon dioxide emissions. City energy is essential for achieving the 2050 net-zero target and the UN's Sustainable Development Goals 7…",
+   "link": "https://huggingface.co/papers/2611.17878",
+   "upvotes": 20,
+   "image": "https://cdn-thumbnails.huggingface.co/social-thumbnails/papers/2611.17878.png",
+   "published": "2026-11-16T00:00:00.000Z"
   }
  ],
  "releases": [
   {
    "repo": "openai/openai-agents-python",
-   "tag": "v0.24.0-alpha.7",
-   "name": "Agents SDK v0.24.0-alpha.7",
-   "link": "https://github.com/openai/openai-agents-python/releases/tag/v0.24.0-alpha.7",
-   "published": "2026-11-08T07:05:11Z",
+   "tag": "v0.24.0-alpha.8",
+   "name": "Agents SDK v0.24.0-alpha.8",
+   "link": "https://github.com/openai/openai-agents-python/releases/tag/v0.24.0-alpha.8",
+   "published": "2026-11-16T04:39:19Z",
    "prerelease": true
   },
   {
-   "repo": "anthropics/claude-code",
-   "tag": "v2.1.319",
-   "name": "v2.1.319",
-   "link": "https://github.com/anthropics/claude-code/releases/tag/v2.1.319",
-   "published": "2026-11-06T17:04:01Z",
-   "prerelease": false
-  },
-  {
-   "repo": "huggingface/transformers",
-   "tag": "v5.22.2",
-   "name": "Patch release v5.22.2",
-   "link": "https://github.com/huggingface/transformers/releases/tag/v5.22.2",
-   "published": "2026-11-06T15:43:27Z",
-   "prerelease": false
-  },
-  {
    "repo": "langchain-ai/langgraph",
-   "tag": "sdk==0.4.14",
-   "name": "langgraph-sdk==0.4.14",
-   "link": "https://github.com/langchain-ai/langgraph/releases/tag/sdk%3D%3D0.4.14",
-   "published": "2026-11-06T03:03:34Z",
+   "tag": "1.2.22",
+   "name": "langgraph==1.2.22",
+   "link": "https://github.com/langchain-ai/langgraph/releases/tag/1.2.22",
+   "published": "2026-11-14T01:43:55Z",
+   "prerelease": false
+  },
+  {
+   "repo": "anthropics/claude-code",
+   "tag": "v2.1.325",
+   "name": "v2.1.325",
+   "link": "https://github.com/anthropics/claude-code/releases/tag/v2.1.325",
+   "published": "2026-11-13T20:40:01Z",
    "prerelease": false
   },
   {
    "repo": "livekit/agents",
-   "tag": "livekit-agents@1.8.11",
-   "name": "livekit-agents@1.8.11",
-   "link": "https://github.com/livekit/agents/releases/tag/livekit-agents%401.8.11",
-   "published": "2026-11-05T19:48:29Z",
+   "tag": "livekit-agents@1.8.12",
+   "name": "livekit-agents@1.8.12",
+   "link": "https://github.com/livekit/agents/releases/tag/livekit-agents%401.8.12",
+   "published": "2026-11-13T17:37:40Z",
    "prerelease": false
   },
   {
-   "repo": "ollama/ollama",
-   "tag": "v0.40.15",
-   "name": "v0.40.15",
-   "link": "https://github.com/ollama/ollama/releases/tag/v0.40.15",
-   "published": "2026-11-03T22:52:31Z",
-   "prerelease": false
-  },
-  {
-   "repo": "vllm-project/vllm",
-   "tag": "v0.33.0rc3",
-   "name": "v0.33.0",
-   "link": "https://github.com/vllm-project/vllm/releases/tag/v0.33.0rc3",
-   "published": "2026-11-02T10:10:05Z",
+   "repo": "huggingface/transformers",
+   "tag": "v5.23.0",
+   "name": "Release v5.23.0",
+   "link": "https://github.com/huggingface/transformers/releases/tag/v5.23.0",
+   "published": "2026-11-13T14:10:57Z",
    "prerelease": false
   },
   {
    "repo": "pipecat-ai/pipecat",
-   "tag": "v1.15.0",
-   "name": "v1.15.0",
-   "link": "https://github.com/pipecat-ai/pipecat/releases/tag/v1.15.0",
-   "published": "2026-10-29T05:50:54Z",
+   "tag": "v1.16.0",
+   "name": "v1.16.0",
+   "link": "https://github.com/pipecat-ai/pipecat/releases/tag/v1.16.0",
+   "published": "2026-11-12T00:45:03Z",
    "prerelease": false
+  },
+  {
+   "repo": "ollama/ollama",
+   "tag": "v0.40.17-rc1",
+   "name": "v0.40.17",
+   "link": "https://github.com/ollama/ollama/releases/tag/v0.40.17-rc1",
+   "published": "2026-11-10T22:25:00Z",
+   "prerelease": true
   }
  ]
 }

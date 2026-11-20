@@ -4,6 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { Mic, MicOff, Phone, PhoneOff } from "lucide-react";
 import type { FunctionCall, LiveServerMessage, Session } from "@google/genai";
 import { AGENT_API, AGENT_NAME } from "@/lib/agent";
+import AxonFace from "@/components/chat/AxonFace";
+import { startPipeline } from "@/components/chat/voicePipeline";
+
+// A call runs one of two ways (the server picks, see functions/api/voice/token.js):
+//   pipeline  Deepgram hears, Axon's chat agent answers, ElevenLabs speaks (voicePipeline.ts)
+//   gemini    one Gemini Live session does all three (the fallback)
 
 export interface CallTurn {
     role: "user" | "assistant";
@@ -14,6 +20,7 @@ type CallState = "idle" | "connecting" | "live" | "error";
 
 const OUTPUT_RATE = 24000;
 const CALL_OPENER = "(The visitor just joined the call.)";
+const GREETING = "Hi, I'm Axon, Isuru's agent. Ask me anything about his work, or say show me PersonaPlex.";
 
 function toBase64(buffer: ArrayBuffer) {
     const bytes = new Uint8Array(buffer);
@@ -43,6 +50,7 @@ const formatTime = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padSta
 
 interface Live {
     session?: Session;
+    pipe?: ReturnType<typeof startPipeline>;
     mic?: MediaStream;
     inCtx?: AudioContext;
     outCtx?: AudioContext;
@@ -69,6 +77,8 @@ export default function VoiceCall({ onEnd }: Props) {
     const [error, setError] = useState("");
     const [muted, setMuted] = useState(false);
     const [speaking, setSpeaking] = useState(false);
+    const [thinking, setThinking] = useState(false);
+    const [provider, setProvider] = useState<"pipeline" | "gemini" | null>(null);
     const [captions, setCaptions] = useState<CallTurn[]>([]);
     const [elapsed, setElapsed] = useState(0);
     const [limit, setLimit] = useState(180);
@@ -96,6 +106,7 @@ export default function VoiceCall({ onEnd }: Props) {
 
     function teardown() {
         const l = live.current;
+        l.pipe?.stop();
         try {
             l.session?.close();
         } catch {
@@ -126,10 +137,10 @@ export default function VoiceCall({ onEnd }: Props) {
     // End the call if the panel closes mid-call
     useEffect(() => () => endCall(false), []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    function addCaption(role: CallTurn["role"], text: string) {
+    function addCaption(role: CallTurn["role"], text: string, replace = false) {
         const turns = live.current.turns;
         const last = turns[turns.length - 1];
-        if (last && last.role === role) last.text += text;
+        if (last && last.role === role) last.text = replace ? text : last.text + text;
         else turns.push({ role, text });
         setCaptions(turns.slice(-3).map((t) => ({ ...t })));
     }
@@ -211,14 +222,16 @@ export default function VoiceCall({ onEnd }: Props) {
         const l = live.current;
 
         try {
-            const res = await fetch(`${AGENT_API}/voice/token`, { method: "POST" });
-            const issued = await res.json().catch(() => ({}));
-            if (!res.ok || !issued.token) throw new Error(issued.detail || "Couldn't start a call right now. Chat still works.");
-            setLimit(issued.max_seconds ?? 180);
-
+            // Microphone first: the speech token below is short-lived, so it's fetched once we can use it
             l.mic = await navigator.mediaDevices.getUserMedia({
                 audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 },
             });
+
+            const res = await fetch(`${AGENT_API}/voice/token`, { method: "POST" });
+            const issued = await res.json().catch(() => ({}));
+            if (!res.ok || !(issued.token || issued.stt?.token)) throw new Error(issued.detail || "Couldn't start a call right now. Chat still works.");
+            setLimit(issued.max_seconds ?? 180);
+            setProvider(issued.provider === "pipeline" ? "pipeline" : "gemini");
 
             // Capture at 16 kHz where the browser allows it; otherwise send the native rate
             let inCtx = new AudioContext({ sampleRate: 16000 });
@@ -244,6 +257,33 @@ export default function VoiceCall({ onEnd }: Props) {
             l.outAnalyser = l.outCtx.createAnalyser();
             l.outAnalyser.connect(l.outCtx.destination);
 
+            if (issued.provider === "pipeline") {
+                l.pipe = startPipeline({
+                    api: AGENT_API,
+                    stt: issued.stt,
+                    node: l.node,
+                    sampleRate: inCtx.sampleRate,
+                    outCtx: l.outCtx,
+                    out: l.outAnalyser,
+                    greeting: GREETING,
+                    hooks: {
+                        caption: (role, text, replace) => addCaption(role, text, replace),
+                        speaking: setSpeaking,
+                        thinking: setThinking,
+                        fail: (message) => {
+                            setError(message);
+                            endCall();
+                        },
+                        action: (a) => {
+                            if (a.type === "go") document.getElementById(a.value)?.scrollIntoView({ behavior: "smooth", block: "start" });
+                            else if (a.type === "contact") {
+                                window.dispatchEvent(new CustomEvent("contact-door", { detail: a.value }));
+                                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                            } else setTimeout(() => endCall(), 400);
+                        },
+                    },
+                });
+            } else {
             // The SDK only loads when someone actually calls
             const { GoogleGenAI, Modality } = await import("@google/genai");
             const ai = new GoogleGenAI({ apiKey: issued.token, httpOptions: { apiVersion: "v1alpha" } });
@@ -267,6 +307,7 @@ export default function VoiceCall({ onEnd }: Props) {
             };
 
             l.session.sendClientContent({ turns: [{ role: "user", parts: [{ text: CALL_OPENER }] }], turnComplete: true });
+            }
 
             l.started = Date.now();
             const max = issued.max_seconds ?? 180;
@@ -295,6 +336,7 @@ export default function VoiceCall({ onEnd }: Props) {
         const next = !live.current.muted;
         live.current.muted = next;
         live.current.mic?.getAudioTracks().forEach((t) => (t.enabled = !next));
+        live.current.pipe?.mute(next);
         if (next) live.current.session?.sendRealtimeInput({ audioStreamEnd: true });
         setMuted(next);
     }
@@ -306,6 +348,8 @@ export default function VoiceCall({ onEnd }: Props) {
             : isLive
               ? speaking
                   ? `${AGENT_NAME} is speaking`
+                  : thinking
+                    ? `${AGENT_NAME} is thinking`
                   : muted
                     ? "You're muted"
                     : "Listening"
@@ -320,8 +364,11 @@ export default function VoiceCall({ onEnd }: Props) {
                 aria-hidden="true"
                 className="agent-orb relative h-40 w-40 shrink-0"
             >
-                <span className="agent-orb-ring absolute inset-0 rounded-full" />
-                <span className="agent-orb-core absolute inset-5 rounded-full" />
+                <AxonFace
+                    size={160}
+                    voice
+                    state={state === "connecting" || (isLive && thinking && !speaking) ? "thinking" : isLive ? (speaking ? "speaking" : muted ? "idle" : "listening") : "idle"}
+                />
             </div>
 
             <p className="mt-6 font-display text-xl font-light tracking-[-0.01em] text-ink" aria-live="polite">
@@ -355,7 +402,7 @@ export default function VoiceCall({ onEnd }: Props) {
                             type="button"
                             onClick={toggleMute}
                             aria-pressed={muted}
-                            className="flex h-12 cursor-pointer items-center gap-2 rounded-full border border-white/15 px-5 text-sm text-ink transition-colors hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-ember"
+                            className="flex h-12 cursor-pointer items-center gap-2 rounded-full border border-fg/15 px-5 text-sm text-ink transition-colors hover:bg-fg/5 focus-visible:outline-2 focus-visible:outline-ember"
                         >
                             {muted ? <MicOff className="h-4 w-4" aria-hidden="true" /> : <Mic className="h-4 w-4" aria-hidden="true" />}
                             {muted ? "Unmute" : "Mute"}
@@ -363,7 +410,7 @@ export default function VoiceCall({ onEnd }: Props) {
                         <button
                             type="button"
                             onClick={() => endCall()}
-                            className="flex h-12 cursor-pointer items-center gap-2 rounded-full bg-inferno-3 px-5 text-sm font-medium text-void transition-colors hover:bg-ember focus-visible:outline-2 focus-visible:outline-ember"
+                            className="flex h-12 cursor-pointer items-center gap-2 rounded-full bg-inferno-3 px-5 text-sm font-medium text-on-ember transition-colors hover:bg-ember focus-visible:outline-2 focus-visible:outline-ember"
                         >
                             <PhoneOff className="h-4 w-4" aria-hidden="true" />
                             End call
@@ -374,14 +421,21 @@ export default function VoiceCall({ onEnd }: Props) {
                         type="button"
                         onClick={startCall}
                         disabled={state === "connecting"}
-                        className="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-ember text-sm font-medium text-void transition-colors hover:bg-inferno-5 disabled:cursor-wait disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+                        className="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-ember text-sm font-medium text-on-ember transition-colors hover:bg-inferno-5 disabled:cursor-wait disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
                     >
                         <Phone className="h-4 w-4" aria-hidden="true" />
                         {state === "connecting" ? "Connecting…" : "Start a voice call"}
                     </button>
                 )}
                 <p className="text-center text-[11px] leading-snug text-ash/80">
-                    English for now. Uses your microphone; audio goes to Google&apos;s Gemini Live API. Calls end after {formatTime(limit)}.
+                    {provider === "gemini" ? (
+                        <>English for now. Uses your microphone; audio goes to Google&apos;s Gemini Live API. Calls end after {formatTime(limit)}.</>
+                    ) : (
+                        <>
+                            English for now. Uses your microphone: Deepgram transcribes you, {AGENT_NAME} answers from Isuru&apos;s knowledge base, and ElevenLabs (or
+                            Deepgram) gives it a voice. Calls end after {formatTime(limit)}.
+                        </>
+                    )}
                 </p>
             </div>
         </div>

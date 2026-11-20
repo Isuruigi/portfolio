@@ -1,0 +1,158 @@
+{
+  "domain": "realtime-s2s",
+  "title": "How a speech-to-speech agent skips the text step",
+  "subtitle": "Audio and video stream over one session to a native audio model that hears, calls tools and talks back.",
+  "hook": "One websocket replaces three models: speech goes in and comes out as audio, never routed through text.",
+  "org": "Google DeepMind",
+  "metric": null,
+  "sources": [
+    {
+      "title": "Can Your Agent Hear You Now? Building Live Voice Agents with Gemini",
+      "speaker": "Thor Schaeff",
+      "org": "Google DeepMind",
+      "videoId": "xfPVBzDYjH4",
+      "url": "https://www.youtube.com/watch?v=xfPVBzDYjH4",
+      "kind": "talk"
+    },
+    {
+      "title": "Voice Agents Can Just Do Things",
+      "speaker": "Charlie Guo",
+      "org": "OpenAI",
+      "videoId": "OpY6MmZFeHo",
+      "url": "https://www.youtube.com/watch?v=OpY6MmZFeHo",
+      "kind": "talk"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "user",
+      "label": "Speaker",
+      "role": "Talks, shows camera, interrupts",
+      "kind": "person",
+      "tool": "Google AI Studio",
+      "toolFromTalk": true,
+      "col": 0,
+      "row": 1,
+      "detail": "A person talking to the agent with a microphone and, optionally, a camera. In the demo the model read the word on the speaker's sweatshirt.",
+      "tradeoff": "The user can barge in and interrupt the model mid-reply, for example when the DJ agent talks too long.",
+      "cite": "15:41"
+    },
+    {
+      "id": "media",
+      "label": "Media framework",
+      "role": "Carries live audio and video",
+      "kind": "service",
+      "tool": "LiveKit",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 1,
+      "detail": "Moves the user's real-time audio and video to the Live API and plays the reply. Google points builders to partners such as LiveKit and Pipecat.",
+      "tradeoff": "The talk calls real-time media quite challenging to scale, which is why it recommends these partners.",
+      "cite": "15:55"
+    },
+    {
+      "id": "session",
+      "label": "Live API session",
+      "role": "One stateful websocket",
+      "kind": "gateway",
+      "tool": "Gemini Live API",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 1,
+      "detail": "You open a session, then stream text, audio and video frames in over one websocket. The model streams audio chunks back as it answers.",
+      "tradeoff": "A transcript of what was said comes back alongside the audio, even though the model itself never goes through text.",
+      "cite": "14:32"
+    },
+    {
+      "id": "model",
+      "label": "Native audio model",
+      "role": "Hears and speaks directly",
+      "kind": "model",
+      "tool": "Gemini 3.1 Flash Live",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 1,
+      "detail": "The same model behind voice in the Gemini app. Its intelligence is built into the audio model, so it understands speech natively instead of reading a transcript.",
+      "tradeoff": "Working in audio lets it switch fluidly between the 90 languages supported in preview, mid-conversation.",
+      "cite": "15:07"
+    },
+    {
+      "id": "tools",
+      "label": "Function calls",
+      "role": "Does things mid-call",
+      "kind": "tool",
+      "tool": "Lyria 3",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 1,
+      "detail": "The model can call functions while talking. The radio DJ demo calls Lyria 3 to make a song on request; in a business it could fetch CRM data or open a ticket.",
+      "tradeoff": "Generative tools are not instant: an image generated through a tool call still took two to three seconds.",
+      "cite": "11:03"
+    },
+    {
+      "id": "search",
+      "label": "Search grounding",
+      "role": "Fresh facts on demand",
+      "kind": "tool",
+      "tool": "Google Search",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 0,
+      "detail": "Turned on with one setting, it works like a built-in function call: the model goes off and searches, for example for today's weather.",
+      "tradeoff": "The model knows a lot from training but has no real-time information; grounding fills that gap.",
+      "cite": "17:25"
+    },
+    {
+      "id": "chain",
+      "label": "Chained pipeline",
+      "role": "The design it replaces",
+      "kind": "service",
+      "tool": "OpenAI",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 2,
+      "detail": "The traditional voice agent: transcribe, send text to an LLM, call tools, generate text, turn it into audio. ChatGPT's first two voice modes were built this way.",
+      "tradeoff": "Those chained modes had significantly higher latency than the native-audio Advanced Voice Mode.",
+      "cite": "12:22",
+      "src": 1
+    }
+  ],
+  "edges": [
+    { "from": "user", "to": "media", "label": "mic and camera" },
+    { "from": "media", "to": "session", "label": "audio, video frames" },
+    { "from": "session", "to": "model", "label": "native audio" },
+    { "from": "model", "to": "tools", "label": "function call" },
+    { "from": "tools", "to": "model", "label": "result" },
+    { "from": "model", "to": "search", "label": "lookup" },
+    { "from": "session", "to": "media", "label": "audio chunks" },
+    { "from": "media", "to": "user", "label": "reply audio" },
+    { "from": "user", "to": "chain", "label": "older path" },
+    { "from": "chain", "to": "session", "label": "replaced by" }
+  ],
+  "flow": [
+    { "node": "user", "text": "Asks the radio DJ agent for a high-energy reggaeton track." },
+    { "node": "media", "text": "Streams the live microphone audio to the Live API." },
+    { "node": "session", "text": "Passes the audio over one open websocket, with no transcription step." },
+    { "node": "model", "text": "Understands the request in audio and decides to call the music tool." },
+    { "node": "tools", "text": "Lyria 3 generates the song while the DJ announces it." },
+    { "node": "session", "text": "Streams reply audio chunks back, plus a transcript of what was said." },
+    { "node": "user", "text": "Hears the track and can barge in at any moment." }
+  ],
+  "takeaways": [
+    {
+      "text": "Transcribing speech throws away tone, cadence, interruptions and background noise; a native audio model keeps that context.",
+      "cite": "12:00",
+      "src": 1
+    },
+    {
+      "text": "Realtime models are trained on audio as tokens, and the industry is dropping strict turn-taking for continuous streaming.",
+      "cite": "11:19",
+      "src": 1
+    },
+    {
+      "text": "When reasoning or tool calls add delay, prompt a short preamble so the agent says it is checking.",
+      "cite": "13:17",
+      "src": 1
+    }
+  ]
+}

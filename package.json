@@ -4,22 +4,27 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/build-seo.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "news": "node scripts/build-news.mjs"
+    "news": "node scripts/build-news.mjs",
+    "seo": "node scripts/build-seo.mjs",
+    "deals": "node scripts/build-deals.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.32.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.25",
+    "livekit-client": "^2.24.1",
     "lucide-react": "^0.555.0",
     "next": "^16.1.1",
     "next-themes": "^0.4.6",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "rss-parser": "^3.13.0",
+    "simple-icons": "^16.38.0",
     "tailwind-merge": "^3.4.0",
     "three": "^0.187.0"
   },

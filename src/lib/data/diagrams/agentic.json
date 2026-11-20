@@ -1,0 +1,242 @@
+{
+  "domain": "agentic",
+  "title": "How an agent team runs a multi-day coding mission",
+  "subtitle": "One orchestrator plans, fresh workers build one feature at a time, and validators who never saw the code check it.",
+  "org": "Factory",
+  "hook": "Done is defined before any code, and features run one at a time: parallel workers fought.",
+  "metric": null,
+  "sources": [
+    {
+      "title": "The Multi-Agent Architecture That Actually Ships",
+      "speaker": "Luke Alvoeiro",
+      "org": "Factory",
+      "videoId": "ow1we5PzK-o",
+      "url": "https://www.youtube.com/watch?v=ow1we5PzK-o",
+      "kind": "talk"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "user",
+      "label": "You",
+      "role": "Sets the goal",
+      "kind": "person",
+      "tool": null,
+      "col": 0,
+      "row": 1,
+      "detail": "You describe a goal, scope it in a conversation with the orchestrator, and approve the plan. Then the system runs for hours or days and you can do something else.",
+      "tradeoff": "The bottleneck is human attention, not model intelligence; a five-person team on 10 work streams might handle 30.",
+      "cite": "04:13"
+    },
+    {
+      "id": "orchestrator",
+      "label": "Orchestrator",
+      "role": "Plans and steers",
+      "kind": "service",
+      "tool": "Droid",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 1,
+      "detail": "Acts as a sounding board, asks strategic questions, and produces a plan of features, milestones and a validation contract. At milestone boundaries it reviews handoffs and scopes follow-up work.",
+      "tradeoff": "Its logic is about 700 lines of prompts and skills, not a hard-coded state machine, so it improves with each model.",
+      "cite": "04:46"
+    },
+    {
+      "id": "contract",
+      "label": "Validation contract",
+      "role": "Defines done",
+      "kind": "eval",
+      "tool": "Cucumber",
+      "toolFromTalk": false,
+      "col": 1,
+      "row": 0,
+      "detail": "Written during planning, before any code, it defines correctness independently of the implementation. Each feature gets one or more assertions, and together the features cover all of them.",
+      "tradeoff": "Large projects can need hundreds of assertions, but tests written after the code only confirm decisions, not catch bugs.",
+      "cite": "06:22"
+    },
+    {
+      "id": "state",
+      "label": "Shared mission state",
+      "role": "Broadcasts context",
+      "kind": "store",
+      "tool": "AGENTS.md",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 0,
+      "detail": "State every agent references, carrying the plan, shared constraints and the skills the orchestrator writes for each mission's workers.",
+      "tradeoff": "It uses primitives models already know, like agents.md and skills, so the deterministic code stays thin.",
+      "cite": "16:53"
+    },
+    {
+      "id": "worker",
+      "label": "Worker",
+      "role": "Builds one feature",
+      "kind": "service",
+      "tool": "Droid",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 1,
+      "detail": "Gets one feature with clean context and no accumulated baggage, reads its spec and implements it. Read-only jobs like code search or API research run as parallel sub-agents.",
+      "tradeoff": "Only one worker or validator runs at a time; slower on paper, but the error rate drops dramatically.",
+      "cite": "05:18"
+    },
+    {
+      "id": "git",
+      "label": "Git repo",
+      "role": "Hands over code",
+      "kind": "store",
+      "tool": "Git",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 2,
+      "detail": "Each worker commits its feature to Git, so the next worker inherits a clean slate and a working codebase.",
+      "tradeoff": "Running many writers in parallel failed: agents stepped on each other's changes and duplicated work.",
+      "cite": "05:29"
+    },
+    {
+      "id": "handoff",
+      "label": "Structured handoff",
+      "role": "Reports back",
+      "kind": "queue",
+      "tool": "Mission Control",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 2,
+      "detail": "A finished worker fills in what it completed and left undone, the commands it ran with exit codes, issues found, and whether it followed procedure.",
+      "tradeoff": "Progress is blocked until handoff issues are addressed, so the mission self-heals instead of relying on agents remembering.",
+      "cite": "08:20"
+    },
+    {
+      "id": "scrutiny",
+      "label": "Scrutiny validator",
+      "role": "Checks the code",
+      "kind": "eval",
+      "tool": "Jest",
+      "toolFromTalk": false,
+      "col": 3,
+      "row": 1,
+      "detail": "Runs after each milestone: the test suite, type checking and lints, plus a dedicated code review agent for each completed feature.",
+      "tradeoff": "It has never seen the code before, so it is not invested in the implementation and reviews adversarially.",
+      "cite": "07:02"
+    },
+    {
+      "id": "usertest",
+      "label": "User testing validator",
+      "role": "Tests like QA",
+      "kind": "eval",
+      "tool": "Playwright",
+      "toolFromTalk": false,
+      "col": 4,
+      "row": 1,
+      "detail": "Acts like a QA engineer: launches the app and, through computer use, fills forms, clicks buttons and checks that flows work end to end.",
+      "tradeoff": "It takes much longer than scrutiny; most of a mission's wall-clock time is spent here, not generating tokens.",
+      "cite": "07:21"
+    }
+  ],
+  "edges": [
+    {
+      "from": "user",
+      "to": "orchestrator",
+      "label": "goal, approval"
+    },
+    {
+      "from": "orchestrator",
+      "to": "contract",
+      "label": "writes first"
+    },
+    {
+      "from": "orchestrator",
+      "to": "state",
+      "label": "plan, skills"
+    },
+    {
+      "from": "orchestrator",
+      "to": "worker",
+      "label": "one feature"
+    },
+    {
+      "from": "state",
+      "to": "worker",
+      "label": "shared context"
+    },
+    {
+      "from": "worker",
+      "to": "git",
+      "label": "commits"
+    },
+    {
+      "from": "worker",
+      "to": "handoff",
+      "label": "writes"
+    },
+    {
+      "from": "worker",
+      "to": "scrutiny",
+      "label": "milestone done"
+    },
+    {
+      "from": "scrutiny",
+      "to": "usertest",
+      "label": "passes on"
+    },
+    {
+      "from": "contract",
+      "to": "usertest",
+      "label": "assertions"
+    },
+    {
+      "from": "handoff",
+      "to": "orchestrator",
+      "label": "reviewed"
+    },
+    {
+      "from": "usertest",
+      "to": "orchestrator",
+      "label": "follow-ups"
+    }
+  ],
+  "flow": [
+    {
+      "node": "user",
+      "text": "You describe a goal, argue scope, then approve the plan."
+    },
+    {
+      "node": "orchestrator",
+      "text": "Plans features and milestones, and writes the validation contract before code."
+    },
+    {
+      "node": "worker",
+      "text": "A fresh worker reads its spec, builds one feature, commits to Git."
+    },
+    {
+      "node": "handoff",
+      "text": "Worker records what is done, undone, commands run and exit codes."
+    },
+    {
+      "node": "scrutiny",
+      "text": "At the milestone: tests, type checks, lints, one review agent per feature."
+    },
+    {
+      "node": "usertest",
+      "text": "Launches the app and clicks through real flows like a QA engineer."
+    },
+    {
+      "node": "orchestrator",
+      "text": "Reads handoffs and results, then scopes follow-up features to fix gaps."
+    }
+  ],
+  "takeaways": [
+    {
+      "text": "Define what done means before any code; tests written after implementation only confirm decisions.",
+      "cite": "06:22"
+    },
+    {
+      "text": "Run features one at a time; parallel workers conflicted, duplicated work and burned tokens.",
+      "cite": "09:30"
+    },
+    {
+      "text": "Put the right model in each seat; validation can use a different provider to avoid shared bias.",
+      "cite": "12:17"
+    }
+  ]
+}

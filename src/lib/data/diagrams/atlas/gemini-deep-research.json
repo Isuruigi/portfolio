@@ -1,0 +1,133 @@
+{
+  "domain": "gemini-deep-research",
+  "org": "Google DeepMind",
+  "title": "How Gemini Deep Research turns one question into a report",
+  "subtitle": "A planner agent browses the web for minutes, plans around partial answers, and writes a cited report you can question.",
+  "hook": "Every page it read stays in context for follow-ups, even the ones the final report never cites.",
+  "metric": null,
+  "sources": [
+    {
+      "title": "How Deep Research Works",
+      "speaker": "Mukund Sridhar & Aarush Selvan",
+      "org": "Google DeepMind",
+      "videoId": "eJOjdjO45Sc",
+      "url": "https://www.youtube.com/watch?v=eJOjdjO45Sc",
+      "kind": "talk"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "user",
+      "label": "You",
+      "role": "Asks a hard question",
+      "kind": "person",
+      "tool": null,
+      "col": 0,
+      "row": 1,
+      "detail": "You bring a research question that a chatbot would answer with a blueprint, like which nuclear reactor startups matter and who supplies them.",
+      "tradeoff": "Most Gemini queries are quick asks like the weather, so the product has to signal that this one will take minutes.",
+      "cite": "02:20"
+    },
+    {
+      "id": "plan",
+      "label": "Research plan",
+      "role": "Lets you steer",
+      "kind": "service",
+      "tool": "Gemini",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 1,
+      "detail": "Gemini first drafts a research plan and shows it as a card you can edit before pressing start, the way a good analyst shows their approach.",
+      "tradeoff": "The card doubles as the cue that this is not a normal chat turn and something long is about to happen.",
+      "cite": "03:15"
+    },
+    {
+      "id": "planner",
+      "label": "Planner agent",
+      "role": "Plans step by step",
+      "kind": "model",
+      "tool": "Gemini",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 1,
+      "detail": "Splits the question into facets, decides which can run in parallel and which must wait, and replans after each finding based on what is still missing.",
+      "tradeoff": "It always holds partial information, so it must ground on what it found before choosing the next step.",
+      "cite": "07:24"
+    },
+    {
+      "id": "jobs",
+      "label": "Async job state",
+      "role": "Survives failures",
+      "kind": "queue",
+      "tool": null,
+      "col": 2,
+      "row": 2,
+      "detail": "Runs the task in the background for minutes, keeps its state, and notifies you on any device when it is done.",
+      "tradeoff": "With many LLM and service calls, something will fail; state management lets it recover instead of dropping the whole task.",
+      "cite": "06:27"
+    },
+    {
+      "id": "browse",
+      "label": "Search and browse",
+      "role": "Reads the web",
+      "kind": "tool",
+      "tool": "Google Search",
+      "toolFromTalk": false,
+      "col": 3,
+      "row": 1,
+      "detail": "Searches and opens pages, while the UI shows each site it visits in real time. Facts are often split across sources and the same entity appears under different names.",
+      "tradeoff": "The web is fragmented and every site lays things out differently, so browsing has to be robust, not a simple scrape.",
+      "cite": "10:14"
+    },
+    {
+      "id": "notes",
+      "label": "Research notes",
+      "role": "Manages context",
+      "kind": "store",
+      "tool": "Gemini",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 0,
+      "detail": "Keeps recent tasks in full in the long context window, and moves selected research notes from older tasks into a retrieval store the model can still reach.",
+      "tradeoff": "Even with long-context models, follow-up questions keep adding pressure, and each memory design has its own trade-offs.",
+      "cite": "11:09"
+    },
+    {
+      "id": "report",
+      "label": "Cited report",
+      "role": "Delivers the answer",
+      "kind": "service",
+      "tool": "Google Docs",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 1,
+      "detail": "A report thousands of words long, pinned like an artifact so you can ask questions, add sections or change style beside it, and export to Google Docs with citations.",
+      "tradeoff": "It lists every source read and every source used; unused ones still stay in context for follow-ups.",
+      "cite": "05:01"
+    }
+  ],
+  "edges": [
+    { "from": "user", "to": "plan", "label": "question" },
+    { "from": "plan", "to": "user", "label": "edit, start" },
+    { "from": "plan", "to": "planner", "label": "approved plan" },
+    { "from": "planner", "to": "browse", "label": "searches" },
+    { "from": "browse", "to": "planner", "label": "partial facts" },
+    { "from": "jobs", "to": "planner", "label": "state, retries" },
+    { "from": "planner", "to": "notes", "label": "research notes" },
+    { "from": "planner", "to": "report", "label": "synthesis" },
+    { "from": "report", "to": "user", "label": "notify, read" }
+  ],
+  "flow": [
+    { "node": "user", "text": "Asks about the latest breakthroughs in small nuclear reactors." },
+    { "node": "plan", "text": "Gemini shows an editable research plan; you press start." },
+    { "node": "planner", "text": "Picks which facets to research in parallel and which in sequence." },
+    { "node": "browse", "text": "Searches and reads sites, shown live while you wait." },
+    { "node": "planner", "text": "Spots what is still missing and plans the next searches." },
+    { "node": "report", "text": "Writes a long cited report and notifies you when done." }
+  ],
+  "takeaways": [
+    { "text": "Trade inference time for depth: let the model browse as long as it needs, within five minutes.", "cite": "01:52" },
+    { "text": "Long tasks need durable state, so one failed call does not drop the whole research job.", "cite": "06:27" },
+    { "text": "Planning means grounding on partial results, then hunting for the missing piece.", "cite": "07:52" }
+  ]
+}

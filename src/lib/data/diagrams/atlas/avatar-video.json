@@ -1,0 +1,156 @@
+{
+  "domain": "avatar-video",
+  "title": "How a voice agent gets a real-time face",
+  "subtitle": "The agent's speech drives a causal video model that streams a full-body avatar frame by frame, for hours.",
+  "hook": "A one-step video model that can only see the past puts a live face on any voice agent, for 8 hours straight.",
+  "org": "LemonSlice",
+  "metric": null,
+  "sources": [
+    {
+      "title": "Voice agents with Realtime Video",
+      "speaker": "Sidney Primas",
+      "org": "LemonSlice",
+      "videoId": "z1dqv74SpUs",
+      "url": "https://www.youtube.com/watch?v=z1dqv74SpUs",
+      "kind": "talk"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "user",
+      "label": "Visitor",
+      "role": "Talks to the avatar",
+      "kind": "person",
+      "col": 0,
+      "row": 1,
+      "detail": "Someone on a video call or in an exhibit, like the Teddy Roosevelt Oval Office built with Microsoft for his presidential library.",
+      "tradeoff": "The aim is an avatar no one can tell from a human on a video call; the speaker says that is not solved yet.",
+      "cite": "01:52"
+    },
+    {
+      "id": "llm",
+      "label": "Customer LLM",
+      "role": "The agent's brain",
+      "kind": "model",
+      "tool": "OpenAI",
+      "toolFromTalk": false,
+      "col": 1,
+      "row": 1,
+      "detail": "LemonSlice is an API: customers bring their own LLM, which does the thinking, and LemonSlice adds only the visual layer.",
+      "tradeoff": "Long term the speaker expects a split: an end-to-end 'EQ' model for the interaction, fed by a separate 'IQ' model for reasoning and tools.",
+      "cite": "08:20"
+    },
+    {
+      "id": "tts",
+      "label": "Agent voice",
+      "role": "Speaks the reply",
+      "kind": "model",
+      "tool": "ElevenLabs",
+      "toolFromTalk": false,
+      "col": 2,
+      "row": 1,
+      "detail": "Customers usually bring their own voice too. Its audio, not the text, is what drives the face, so any voice agent can become a video agent.",
+      "tradeoff": "The bet is that people understand best with a visual layer, since staying locked in on voice alone is hard.",
+      "cite": "08:20"
+    },
+    {
+      "id": "enc",
+      "label": "Audio encoder",
+      "role": "Hears emotion in speech",
+      "kind": "model",
+      "tool": "LemonSlice",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 0,
+      "detail": "Turns the agent's speech into embeddings that steer lips, face and emotion. Audio turned out to matter most for getting expressions right.",
+      "tradeoff": "Most audio encoders are trained on monotone audiobooks, so LemonSlice spends a lot of time on its own embeddings.",
+      "cite": "09:37"
+    },
+    {
+      "id": "image",
+      "label": "Avatar image",
+      "role": "Sets who appears",
+      "kind": "store",
+      "tool": "LemonSlice",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 2,
+      "detail": "A single image defines the avatar: photorealistic, Pixar-style or cartoon. Clothes and scene can change within the same call.",
+      "tradeoff": "Earrings and water move naturally because the video model has learned how the physical world behaves.",
+      "cite": "06:58"
+    },
+    {
+      "id": "emotion",
+      "label": "Emotion engine",
+      "role": "Picks the next action",
+      "kind": "model",
+      "tool": "LemonSlice",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 2,
+      "detail": "In development: predicts from the avatar's audio and the text it is about to say which emotion or action fits this moment.",
+      "tradeoff": "The model can already emote and act, but not controllably or deterministically enough to keep pace with the conversation.",
+      "cite": "18:22"
+    },
+    {
+      "id": "dit",
+      "label": "Causal video model",
+      "role": "Paints each frame",
+      "kind": "gpu",
+      "tool": "LemonSlice",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 1,
+      "detail": "A video diffusion transformer trained with an attention mask so it only sees the past, then cut from about 30 denoising steps to one.",
+      "tradeoff": "Looking only backward compounds errors over time; an undisclosed fix lets avatars run 8 hours straight without a reset.",
+      "cite": "12:49"
+    },
+    {
+      "id": "harness",
+      "label": "Model harness",
+      "role": "Keeps video real time",
+      "kind": "service",
+      "tool": "LemonSlice",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 1,
+      "detail": "Separate GPU and CPU threads move live data so the video never stutters, clearing queues and buffers when the user interrupts.",
+      "tradeoff": "The speaker says the harness is often overlooked, and that much of the product's value lives there.",
+      "cite": "15:11"
+    }
+  ],
+  "edges": [
+    { "from": "user", "to": "llm", "label": "speech" },
+    { "from": "llm", "to": "tts", "label": "reply text" },
+    { "from": "tts", "to": "enc", "label": "agent audio" },
+    { "from": "enc", "to": "dit", "label": "audio embeddings" },
+    { "from": "image", "to": "dit", "label": "identity" },
+    { "from": "tts", "to": "emotion", "label": "audio and text" },
+    { "from": "emotion", "to": "dit", "label": "action cue" },
+    { "from": "dit", "to": "harness", "label": "frames" },
+    { "from": "harness", "to": "user", "label": "live video" }
+  ],
+  "flow": [
+    { "node": "user", "text": "A visitor asks Teddy Roosevelt about his greatest achievement." },
+    { "node": "llm", "text": "The customer's LLM writes Roosevelt's answer about the Panama Canal." },
+    { "node": "tts", "text": "The chosen voice turns the answer into speech." },
+    { "node": "enc", "text": "Encodes the speech into expressive embeddings for lips and face." },
+    { "node": "dit", "text": "Generates the next frames in one denoising step, looking only backward." },
+    { "node": "harness", "text": "GPU and CPU threads stream the frames without stutter." },
+    { "node": "user", "text": "Sees Roosevelt answer, from an avatar that runs 8 hours without reset." }
+  ],
+  "takeaways": [
+    {
+      "text": "Building on a world model is harder to train, but full-body movement, physics and micro-expressions come more easily.",
+      "cite": "05:24"
+    },
+    {
+      "text": "A model that only sees its own past output compounds errors; staying stable for 8 to 16 hours is hard.",
+      "cite": "12:31"
+    },
+    {
+      "text": "Real-time avatar video now costs about the same as a voice model, which opens up consumer uses.",
+      "cite": "14:10"
+    }
+  ]
+}

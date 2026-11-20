@@ -75,20 +75,20 @@ export default function Blog() {
                     </a>
                 </div>
 
-                <ul className="mt-12 border-t border-white/10" aria-busy={posts === null && !failed}>
+                <ul className="mt-12 border-t border-fg/10" aria-busy={posts === null && !failed}>
                     {posts === null && !failed &&
                         [0, 1, 2].map((i) => (
-                            <li key={i} className="grid animate-pulse grid-cols-1 gap-3 border-b border-white/10 py-6 md:grid-cols-[8rem_minmax(0,1fr)]">
-                                <span className="h-3 w-20 rounded bg-white/10" />
+                            <li key={i} className="grid animate-pulse grid-cols-1 gap-3 border-b border-fg/10 py-6 md:grid-cols-[8rem_minmax(0,1fr)]">
+                                <span className="h-3 w-20 rounded bg-fg/10" />
                                 <span className="space-y-2">
-                                    <span className="block h-4 w-2/3 rounded bg-white/10" />
-                                    <span className="block h-3 w-full rounded bg-white/5" />
+                                    <span className="block h-4 w-2/3 rounded bg-fg/10" />
+                                    <span className="block h-3 w-full rounded bg-fg/5" />
                                 </span>
                             </li>
                         ))}
 
                     {(failed || posts?.length === 0) && (
-                        <li className="border-b border-white/10 py-6 text-ash">
+                        <li className="border-b border-fg/10 py-6 text-ash">
                             {failed ? "The Medium feed didn't load. " : "No posts yet. "}
                             <a href={MEDIUM_PROFILE} target="_blank" rel="noopener noreferrer" className="text-ink underline decoration-inferno-3 underline-offset-4 hover:text-ember">
                                 Read on Medium instead
@@ -102,7 +102,7 @@ export default function Blog() {
                                 href={p.link}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="group grid grid-cols-1 gap-2 border-b border-white/10 py-6 transition-colors hover:bg-white/[0.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember md:grid-cols-[8rem_minmax(0,1fr)_5rem_1.5rem] md:items-baseline md:gap-6"
+                                className="group grid grid-cols-1 gap-2 border-b border-fg/10 py-6 transition-colors hover:bg-fg/[0.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember md:grid-cols-[8rem_minmax(0,1fr)_5rem_1.5rem] md:items-baseline md:gap-6"
                             >
                                 <time dateTime={p.date} className="font-mono text-[11px] text-ash">
                                     {dateFormat.format(new Date(p.date.replace(" ", "T")))}

@@ -1,0 +1,146 @@
+{
+  "domain": "fraud",
+  "title": "How the fraud model learns what mistakes cost",
+  "subtitle": "Transactions pass data gates and leak-free features, then XGBoost and a cost sweep decide which purchases get flagged.",
+  "metric": null,
+  "sources": [
+    {
+      "kind": "repo",
+      "title": "fraud-detection-system",
+      "speaker": "Isuru Chathuranga",
+      "org": "GitHub",
+      "url": "https://github.com/Isuruigi/fraud-detection-system"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "data",
+      "label": "Raw transactions",
+      "role": "The input data",
+      "kind": "store",
+      "tool": "pandas",
+      "toolFromTalk": true,
+      "col": 0,
+      "row": 1,
+      "detail": "Loads the raw purchase records (user, device, IP, browser, source, value, signup and purchase times) and saves them as snappy-compressed Parquet.",
+      "tradeoff": "Every row carries both signup and purchase times, which the checks and features downstream depend on.",
+      "cite": "src/data_pipeline/ingest.py"
+    },
+    {
+      "id": "gates",
+      "label": "Data gates",
+      "role": "Blocks bad data",
+      "kind": "eval",
+      "tool": "pandas",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 1,
+      "detail": "Checks rows against a JSON schema, that signup comes before purchase, that under 5% of values are missing, and that fraud makes up 5% to 15%.",
+      "tradeoff": "The quality gate exits with an error code, so an automated run stops before training on bad data.",
+      "cite": "src/data_pipeline/quality_gate.py"
+    },
+    {
+      "id": "features",
+      "label": "Feature builder",
+      "role": "Turns rows into signals",
+      "kind": "service",
+      "tool": "pandas",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 1,
+      "detail": "Builds account age, time of day, purchase counts per device and IP over 1-hour and 24-hour windows, amount z-scores, and target-encoded browser and source.",
+      "tradeoff": "Windows count only earlier transactions, and target encoding uses K-fold, so the label can't leak into the features.",
+      "cite": "src/features/engineer.py"
+    },
+    {
+      "id": "cv",
+      "label": "Cross-validation",
+      "role": "Tests stability",
+      "kind": "eval",
+      "tool": "scikit-learn",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 2,
+      "detail": "Each model type runs 5-fold stratified cross-validation, recording AUC, precision, recall, F1 and total cost for every fold.",
+      "tradeoff": "A 20% test set, split with the fraud ratio kept, is held back for the final numbers.",
+      "cite": "src/models/train_pipeline.py"
+    },
+    {
+      "id": "model",
+      "label": "XGBoost model",
+      "role": "Scores fraud risk",
+      "kind": "model",
+      "tool": "XGBoost",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 1,
+      "detail": "XGBoost learns a fraud probability with scale_pos_weight set to the cost ratio, 100 / 5 = 20. Logistic regression and LightGBM share the same interface.",
+      "tradeoff": "Weighting by cost favours recall: the committed results show XGBoost at 0.70 recall and 0.22 precision on the test set.",
+      "cite": "src/models/fraud_model.py"
+    },
+    {
+      "id": "threshold",
+      "label": "Cost threshold",
+      "role": "Decides who gets flagged",
+      "kind": "service",
+      "tool": "NumPy",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 1,
+      "detail": "Tries 101 thresholds from 0 to 1 and keeps the cheapest: false alarms times $5 plus missed fraud times $100.",
+      "tradeoff": "In the committed results it settled at 0.46 for XGBoost and 0.52 for logistic regression, not the default 0.5.",
+      "cite": "src/models/fraud_model.py"
+    },
+    {
+      "id": "gate",
+      "label": "Performance gate",
+      "role": "Guards deployment",
+      "kind": "eval",
+      "tool": "scikit-learn",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 2,
+      "detail": "Re-scores the saved model on the test set and checks AUC of at least 0.75, precision 0.60, recall 0.70 and F1 0.60.",
+      "tradeoff": "Any failed check exits with code 1, so a CI job can refuse to ship the model.",
+      "cite": "src/models/performance_gate.py"
+    },
+    {
+      "id": "mlflow",
+      "label": "MLflow registry",
+      "role": "Remembers every run",
+      "kind": "monitor",
+      "tool": "MLflow",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 0,
+      "detail": "Helpers log parameters, cost settings, metrics and plots, register models, and promote the best model by AUC to Production.",
+      "tradeoff": "The MLflow server runs in Docker from the v2.5.0 image, storing runs and artifacts on local disk.",
+      "cite": "src/utils/mlflow_utils.py"
+    }
+  ],
+  "edges": [
+    { "from": "data", "to": "gates", "label": "raw rows" },
+    { "from": "gates", "to": "features", "label": "clean rows" },
+    { "from": "features", "to": "cv", "label": "train split" },
+    { "from": "features", "to": "model", "label": "features" },
+    { "from": "cv", "to": "model", "label": "fold scores" },
+    { "from": "model", "to": "threshold", "label": "fraud probability" },
+    { "from": "threshold", "to": "gate", "label": "flags" },
+    { "from": "model", "to": "mlflow", "label": "params, metrics" }
+  ],
+  "flow": [
+    { "node": "data", "text": "Loads the raw purchase records and saves them as Parquet." },
+    { "node": "gates", "text": "Checks schema, time order, missing values and fraud ratio; stops if any fail." },
+    { "node": "features", "text": "Counts each device's and IP's purchases in the hour and day before." },
+    { "node": "cv", "text": "Runs 5-fold cross-validation to see how stable each model is." },
+    { "node": "model", "text": "Fits XGBoost with missed fraud weighted 20 times a false alarm." },
+    { "node": "threshold", "text": "Sweeps 101 cut-offs and keeps the cheapest, 0.46 in the committed run." },
+    { "node": "gate", "text": "Fails the build if AUC, precision, recall or F1 fall short." },
+    { "node": "mlflow", "text": "Logs the run and promotes the best model by AUC." }
+  ],
+  "takeaways": [
+    { "text": "The flag threshold minimises $5 per false alarm plus $100 per missed fraud, instead of defaulting to 0.5.", "cite": "src/models/fraud_model.py" },
+    { "text": "Velocity windows count only earlier transactions, so features never see the future they are meant to predict.", "cite": "src/features/engineer.py" },
+    { "text": "Data and model gates exit with code 1, letting CI block bad data or a weak model.", "cite": "src/models/performance_gate.py" }
+  ]
+}

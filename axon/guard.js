@@ -48,20 +48,21 @@ export function checkMessage(text, pasted = false) {
 // network; without one they live in this isolate's memory, which still stops a burst.
 const memory = new Map();
 
-async function bump(env, key, ttl) {
+async function bump(env, key, ttl, amount = 1) {
     if (env.AXON_KV) {
-        const n = Number((await env.AXON_KV.get(key)) || 0) + 1;
+        const n = Number((await env.AXON_KV.get(key)) || 0) + amount;
         await env.AXON_KV.put(key, String(n), { expirationTtl: ttl });
         return n;
     }
     const now = Date.now();
     const hit = memory.get(key);
     if (!hit || hit.until < now) {
-        memory.set(key, { n: 1, until: now + ttl * 1000 });
+        memory.set(key, { n: amount, until: now + ttl * 1000 });
         if (memory.size > 5000) for (const [k, v] of memory) if (v.until < now) memory.delete(k);
-        return 1;
+        return amount;
     }
-    return ++hit.n;
+    hit.n += amount;
+    return hit.n;
 }
 
 /** @returns {Promise<null | "rate" | "daily">} */
@@ -71,6 +72,27 @@ export async function checkRate(env, ip, limits = LIMITS) {
     if ((await bump(env, `rl:${ip}:${minute}`, 120)) > limits.perMinute) return "rate";
     if ((await bump(env, `day:${ip}:${day}`, 90000)) > limits.perDay) return "daily";
     return null;
+}
+
+/**
+ * A site-wide daily budget for an expensive feature (voice calls, avatar calls).
+ * Counts this use; returns true when today's budget was already spent.
+ */
+export async function dailyCapReached(env, name, cap) {
+    const day = new Date().toISOString().slice(0, 10);
+    return (await bump(env, `cap:${name}:${day}`, 90000)) > cap;
+}
+
+/** Spend from a daily allowance measured in units (e.g. characters of speech). True once it's used up. */
+export async function spendDailyBudget(env, name, amount, cap) {
+    const day = new Date().toISOString().slice(0, 10);
+    return (await bump(env, `budget:${name}:${day}`, 90000, amount)) > cap;
+}
+
+/** The same, per calendar month (UTC): for features with a monthly allowance, like free avatar minutes. */
+export async function monthlyCapReached(env, name, cap) {
+    const month = new Date().toISOString().slice(0, 7);
+    return (await bump(env, `cap:${name}:${month}`, 32 * 86400)) > cap;
 }
 
 // Browsers allowed to call the API: the site itself, plus local development

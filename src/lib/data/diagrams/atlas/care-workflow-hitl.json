@@ -1,0 +1,163 @@
+{
+  "domain": "care-workflow-hitl",
+  "org": "Stride",
+  "title": "How a care agent knows when to ask a human",
+  "subtitle": "A LangGraph workflow texts patients through a home treatment; a judge agent sends tricky turns to human reviewers.",
+  "hook": "The judge docks confidence for complexity, not just doubt, so any turn under 75% waits for a human.",
+  "metric": null,
+  "sources": [
+    {
+      "title": "Case Study + Deep Dive: Telemedicine Support Agents with LangGraph/MCP",
+      "speaker": "Dan Mason",
+      "org": "Stride",
+      "videoId": "sn79oS4MZFI",
+      "url": "https://www.youtube.com/watch?v=sn79oS4MZFI",
+      "kind": "talk"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "patient",
+      "label": "Patient",
+      "role": "Texts in free form",
+      "kind": "person",
+      "tool": null,
+      "col": 0,
+      "row": 1,
+      "detail": "A patient taking a home medication regimen texts updates and questions in their own words. The agent only runs when the patient sends a message; reminders scheduled earlier cover the silences.",
+      "tradeoff": "Reminders stop after one or two nudges and nothing polls the patient, so the system stays low touch.",
+      "cite": "29:12"
+    },
+    {
+      "id": "gateway",
+      "label": "Text gateway",
+      "role": "Receives and sends SMS",
+      "kind": "gateway",
+      "tool": "Twilio",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 1,
+      "detail": "A Node service on AWS takes texts in through Twilio, hands the patient's state to the agent graph, and sends approved replies, including MMS images with dates stamped on.",
+      "tradeoff": "The LLM side only ever sees a first name; phone numbers and other identifiers stay in this box.",
+      "cite": "07:51"
+    },
+    {
+      "id": "schedule",
+      "label": "Schedule document",
+      "role": "Holds patient state",
+      "kind": "store",
+      "tool": "MongoDB",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 2,
+      "detail": "A versioned per-patient snapshot: messages so far, unsent scheduled messages, anchors (events that did or will happen) and time zone. It is loaded at the start of a turn and saved back at the end.",
+      "tradeoff": "Each turn restarts from this compressed state; long-running threads led to forgotten tool calls and JSON errors.",
+      "cite": "40:32"
+    },
+    {
+      "id": "associate",
+      "label": "Virtual ops associate",
+      "role": "Proposes the reply",
+      "kind": "service",
+      "tool": "LangGraph",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 1,
+      "detail": "One Claude agent in a LangGraph container reads the state and the blueprint, then proposes the next texts, anchor changes and scheduled reminders, each with a written rationale.",
+      "tradeoff": "It stays one agent instead of several smaller ones, because switching system prompts breaks Claude's prompt cache.",
+      "cite": "18:18"
+    },
+    {
+      "id": "blueprints",
+      "label": "Treatment blueprints",
+      "role": "Approved language",
+      "kind": "store",
+      "tool": "Google Docs",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 0,
+      "detail": "Each treatment is a set of cross-linked markdown files, edited in Google Docs with a physician assistant: an overview, one file per phase, a triage guide and a Q&A list, read through an MCP file server.",
+      "tradeoff": "No RAG: the agent reads whole documents, because retrieved snippets could not capture the shape of a treatment.",
+      "cite": "39:12"
+    },
+    {
+      "id": "evaluator",
+      "label": "Evaluator agent",
+      "role": "Scores confidence",
+      "kind": "eval",
+      "tool": "Claude",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 1,
+      "detail": "A second agent with its own prompt checks the proposal against the guidelines, then scores it. It deducts for complexity: new anchors, edited patient data, several or duplicate messages.",
+      "tradeoff": "LLMs are hard to convince they are wrong, so judging complexity is the easier, more reliable signal.",
+      "cite": "54:03"
+    },
+    {
+      "id": "reviewer",
+      "label": "Human reviewer",
+      "role": "Approves or coaches",
+      "kind": "person",
+      "tool": null,
+      "col": 4,
+      "row": 1,
+      "detail": "Below the 75% threshold, an operations associate sees the proposal and rationale in a dashboard, then approves it or types feedback in plain English, which resumes the same graph thread.",
+      "tradeoff": "They see roughly one in ten exchanges, and an approval takes about as long as the old button press.",
+      "cite": "67:00"
+    },
+    {
+      "id": "traces",
+      "label": "LangSmith traces",
+      "role": "Keeps every turn",
+      "kind": "monitor",
+      "tool": "LangSmith",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 2,
+      "detail": "The full back-and-forth between the two agents, with every tool call, is kept in LangSmith as a debugging record. Only each turn's input and output go back to the main system.",
+      "tradeoff": "Its cost view ignores prompt caching, so it overstates spend; caching brings a message to about 15 to 20 cents.",
+      "cite": "64:45"
+    },
+    {
+      "id": "evals",
+      "label": "Offline evals",
+      "role": "Replays past chats",
+      "kind": "eval",
+      "tool": "Promptfoo",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 2,
+      "detail": "A custom harness pulls datasets from LangSmith, rewrites old timestamps, replays them through the graph, and has a GPT-4o rubric judge whether the output state matches.",
+      "tradeoff": "The rubric is deliberately fuzzy: it flags anything completely broken and ignores harmless wording changes.",
+      "cite": "96:10"
+    }
+  ],
+  "edges": [
+    { "from": "patient", "to": "gateway", "label": "SMS" },
+    { "from": "schedule", "to": "gateway", "label": "patient state" },
+    { "from": "gateway", "to": "associate", "label": "state, message" },
+    { "from": "blueprints", "to": "associate", "label": "via MCP" },
+    { "from": "associate", "to": "evaluator", "label": "proposal" },
+    { "from": "evaluator", "to": "gateway", "label": "75%+: send" },
+    { "from": "evaluator", "to": "reviewer", "label": "under 75%" },
+    { "from": "reviewer", "to": "associate", "label": "feedback" },
+    { "from": "reviewer", "to": "gateway", "label": "approved" },
+    { "from": "associate", "to": "traces", "label": "full trace" },
+    { "from": "traces", "to": "evals", "label": "datasets" },
+    { "from": "gateway", "to": "patient", "label": "reply" }
+  ],
+  "flow": [
+    { "node": "patient", "text": "Says the medicine arrived and gives their local time." },
+    { "node": "gateway", "text": "Loads the patient's schedule document and starts a graph run." },
+    { "node": "associate", "text": "Reads the blueprint, sets the time zone, schedules the next messages." },
+    { "node": "evaluator", "text": "Docks points for many changes at once; confidence lands at 70%." },
+    { "node": "reviewer", "text": "Below 75%, an associate asks it to use the patient's name." },
+    { "node": "associate", "text": "Resumes the same thread and rewrites only that message." },
+    { "node": "gateway", "text": "After approval, sends the texts and saves the new state." }
+  ],
+  "takeaways": [
+    { "text": "Treatments live in documents, not code, so a new regimen ships without new software.", "cite": "16:30" },
+    { "text": "A judge with its own prompt is a second bite at the apple, mostly by spotting complexity.", "cite": "62:28" },
+    { "text": "Skip RAG when the model must grasp a whole process; give it the complete documents.", "cite": "39:38" }
+  ]
+}

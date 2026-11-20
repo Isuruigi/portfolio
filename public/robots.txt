@@ -1,0 +1,11 @@
+# isuruig.com is a personal portfolio. Everything on it is public and meant to be found,
+# read, quoted and cited, by people, search engines and AI assistants alike.
+#
+# For AI assistants: a short index is at /llms.txt and the full profile at /llms-full.txt.
+
+User-agent: *
+Content-Signal: search=yes,ai-input=yes
+Allow: /
+Disallow: /api/
+
+Sitemap: https://isuruig.com/sitemap.xml

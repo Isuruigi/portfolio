@@ -22,7 +22,7 @@ const linkClass =
 
 export default function Footer() {
     return (
-        <footer className="border-t border-white/10 bg-void text-ink">
+        <footer className="border-t border-fg/10 bg-void text-ink">
             <div className="mx-auto max-w-[1280px] px-5 py-16 lg:px-10">
                 <div className="grid grid-cols-2 gap-10 md:grid-cols-[minmax(0,2fr)_1fr_1fr_1fr]">
                     <div className="col-span-2 md:col-span-1">
@@ -77,7 +77,7 @@ export default function Footer() {
                     </div>
                 </div>
 
-                <div className="mt-14 flex flex-col gap-2 border-t border-white/10 pt-6 text-xs text-ash sm:flex-row sm:justify-between">
+                <div className="mt-14 flex flex-col gap-2 border-t border-fg/10 pt-6 text-xs text-ash sm:flex-row sm:justify-between">
                     <p>© {new Date().getFullYear()} Isuru Chathuranga</p>
                     <p>Some studio portraits on this site are AI-generated from real photos.</p>
                 </div>

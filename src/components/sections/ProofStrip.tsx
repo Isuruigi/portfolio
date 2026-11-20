@@ -73,12 +73,12 @@ export default function ProofStrip() {
 
     return (
         <section aria-label="Proof" className="bg-void text-ink">
-            <div className="mx-auto grid max-w-[1280px] grid-cols-1 border-y border-white/10 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mx-auto grid max-w-[1280px] grid-cols-1 border-y border-fg/10 sm:grid-cols-2 lg:grid-cols-4">
                 {facts.map((f) => (
                     <a
                         key={f.label}
                         href={f.href}
-                        className="group border-white/10 px-5 py-8 transition-colors hover:bg-white/[0.03] sm:[&:nth-child(odd)]:border-r lg:border-r lg:px-8"
+                        className="group border-fg/10 px-5 py-8 transition-colors hover:bg-fg/[0.03] sm:[&:nth-child(odd)]:border-r lg:border-r lg:px-8"
                     >
                         <p className="font-display text-4xl font-light tracking-[-0.03em] group-hover:text-ember">{f.value}</p>
                         <p className="mt-2 text-sm leading-snug text-ash">{f.label}</p>
@@ -89,7 +89,7 @@ export default function ProofStrip() {
                     href={`https://github.com/${GITHUB_USER}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group px-5 py-8 transition-colors hover:bg-white/[0.03] lg:px-8"
+                    className="group px-5 py-8 transition-colors hover:bg-fg/[0.03] lg:px-8"
                 >
                     {activity ? (
                         <>

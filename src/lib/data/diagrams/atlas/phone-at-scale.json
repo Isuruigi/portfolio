@@ -1,0 +1,174 @@
+{
+  "domain": "phone-at-scale",
+  "title": "How a phone voice agent holds up in production",
+  "subtitle": "Calls arrive over SIP and pass through transcription, cleanup, a small open model, typed fields and speech cleanup.",
+  "hook": "A billion calls a month taught Plivo to collect names and numbers as typed fields, not trust transcripts.",
+  "org": "Plivo",
+  "metric": { "label": "Time to first audio", "unit": "ms" },
+  "sources": [
+    {
+      "title": "5 Voice Agent Failure Modes You'll Hit in Week One",
+      "speaker": "Venky B",
+      "org": "Plivo",
+      "videoId": "vblnYHzBgS4",
+      "url": "https://www.youtube.com/watch?v=vblnYHzBgS4",
+      "kind": "talk"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "caller",
+      "label": "Caller",
+      "role": "Rings in on a phone",
+      "kind": "person",
+      "tool": "Plivo",
+      "toolFromTalk": true,
+      "col": 0,
+      "row": 1,
+      "detail": "A real person on a phone line. Plivo carries over a billion voice calls a month, which is where these failure patterns show up.",
+      "tradeoff": "Most teams aim for under 550 ms to first audio but land between 750 ms and 1.2 s; past that, callers hang up.",
+      "cite": "06:04"
+    },
+    {
+      "id": "sip",
+      "label": "SIP trunk",
+      "role": "Connects the phone network",
+      "kind": "gateway",
+      "tool": "Plivo",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 1,
+      "detail": "Plivo runs its own SIP trunking and audio streaming, built over 14 years, so it doesn't rely on anyone else for the telephony or carrier layer.",
+      "tradeoff": "The agent on top is a speech pipeline, not a true speech-to-speech product yet.",
+      "cite": "03:14"
+    },
+    {
+      "id": "stt",
+      "label": "Speech to text",
+      "role": "The agent's ears",
+      "kind": "model",
+      "tool": "Deepgram",
+      "toolFromTalk": false,
+      "col": 2,
+      "row": 1,
+      "detail": "Transcribes the call with dynamic keyword boosting: only the names or terms expected at this stage of the call are boosted, then removed.",
+      "tradeoff": "Top engines score 4 to 6% word error on known test sets, but noisy, accented real calls end up in double digits.",
+      "cite": "13:57"
+    },
+    {
+      "id": "cleanup",
+      "label": "Transcript cleanup",
+      "role": "Fixes what STT misheard",
+      "kind": "model",
+      "tool": "Gemma",
+      "toolFromTalk": false,
+      "col": 2,
+      "row": 0,
+      "detail": "An LLM with domain context post-processes the transcript, for example reading an 'E' inside a phone number as a 3, and transliterates code-switched speech.",
+      "tradeoff": "Sending consistently cleaned text keeps the agent independent of whichever transcription engine is upstream.",
+      "cite": "17:09"
+    },
+    {
+      "id": "llm",
+      "label": "Small open LLM",
+      "role": "The agent's brain",
+      "kind": "model",
+      "tool": "Gemma",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 1,
+      "detail": "Runs with thinking off. Qwen 3.5 or Gemma 4 mixture-of-experts models at 3 to 4B work out of the box; fine-tuning for a domain needs 8 to 12B.",
+      "tradeoff": "Frontier APIs sit around 450 to 500 ms p50 to first token and can spike past 1.2 s at p90 to p95.",
+      "cite": "08:09"
+    },
+    {
+      "id": "gpu",
+      "label": "Self-hosted GPUs",
+      "role": "Keeps latency predictable",
+      "kind": "gpu",
+      "tool": "vLLM",
+      "toolFromTalk": false,
+      "col": 3,
+      "row": 0,
+      "detail": "Plivo hosts open-source models on its own GPUs, which it found the best balance of latency, cost and intelligence when targeting under 300 ms.",
+      "tradeoff": "Fast-token clouds like Cerebras or Groq need dedicated capacity booked about 12 months ahead, which is expensive.",
+      "cite": "10:13"
+    },
+    {
+      "id": "fields",
+      "label": "Typed fields",
+      "role": "Collects data reliably",
+      "kind": "tool",
+      "tool": "Pydantic",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 2,
+      "detail": "Phone numbers, names and dates are typed fields with validation and allowed values, filled through tool calls and tested like unit tests.",
+      "tradeoff": "Thinking in fields instead of free transcripts raised data-collection accuracy from 30% to about 95%.",
+      "cite": "18:39"
+    },
+    {
+      "id": "normalizer",
+      "label": "Speech normalizer",
+      "role": "Makes text speakable",
+      "kind": "service",
+      "tool": "Pipecat",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 2,
+      "detail": "Sits between the LLM and TTS: strips emojis and markdown, spells out emails, currency and dates, and applies custom pronunciation dictionaries.",
+      "tradeoff": "Owning this layer means you can switch TTS providers, say when one is down, without relying on their quirks.",
+      "cite": "22:38"
+    },
+    {
+      "id": "tts",
+      "label": "Text to speech",
+      "role": "The agent's voice",
+      "kind": "model",
+      "tool": "Cartesia",
+      "toolFromTalk": false,
+      "col": 4,
+      "row": 1,
+      "detail": "Speaks the reply back down the line, slowing to about 0.7 to 0.8x speed for entities like emails, phone numbers or spelled-out names.",
+      "tradeoff": "The speaker's quick test: if it can't say his surname or 'Plivo' correctly, it will mangle other words too.",
+      "cite": "23:49"
+    }
+  ],
+  "edges": [
+    { "from": "caller", "to": "sip", "label": "phone call" },
+    { "from": "sip", "to": "stt", "label": "audio stream" },
+    { "from": "stt", "to": "cleanup", "label": "raw transcript" },
+    { "from": "cleanup", "to": "llm", "label": "clean text" },
+    { "from": "gpu", "to": "llm", "label": "hosts" },
+    { "from": "llm", "to": "fields", "label": "tool call" },
+    { "from": "fields", "to": "llm", "label": "validated value" },
+    { "from": "llm", "to": "normalizer", "label": "reply text" },
+    { "from": "normalizer", "to": "tts", "label": "speakable text" },
+    { "from": "tts", "to": "sip", "label": "reply audio" },
+    { "from": "sip", "to": "caller", "label": "voice" }
+  ],
+  "flow": [
+    { "node": "caller", "text": "Reads out a phone number while booking an appointment." },
+    { "node": "sip", "text": "Plivo's SIP trunk streams the call audio into the agent pipeline." },
+    { "node": "stt", "text": "Transcribes with number terms boosted; one digit comes back as 'E'." },
+    { "node": "cleanup", "text": "An LLM with domain context corrects the 'E' to a 3." },
+    { "node": "llm", "text": "A small open model, thinking off, decides to fill the phone field.", "ms": 300 },
+    { "node": "fields", "text": "Validates the number against the typed phone field before confirming." },
+    { "node": "normalizer", "text": "Spells the number out so the voice reads each digit." },
+    { "node": "tts", "text": "Reads the number back slowly so the caller can confirm it." }
+  ],
+  "takeaways": [
+    {
+      "text": "Voice agents must run with thinking off, so a year of LLM reasoning gains barely helps them.",
+      "cite": "07:14"
+    },
+    {
+      "text": "Treat collected data as typed, validated fields; Plivo saw accuracy rise from 30% to about 95%.",
+      "cite": "18:39"
+    },
+    {
+      "text": "Boost keywords only at the call stage that needs them; boosting everything makes the transcriber hallucinate.",
+      "cite": "16:21"
+    }
+  ]
+}

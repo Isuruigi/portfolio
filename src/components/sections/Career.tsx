@@ -128,7 +128,7 @@ export default function Career() {
                                 <li
                                     key={c.role}
                                     className={`rounded-xl border p-5 transition-all duration-500 ${
-                                        reached ? "border-white/15 bg-white/[0.03] opacity-100" : "border-white/5 opacity-45"
+                                        reached ? "border-fg/15 bg-fg/[0.03] opacity-100" : "border-fg/5 opacity-45"
                                     }`}
                                 >
                                     <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
@@ -146,11 +146,11 @@ export default function Career() {
                     </ol>
                 </div>
 
-                <div className="mt-20 border-t border-white/10 pt-8">
+                <div className="mt-20 border-t border-fg/10 pt-8">
                     <p className="text-sm text-ash">Certified by Oracle, Databricks, Microsoft Azure, Astronomer, Qdrant and others</p>
                     <ul className="mt-4 flex flex-wrap gap-2">
                         {certifications.map((c) => (
-                            <li key={c} className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-ink/80">
+                            <li key={c} className="rounded-full border border-fg/10 px-3 py-1.5 text-xs text-ink/80">
                                 {c}
                             </li>
                         ))}
@@ -159,7 +159,7 @@ export default function Career() {
                                 href="https://linkedin.com/in/isuruig"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="inline-block rounded-full border border-ember/40 px-3 py-1.5 text-xs text-ember hover:bg-ember hover:text-void"
+                                className="inline-block rounded-full border border-ember/40 px-3 py-1.5 text-xs text-ember hover:bg-ember hover:text-on-ember"
                             >
                                 +{certificationTotal - certifications.length} more on LinkedIn
                             </a>

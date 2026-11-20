@@ -1,0 +1,132 @@
+{
+  "domain": "nexus",
+  "title": "How NEXUS answers a multi-hop question",
+  "subtitle": "In development: dense search in Qdrant and graph traversal in Neo4j, fused into one context for a LangGraph agent.",
+  "metric": null,
+  "sources": [
+    {
+      "kind": "project",
+      "title": "NEXUS GraphRAG",
+      "speaker": "Isuru Chathuranga",
+      "org": "In development",
+      "url": ""
+    }
+  ],
+  "nodes": [
+    {
+      "id": "user",
+      "label": "User",
+      "role": "Asks a linked question",
+      "kind": "person",
+      "tool": null,
+      "col": 0,
+      "row": 1,
+      "detail": "Asks something whose answer is spread across several connected facts, such as which suppliers of X are affected by Y.",
+      "tradeoff": "Plain vector search finds similar passages but can't follow the links between them."
+    },
+    {
+      "id": "api",
+      "label": "API",
+      "role": "Takes the question",
+      "kind": "service",
+      "tool": "FastAPI",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 1,
+      "detail": "Receives the question and returns the answer. FastAPI is the service layer in the planned stack."
+    },
+    {
+      "id": "cache",
+      "label": "Cache",
+      "role": "Keeps latency low",
+      "kind": "cache",
+      "tool": "Dragonfly",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 2,
+      "detail": "A Dragonfly cache is part of the stack to keep responses fast."
+    },
+    {
+      "id": "ingest",
+      "label": "Ingest stream",
+      "role": "Brings documents in",
+      "kind": "queue",
+      "tool": "Redpanda",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 0,
+      "detail": "Text and structured data stream in through Redpanda and become both text chunks and graph entities."
+    },
+    {
+      "id": "agent",
+      "label": "LangGraph agent",
+      "role": "Chains the hops",
+      "kind": "service",
+      "tool": "LangGraph",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 1,
+      "detail": "Orchestrates retrieval, chains the hops between facts, and writes the answer from the fused context."
+    },
+    {
+      "id": "qdrant",
+      "label": "Vector search",
+      "role": "Finds similar passages",
+      "kind": "store",
+      "tool": "Qdrant",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 0,
+      "detail": "Dense search finds the passages most similar to the question."
+    },
+    {
+      "id": "neo4j",
+      "label": "Knowledge graph",
+      "role": "Follows the links",
+      "kind": "store",
+      "tool": "Neo4j",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 2,
+      "detail": "Follows relationships from those passages to the facts they point at, which is what multi-hop questions need."
+    },
+    {
+      "id": "fuse",
+      "label": "Fusion",
+      "role": "Merges both results",
+      "kind": "service",
+      "tool": null,
+      "col": 4,
+      "row": 1,
+      "detail": "Merges the vector results and the graph results into one ranked context for the agent."
+    }
+  ],
+  "edges": [
+    { "from": "user", "to": "api", "label": "question" },
+    { "from": "api", "to": "cache" },
+    { "from": "api", "to": "agent", "label": "question" },
+    { "from": "agent", "to": "qdrant", "label": "dense search" },
+    { "from": "qdrant", "to": "neo4j", "label": "seed passages" },
+    { "from": "qdrant", "to": "fuse", "label": "passages" },
+    { "from": "neo4j", "to": "fuse", "label": "linked facts" },
+    { "from": "fuse", "to": "agent", "label": "ranked context" },
+    { "from": "agent", "to": "user", "label": "answer" },
+    { "from": "ingest", "to": "qdrant", "label": "chunks" },
+    { "from": "ingest", "to": "neo4j", "label": "entities" }
+  ],
+  "flow": [
+    { "node": "user", "text": "Asks which suppliers of X are affected by Y." },
+    { "node": "api", "text": "Receives the question and passes it to the agent." },
+    { "node": "agent", "text": "Starts retrieval for the first hop." },
+    { "node": "qdrant", "text": "Finds passages similar to the question." },
+    { "node": "neo4j", "text": "Follows relationships from those passages to connected facts." },
+    { "node": "fuse", "text": "Merges both result sets into one ranked context." },
+    { "node": "agent", "text": "Chains the hops and writes the answer." },
+    { "node": "user", "text": "Gets an answer built from several connected facts." }
+  ],
+  "takeaways": [
+    { "text": "Vector search finds similar passages; graph traversal follows the links between them. NEXUS uses both." },
+    { "text": "Ingest turns the same documents into chunks for Qdrant and entities for Neo4j, streamed through Redpanda." },
+    { "text": "NEXUS is in development and private, so there are no results to report yet." }
+  ]
+}

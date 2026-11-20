@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // A separate project with its own toolchain (the LiveKit avatar agent)
+    "avatar-agent/**",
   ]),
 ]);
 

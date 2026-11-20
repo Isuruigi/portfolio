@@ -2,37 +2,91 @@
   "name": "Isuru (IG) Chathuranga",
   "headline": "AI/ML Engineer building AI systems that hold up in production",
   "location": "Colombo, Sri Lanka",
-  "focus": ["Voice AI agents", "RAG and GraphRAG", "Multi-agent systems", "MLOps and monitoring"],
+  "focus": [
+    "Voice AI agents",
+    "RAG and GraphRAG",
+    "Multi-agent systems",
+    "MLOps and monitoring"
+  ],
   "roles": [
-    { "title": "AI/ML Engineer", "org": "Veracity Digital", "from": "2026-08", "to": null },
-    { "title": "Technical Assistant, Agentic AI Bootcamp", "org": "Buildr Labs", "from": "2026-05", "to": null },
-    { "title": "Open source contributor", "org": "LangChain, PyTorch, Hugging Face, MLflow", "from": "2024-09", "to": null },
-    { "title": "Machine Learning Finalist (Top 3 of 290)", "org": "Zuu Crew AI", "from": "2025-09", "to": "2025-12" },
-    { "title": "Freelance AI Engineer", "org": "Self-employed", "from": "2024-06", "to": "2026-08" }
+    {
+      "title": "AI/ML Engineer",
+      "org": "Veracity Digital",
+      "from": "2026-08",
+      "to": null
+    },
+    {
+      "title": "Technical Assistant, Agentic AI Bootcamp",
+      "org": "Buildr Labs",
+      "from": "2026-05",
+      "to": null
+    },
+    {
+      "title": "Open source contributor",
+      "org": "LangChain, PyTorch, Hugging Face, MLflow",
+      "from": "2024-09",
+      "to": null
+    },
+    {
+      "title": "Machine Learning Finalist (Top 3 of 290)",
+      "org": "Zuu Crew AI",
+      "from": "2025-09",
+      "to": "2025-12"
+    },
+    {
+      "title": "Freelance AI Engineer",
+      "org": "Self-employed",
+      "from": "2024-06",
+      "to": "2026-08"
+    }
   ],
   "education": [
-    { "degree": "BSc (Hons) IT & Management", "institution": "University of Colombo", "from": "2023-05", "to": "2027-05" }
+    {
+      "degree": "BSc (Hons) IT & Management",
+      "institution": "University of Colombo",
+      "from": "2023-05",
+      "to": "2027-05"
+    }
   ],
   "flagshipProjects": [
     {
       "name": "PersonaPlex",
       "status": "shipped",
       "summary": "Full-duplex voice agent that answers real phone calls with sub-second responses",
-      "stack": ["Python", "FastAPI", "Twilio", "Deepgram", "OpenAI", "Edge TTS"],
+      "stack": [
+        "Python",
+        "FastAPI",
+        "Twilio",
+        "Deepgram",
+        "OpenAI",
+        "Edge TTS"
+      ],
       "url": "https://github.com/Isuruigi/personaplex-agent"
     },
     {
       "name": "NEXUS GraphRAG",
       "status": "in development",
       "summary": "Hybrid dense + graph retrieval for multi-hop questions",
-      "stack": ["LangGraph", "Qdrant", "Neo4j", "Redpanda", "Dragonfly", "FastAPI"],
+      "stack": [
+        "LangGraph",
+        "Qdrant",
+        "Neo4j",
+        "Redpanda",
+        "Dragonfly",
+        "FastAPI"
+      ],
       "url": null
     },
     {
       "name": "Cost-Aware Fraud Detection",
       "status": "shipped",
       "summary": "Fraud model with a cost-based decision threshold, 92% test coverage, MLflow tracking",
-      "stack": ["Python", "XGBoost", "MLflow", "CI/CD"],
+      "stack": [
+        "Python",
+        "XGBoost",
+        "MLflow",
+        "CI/CD"
+      ],
       "url": "https://github.com/Isuruigi/fraud-detection-system"
     }
   ],
@@ -43,5 +97,91 @@
     "x": "https://x.com/Isuru_ig",
     "website": "https://isuruig.com"
   },
-  "humanReadable": "https://isuruig.com/llms.txt"
+  "humanReadable": {
+    "short": "https://isuruig.com/llms.txt",
+    "full": "https://isuruig.com/llms-full.txt",
+    "site": "https://isuruig.com"
+  },
+  "updated": "2026-11-20",
+  "url": "https://isuruig.com",
+  "availability": {
+    "fullTime": "Employed full time at Veracity Digital; not looking for another full-time job",
+    "freelance": "Open to selected freelance and advisory work",
+    "remote": true,
+    "timezone": "GMT+5:30",
+    "usualReplyTime": "within 24 hours"
+  },
+  "services": [
+    {
+      "name": "AI assistants over your own documents",
+      "description": "Assistants that answer on WhatsApp, web chat and email around the clock, grounded in a company's private documents with RAG, with human checkpoints where needed and analytics built in. Typical uses: customer support, internal knowledge-base chat, lead qualification on WhatsApp, document Q&A."
+    },
+    {
+      "name": "Voice agents for phone lines",
+      "description": "Full-duplex voice agents on Twilio, Deepgram and OpenAI with sub-second responses, for bookings, FAQs and call routing in English, Sinhala or Tamil. Typical uses: a phone line answered at any hour, appointment booking, multilingual routing."
+    },
+    {
+      "name": "Workflow automation with human sign-off",
+      "description": "Automation pipelines in n8n (also Make or Zapier) that connect LLMs to real tools: payment verification with bank reconciliation, ads decision agents, multi-step approvals, CRM and database updates, document processing. Risky steps keep a human checkpoint."
+    },
+    {
+      "name": "Custom ML and knowledge systems",
+      "description": "Custom models trained on a company's data, for example churn prediction or fraud detection, deployed with monitoring; and RAG or GraphRAG knowledge engines that let a team query private data in plain language, including multi-hop questions across connected records."
+    }
+  ],
+  "skills": "Languages: Python (proficient), TypeScript, R. LLMs & agents: LangGraph (proficient), LangChain (proficient), Groq (proficient), CrewAI, LlamaIndex, AutoGen, DSPy, Pydantic AI, MCP (Model Context Protocol), OpenAI, Anthropic, Transformers, vLLM (high-throughput model serving), LoRA / PEFT (efficient fine-tuning). Retrieval: Qdrant (proficient), RAG, GraphRAG, Neo4j, Pinecone, Weaviate, ChromaDB, Tavily. Voice: Twilio, Deepgram, LiveKit, Pipecat, Vapi, OpenAI Realtime API, Gemini Live, ElevenLabs, Edge TTS. ML: PyTorch (proficient), scikit-learn (proficient), Pandas (proficient), NumPy (proficient), Jupyter (proficient), XGBoost, TensorFlow, Keras, OpenCV. MLOps: FastAPI (proficient), Docker (proficient), Git (proficient), Kubernetes, MLflow, LangSmith, Prometheus, Grafana, CI/CD. Data: PostgreSQL, Supabase, MongoDB, Kafka, Redpanda, Airflow, PySpark, Redis (familiar), Dragonfly (familiar). Automation: n8n (proficient), Make (familiar), Zapier (familiar). Cloud: GCP / Vertex AI (Google Cloud, including Vertex AI), AWS / Bedrock (including Bedrock), Azure OpenAI (familiar), Oracle Cloud (familiar), Cloudflare Workers. Web & demos: Next.js, React, Tailwind CSS, Three.js, Streamlit, Gradio, Playwright. Tools without a level are intermediate. This card lists tools he has worked with; it shows the skill at that level, but not where each tool was used; production use needs a story or work card. He keeps adding new tools; the newest are on the \"Recently learned\" card.",
+  "recentlyLearned": "Recent learning, practised in side builds and in the Buildr Labs bootcamp lab rather than run in production. Agent architectures: Parallel agents (Grok Heavy-style) (several agents work the same problem in parallel, then compare answers to reach consensus), Orchestrator–workers, Planner–executor, Evaluator–optimizer, Agentic RAG, Tiered agent memory, A2A protocol (agent-to-agent). Agent harnesses: Claude Agent SDK, Claude Code, OpenAI Agents SDK, Codex, Google ADK, Vercel AI SDK. Evals & guardrails: lm-eval-harness, promptfoo, RAGAS, DeepEval, Langfuse, OpenTelemetry, Llama Guard, NeMo Guardrails.",
+  "faq": [
+    {
+      "question": "Are you available for hire?",
+      "answer": "I work full time as an AI/ML Engineer at Veracity Digital, so I'm not looking for another full-time job. I do take on selected freelance and advisory work that fits around it, and I'm always open to a conversation about an interesting production AI problem."
+    },
+    {
+      "question": "What kind of freelance AI work do you take on?",
+      "answer": "Four kinds: AI assistants that answer from your own documents (RAG) on WhatsApp, web chat or email; voice agents that answer phone lines; workflow automation in n8n with a human signing off on the risky steps; and custom machine learning or GraphRAG systems trained on your data and deployed with monitoring."
+    },
+    {
+      "question": "Where are you based, and do you work remotely?",
+      "answer": "I'm in Colombo, Sri Lanka (GMT+5:30) and work remotely with teams anywhere. My hours overlap with both US and EU working days, and I usually reply within 24 hours."
+    },
+    {
+      "question": "What are your qualifications?",
+      "answer": "I'm in the final year of a BSc (Hons) in IT & Management at the University of Colombo, specialising in AI, machine learning and data science, and I also study the Bachelor of Information Technology at the University of Colombo School of Computing. I placed in the top 3 of 290 in Zuu Crew AI's production machine learning programme and hold 28 certifications, including Oracle OCI AI Foundations, Databricks Generative AI and AI Agent Fundamentals, and Qdrant Essentials."
+    },
+    {
+      "question": "What is your tech stack?",
+      "answer": "Python first. For LLM work: LangGraph, LangChain, Groq, vLLM, MCP, and the OpenAI and Anthropic APIs. For retrieval: Qdrant, Neo4j and GraphRAG. For voice: Twilio, Deepgram and Gemini Live. For machine learning and operations: PyTorch, scikit-learn, XGBoost, FastAPI, Docker, Kubernetes and MLflow. The full list is in the About section."
+    },
+    {
+      "question": "Can I see more of your work?",
+      "answer": "The projects on this site are the ones I can show publicly, and most have code on GitHub. Production systems I've built for my employer and for clients are private or under confidentiality agreements. I'm happy to walk through the problem, the approach and the stack in a conversation, without naming who it was for."
+    },
+    {
+      "question": "How do I start a project with you?",
+      "answer": "Send a short note through the contact form or by email saying what you're trying to build and for whom. If you'd like a head start, ask Axon, the agent on this site: it can sketch how I'd approach your idea or check a job description against my real work. Scope, timelines and rates come from a conversation with me."
+    }
+  ],
+  "sameAs": [
+    "https://linkedin.com/in/isuruig",
+    "https://github.com/Isuruigi",
+    "https://x.com/Isuru_ig"
+  ],
+  "agent": {
+    "name": "Axon",
+    "description": "AI agent that answers questions about Isuru from his real work, with sources",
+    "chat": {
+      "method": "POST",
+      "url": "https://isuruig.com/api/chat",
+      "body": {
+        "messages": [
+          {
+            "role": "user",
+            "content": "..."
+          }
+        ],
+        "mode": "ask | fit | build | story | learn (optional)"
+      },
+      "response": "text/event-stream"
+    }
+  }
 }

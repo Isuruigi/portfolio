@@ -2,10 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUp, AudioLines, BookOpen, Briefcase, Hammer, MessageCircleQuestion, MessageSquareText, ScrollText, Sparkles, X, type LucideIcon } from "lucide-react";
+import { ArrowUp, AudioLines, BookOpen, Briefcase, Hammer, MessageCircleQuestion, MessageSquareText, Compass, ScrollText, Video, X, type LucideIcon } from "lucide-react";
 import VoiceCall, { type CallTurn } from "@/components/chat/VoiceCall";
+import AxonFace, { type FaceState } from "@/components/chat/AxonFace";
+import AvatarCall from "@/components/chat/AvatarCall";
 import { AGENTS } from "@/lib/pipeline";
-import { AGENT_NAME, OPEN_AGENT_EVENT, AGENT_API } from "@/lib/agent";
+import { AGENT_NAME, OPEN_AGENT_EVENT, OPEN_MODE_EVENT, AGENT_API, startTour } from "@/lib/agent";
 import { sendLead, streamAxon, type AxonAction, type AxonCard, type AxonMode, type ChatTurn } from "@/lib/axonClient";
 
 interface Message {
@@ -18,7 +20,7 @@ interface Message {
     note?: string; // small label above a message, e.g. a call transcript header
 }
 
-type Mode = "chat" | "voice";
+type Mode = "chat" | "voice" | "face";
 
 const STORAGE_KEY = "axon-console-v2";
 
@@ -70,7 +72,7 @@ function Rich({ text, cards = [], onCite }: { text: string; cards?: AxonCard[]; 
                             type="button"
                             onClick={() => onCite?.(card)}
                             title={card.title}
-                            className="mx-0.5 inline-flex h-[18px] min-w-[18px] cursor-pointer items-center justify-center rounded-full bg-white/10 px-1 align-[2px] font-mono text-[10px] text-ink/80 transition-colors hover:bg-ember hover:text-void"
+                            className="mx-0.5 inline-flex h-[18px] min-w-[18px] cursor-pointer items-center justify-center rounded-full bg-fg/10 px-1 align-[2px] font-mono text-[10px] text-ink/80 transition-colors hover:bg-ember hover:text-on-ember"
                         >
                             {card.n}
                         </button>
@@ -122,7 +124,7 @@ function LeadForm({ door, transcript, onSent }: { door: AxonAction["door"]; tran
         }
     };
 
-    const field = "w-full rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-ink placeholder:text-ash/60 focus:border-ember/60 focus:outline-none";
+    const field = "w-full rounded-xl border border-fg/10 bg-fg/[0.03] px-3 py-2 text-sm text-ink placeholder:text-ash/60 focus:border-ember/60 focus:outline-none";
     return (
         <form onSubmit={submit} className="mt-4 rounded-2xl border border-ember/30 bg-ember/[0.04] p-4">
             <p className="text-sm text-ink">Isuru gets a short summary of this conversation and your email. He usually replies within 24 hours.</p>
@@ -137,7 +139,7 @@ function LeadForm({ door, transcript, onSent }: { door: AxonAction["door"]; tran
                 <button
                     type="submit"
                     disabled={state === "sending"}
-                    className="cursor-pointer rounded-full bg-ember px-4 py-2 text-sm font-medium text-void transition-colors hover:bg-inferno-5 disabled:cursor-wait disabled:opacity-60"
+                    className="cursor-pointer rounded-full bg-ember px-4 py-2 text-sm font-medium text-on-ember transition-colors hover:bg-inferno-5 disabled:cursor-wait disabled:opacity-60"
                 >
                     {state === "sending" ? "Sending…" : "Send to Isuru"}
                 </button>
@@ -160,6 +162,10 @@ export default function Chatbot() {
     const [step, setStep] = useState(0);
     const [composerMode, setComposerMode] = useState<AxonMode | null>(null);
     const [leadFor, setLeadFor] = useState<number | null>(null);
+    const [happy, setHappy] = useState(false);
+    // Face-to-face calls appear only once the avatar is set up on the server
+    const [hasAvatar, setHasAvatar] = useState(false);
+    const askedHealth = useRef(false);
     const messagesRef = useRef<Message[]>([]);
     const scrollRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -185,6 +191,13 @@ export default function Chatbot() {
     const openConsole = useCallback(() => {
         if (openRef.current) return;
         setOpen(true);
+        if (!askedHealth.current) {
+            askedHealth.current = true;
+            fetch(`${AGENT_API}/health`)
+                .then((r) => r.json())
+                .then((h) => setHasAvatar(Boolean(h?.avatar)))
+                .catch(() => {});
+        }
     }, []);
 
     const closeConsole = useCallback(() => {
@@ -286,10 +299,22 @@ export default function Chatbot() {
                 else openConsole();
             }
         };
+        // Opened in a mode (the tour's last stop): pick the mode, put the cursor in the box
+        const onOpenMode = (e: Event) => {
+            const m = (e as CustomEvent<string>).detail as AxonMode;
+            if (!STARTERS.some((s) => s.mode === m)) return;
+            pendingPrompt.current = undefined;
+            setMode("chat");
+            setComposerMode(m);
+            openConsole();
+            setTimeout(() => inputRef.current?.focus(), 450);
+        };
         window.addEventListener(OPEN_AGENT_EVENT, onOpen);
+        window.addEventListener(OPEN_MODE_EVENT, onOpenMode);
         window.addEventListener("keydown", onKey);
         return () => {
             window.removeEventListener(OPEN_AGENT_EVENT, onOpen);
+            window.removeEventListener(OPEN_MODE_EVENT, onOpenMode);
             window.removeEventListener("keydown", onKey);
         };
     }, [openConsole, closeConsole]);
@@ -318,14 +343,14 @@ export default function Chatbot() {
         return () => clearTimeout(t);
     }, [ready, send]);
 
-    const onCallEnd = useCallback((turns: CallTurn[], seconds: number) => {
+    const onCallEnd = useCallback((turns: CallTurn[], seconds: number, kind: "Voice" | "Face-to-face" = "Voice") => {
         const length = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
         setMessages((m) => [
             ...m,
             ...turns.map((t, i) => ({
                 role: t.role,
                 content: t.text.trim(),
-                note: i === 0 ? `Voice call, ${length}` : undefined,
+                note: i === 0 ? `${kind} call, ${length}` : undefined,
             })),
         ]);
         setMode("chat");
@@ -362,6 +387,8 @@ export default function Chatbot() {
 
     const leadSent = (index: number) => {
         setLeadFor(null);
+        setHappy(true);
+        setTimeout(() => setHappy(false), 2600);
         setMessages((m) => [
             ...m.slice(0, index + 1).map((x, i) => (i === index ? { ...x, actions: [] } : x)),
             ...m.slice(index + 1),
@@ -372,6 +399,18 @@ export default function Chatbot() {
     const placeholder = composerMode ? STARTERS.find((x) => x.mode === composerMode)?.placeholder : undefined;
 
     const empty = messages.length === 0 && !loading;
+
+    // What the face shows: thinking until the first words arrive, then speaking while they stream,
+    // listening while the visitor types, a smile after a lead goes through
+    const face: FaceState = happy
+        ? "happy"
+        : loading
+          ? messages.at(-1)?.content
+              ? "speaking"
+              : "thinking"
+          : input.trim()
+            ? "listening"
+            : "idle";
 
     return (
         <>
@@ -387,13 +426,14 @@ export default function Chatbot() {
                     style={{ borderRadius: 999 }}
                     className="fixed bottom-6 right-6 z-50 flex cursor-pointer items-center gap-2.5 border border-ember/40 bg-void/80 py-2.5 pl-3 pr-4 text-sm text-ink shadow-2xl shadow-black/60 backdrop-blur-xl transition-colors hover:border-ember focus-visible:outline-2 focus-visible:outline-ember"
                     aria-label={`Ask ${AGENT_NAME}, Isuru's AI agent`}
+                    data-axon-launcher=""
                 >
-                    <motion.span layout="position" className="relative flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-inferno-5 via-ember to-inferno-2">
-                        <Sparkles className="h-3.5 w-3.5 text-void" aria-hidden="true" />
+                    <motion.span layout="position" className="relative flex h-7 w-7 items-center justify-center">
+                        <AxonFace size={28} />
                     </motion.span>
                     <motion.span layout="position" className="flex items-center gap-2.5">
                         Ask {AGENT_NAME}
-                        <kbd className="hidden rounded border border-white/15 px-1.5 py-0.5 font-mono text-[10px] text-ash sm:inline">Ctrl&nbsp;K</kbd>
+                        <kbd className="hidden rounded border border-fg/15 px-1.5 py-0.5 font-mono text-[10px] text-ash sm:inline">Ctrl&nbsp;K</kbd>
                     </motion.span>
                 </motion.button>
             )}
@@ -421,7 +461,7 @@ export default function Chatbot() {
                             layoutId="axon-shell"
                             transition={SHELL_SPRING}
                             style={{ borderRadius: shellRadius }}
-                            className="relative flex h-full w-full flex-col overflow-hidden bg-[#05040a] text-ink sm:h-[min(860px,90vh)] sm:max-w-[780px] sm:border sm:border-white/10 sm:shadow-[0_40px_120px_-20px_rgba(221,81,58,0.25)]"
+                            className="relative flex h-full w-full flex-col overflow-hidden bg-surface text-ink sm:h-[min(860px,90vh)] sm:max-w-[780px] sm:border sm:border-fg/10 sm:shadow-[0_40px_120px_-20px_rgba(221,81,58,0.25)]"
                         >
                           <motion.div
                             className="relative flex min-h-0 flex-1 flex-col"
@@ -438,16 +478,16 @@ export default function Chatbot() {
                             {/* Header */}
                             <header className="relative flex items-center justify-between gap-3 px-5 py-4">
                                 <div className="flex items-center gap-3">
-                                    <span className="h-8 w-8 rounded-full bg-[radial-gradient(circle_at_35%_30%,#fcffa4,#fca50a_25%,#dd513a_50%,#932667_75%,#420a68)]" aria-hidden="true" />
+                                    <AxonFace size={36} state={mode === "chat" ? face : "idle"} />
                                     <div>
                                         <p className="font-display text-lg leading-none tracking-[-0.01em]">{AGENT_NAME}</p>
-                                        <p className="mt-1 text-[11px] text-ash">Isuru&apos;s AI agent</p>
+                                        <p className={`mt-1 whitespace-nowrap text-[11px] text-ash ${hasAvatar ? "hidden sm:block" : ""}`}>Isuru&apos;s AI agent</p>
                                     </div>
                                 </div>
 
                                 <div className="flex items-center gap-2">
-                                    <div role="tablist" aria-label="Mode" className="flex rounded-full border border-white/10 p-0.5 text-xs">
-                                        {(["chat", "voice"] as Mode[]).map((m) => (
+                                    <div role="tablist" aria-label="Mode" className="flex rounded-full border border-fg/10 p-0.5 text-xs">
+                                        {((hasAvatar ? ["chat", "voice", "face"] : ["chat", "voice"]) as Mode[]).map((m) => (
                                             <button
                                                 key={m}
                                                 type="button"
@@ -455,11 +495,17 @@ export default function Chatbot() {
                                                 aria-selected={mode === m}
                                                 onClick={() => setMode(m)}
                                                 className={`flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1.5 transition-colors ${
-                                                    mode === m ? "bg-white/10 text-ink" : "text-ash hover:text-ink"
+                                                    mode === m ? "bg-fg/10 text-ink" : "text-ash hover:text-ink"
                                                 }`}
                                             >
-                                                {m === "chat" ? <MessageSquareText className="h-3.5 w-3.5" aria-hidden="true" /> : <AudioLines className="h-3.5 w-3.5" aria-hidden="true" />}
-                                                {m === "chat" ? "Chat" : "Voice"}
+                                                {m === "chat" ? (
+                                                    <MessageSquareText className="h-3.5 w-3.5" aria-hidden="true" />
+                                                ) : m === "voice" ? (
+                                                    <AudioLines className="h-3.5 w-3.5" aria-hidden="true" />
+                                                ) : (
+                                                    <Video className="h-3.5 w-3.5" aria-hidden="true" />
+                                                )}
+                                                {m === "chat" ? "Chat" : m === "voice" ? "Voice" : "Face"}
                                             </button>
                                         ))}
                                     </div>
@@ -467,14 +513,16 @@ export default function Chatbot() {
                                         type="button"
                                         onClick={() => setOpen(false)}
                                         aria-label="Close"
-                                        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-ash transition-colors hover:bg-white/10 hover:text-ink"
+                                        className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-ash transition-colors hover:bg-fg/10 hover:text-ink"
                                     >
                                         <X className="h-4 w-4" aria-hidden="true" />
                                     </button>
                                 </div>
                             </header>
 
-                            {mode === "voice" ? (
+                            {mode === "face" ? (
+                                <AvatarCall onEnd={(turns, seconds) => onCallEnd(turns, seconds, "Face-to-face")} />
+                            ) : mode === "voice" ? (
                                 <VoiceCall onEnd={onCallEnd} />
                             ) : (
                                 <>
@@ -493,7 +541,7 @@ export default function Chatbot() {
                                                             key={s.mode}
                                                             type="button"
                                                             onClick={() => startMode(s)}
-                                                            className={`group flex cursor-pointer gap-3 rounded-2xl border border-white/10 bg-white/[0.02] p-4 text-left transition-colors hover:border-ember/50 hover:bg-white/[0.04] focus-visible:outline-2 focus-visible:outline-ember ${s.mode === "ask" ? "sm:col-span-2" : ""}`}
+                                                            className={`group flex cursor-pointer gap-3 rounded-2xl border border-fg/10 bg-fg/[0.02] p-4 text-left transition-colors hover:border-ember/50 hover:bg-fg/[0.04] focus-visible:outline-2 focus-visible:outline-ember ${s.mode === "ask" ? "sm:col-span-2" : ""}`}
                                                         >
                                                             <s.icon className="mt-0.5 h-4 w-4 shrink-0 text-ash transition-colors group-hover:text-ember" aria-hidden="true" />
                                                             <span>
@@ -502,6 +550,20 @@ export default function Chatbot() {
                                                             </span>
                                                         </button>
                                                     ))}
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            closeConsole();
+                                                            setTimeout(() => startTour(), 350);
+                                                        }}
+                                                        className="group flex cursor-pointer gap-3 rounded-2xl border border-dashed border-ember/30 p-4 text-left transition-colors hover:border-ember/60 hover:bg-fg/[0.04] focus-visible:outline-2 focus-visible:outline-ember sm:col-span-2"
+                                                    >
+                                                        <Compass className="mt-0.5 h-4 w-4 shrink-0 text-ember" aria-hidden="true" />
+                                                        <span>
+                                                            <span className="block text-sm font-medium text-ink">Take the tour</span>
+                                                            <span className="mt-1 block text-xs leading-relaxed text-ash">A one-minute walk through the site, picked for why you&apos;re here</span>
+                                                        </span>
+                                                    </button>
                                                 </div>
                                             </div>
                                         ) : (
@@ -522,7 +584,7 @@ export default function Chatbot() {
                                                             )}
                                                             {m.role === "user" ? (
                                                                 <div className="flex justify-end">
-                                                                    <p className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-md bg-white/[0.07] px-4 py-2.5 text-[15px]">
+                                                                    <p className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-br-md bg-fg/[0.07] px-4 py-2.5 text-[15px]">
                                                                         {m.content}
                                                                     </p>
                                                                 </div>
@@ -539,7 +601,7 @@ export default function Chatbot() {
                                                                                     type="button"
                                                                                     onClick={() => openCard(c)}
                                                                                     disabled={!c.section && !c.link}
-                                                                                    className="cursor-pointer rounded-full border border-white/10 px-2.5 py-1 text-[11px] text-ink/80 transition-colors hover:border-ember/60 hover:text-ember disabled:cursor-default disabled:hover:border-white/10 disabled:hover:text-ink/80"
+                                                                                    className="cursor-pointer rounded-full border border-fg/10 px-2.5 py-1 text-[11px] text-ink/80 transition-colors hover:border-ember/60 hover:text-ember disabled:cursor-default disabled:hover:border-fg/10 disabled:hover:text-ink/80"
                                                                                 >
                                                                                     <span className="mr-1 font-mono text-ash">{c.n}</span>
                                                                                     {c.title.replace(/^Story: (\w)/, (_m, l: string) => l.toUpperCase())}
@@ -555,7 +617,7 @@ export default function Chatbot() {
                                                                                     type="button"
                                                                                     onClick={() => runAction(a, i)}
                                                                                     aria-expanded={a.type === "lead" ? leadFor === i : undefined}
-                                                                                    className="cursor-pointer rounded-full border border-ember/50 px-3.5 py-1.5 text-xs text-ink transition-colors hover:bg-ember hover:text-void"
+                                                                                    className="cursor-pointer rounded-full border border-ember/50 px-3.5 py-1.5 text-xs text-ink transition-colors hover:bg-ember hover:text-on-ember"
                                                                                 >
                                                                                     {a.label}
                                                                                 </button>
@@ -602,7 +664,7 @@ export default function Chatbot() {
                                                 </button>
                                             </div>
                                         )}
-                                        <div className="flex items-end gap-2 rounded-3xl border border-white/10 bg-white/[0.03] p-2 pl-4 transition-colors focus-within:border-ember/50">
+                                        <div className="flex items-end gap-2 rounded-3xl border border-fg/10 bg-fg/[0.03] p-2 pl-4 transition-colors focus-within:border-ember/50">
                                             <label htmlFor="agent-input" className="sr-only">
                                                 Ask {AGENT_NAME} about Isuru
                                             </label>
@@ -630,7 +692,7 @@ export default function Chatbot() {
                                                 type="button"
                                                 onClick={() => setMode("voice")}
                                                 aria-label="Switch to voice"
-                                                className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full text-ash transition-colors hover:bg-white/10 hover:text-ink"
+                                                className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full text-ash transition-colors hover:bg-fg/10 hover:text-ink"
                                             >
                                                 <AudioLines className="h-[18px] w-[18px]" aria-hidden="true" />
                                             </button>
@@ -638,7 +700,7 @@ export default function Chatbot() {
                                                 type="submit"
                                                 disabled={!input.trim() || loading}
                                                 aria-label="Send"
-                                                className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full bg-ember text-void transition-colors hover:bg-inferno-5 disabled:cursor-not-allowed disabled:bg-white/10 disabled:text-ash"
+                                                className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full bg-ember text-on-ember transition-colors hover:bg-inferno-5 disabled:cursor-not-allowed disabled:bg-fg/10 disabled:text-ash"
                                             >
                                                 <ArrowUp className="h-[18px] w-[18px]" aria-hidden="true" />
                                             </button>

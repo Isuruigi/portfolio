@@ -17,6 +17,23 @@ VOICE_NAME = "Aoede"
 VOICE_LANGUAGES = "en"
 VOICE_MAX_SECONDS = "180"
 VOICE_DAILY_CAP = "150"
+# Voice calls run Deepgram (speech to text) -> Axon's chat agent -> ElevenLabs (voice) when the
+# DEEPGRAM_API_KEY and ELEVENLABS_API_KEY secrets are set; otherwise they fall back to Gemini Live.
+STT_MODEL = "nova-3"
+ELEVENLABS_VOICE_ID = "g8mugxIm0WCtD9QthCk3"   # "Axon - Sri Lankan guide (v3)", the same voice as the tour
+ELEVENLABS_MODEL = "eleven_flash_v2_5"         # half the credits per character, lowest latency
+TTS_DAILY_CHARS = "2000"                       # ~1,000 credits a day at flash rates
+# Optional live backup voice (Deepgram Aura-2, e.g. "aura-2-amalthea-en"). Off: it doesn't sound like
+# Axon. Without ElevenLabs, calls answer with Axon's recorded answers (public/media/voice) instead.
+BACKUP_TTS_VOICE = ""
+BACKUP_TTS_DAILY_CHARS = "6000"
+# Free fallbacks for live speech after ElevenLabs: Workers AI (Deepgram Aura-2, via the AI binding),
+# then Gemini text-to-speech on the Google key. Common questions use the recorded answers instead.
+FREE_TTS_MODEL = "@cf/deepgram/aura-2-en"
+FREE_TTS_SPEAKER = "amalthea"
+FREE_TTS_DAILY_CHARS = "20000"
+GEMINI_TTS_MODEL = "gemini-3.8-flash-tts"
+GEMINI_TTS_VOICE = "Leda"
 
 # Optional, recommended in production: shared rate limits across Cloudflare's network.
 # Create it with `npx wrangler kv namespace create AXON_KV` and paste the id here.
@@ -24,6 +41,21 @@ VOICE_DAILY_CAP = "150"
 # binding = "AXON_KV"
 # id = ""
 
-# Optional last-resort model when Groq is down (Workers AI, free tier).
-# [ai]
-# binding = "AI"
+# Face-to-face avatar calls (functions/api/avatar/token.js + avatar-agent/). Secrets: LIVEKIT_URL,
+# LIVEKIT_API_KEY, LIVEKIT_API_SECRET. The "Face" tab stays hidden until all three are set.
+# Caps fit Anam's free plan (30 avatar minutes a month): 11 calls x 2.5 min, at most 3 a day.
+# Without AXON_KV these counters are per Cloudflare server, so add KV before relying on them.
+# Switch on only after the agent is deployed (avatar-agent/README.md) and has answered a test call
+AVATAR_ENABLED = "false"
+AVATAR_AGENT_NAME = "axon-avatar"
+AVATAR_MAX_SECONDS = "150"
+AVATAR_DAILY_CAP = "3"
+AVATAR_MONTHLY_CAP = "11"
+
+# Free model pool (axon/llm.js). Keys are secrets: GROQ_API_KEY, OPENROUTER_API_KEY, GOOGLE_API_KEY.
+GEMINI_CHAT_MODEL = "gemini-3.5-flash-lite"
+WORKERS_AI_MODEL = "@cf/openai/gpt-oss-120b"
+
+# Workers AI: a free lane that needs no key (10,000 neurons a day on the free plan)
+[ai]
+binding = "AI"

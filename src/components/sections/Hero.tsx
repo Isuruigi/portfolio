@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion } from "framer-motion";
 import ForwardPass from "@/components/hero/ForwardPass";
-import { openAgent } from "@/lib/agent";
+import { openAgent, startTour } from "@/lib/agent";
 import { socials } from "@/lib/socials";
 
 const PORTRAIT_SRC = "/assets/portrait-studio.webp";
@@ -15,7 +15,7 @@ export default function Hero() {
 
 
     return (
-        <section id="hero" className="relative isolate min-h-[100svh] overflow-hidden bg-void text-ink">
+        <section id="hero" className="stay-dark relative isolate min-h-[100svh] overflow-hidden bg-void text-ink">
             <ForwardPass anchorRef={portraitRef} />
 
             <motion.img
@@ -38,7 +38,7 @@ export default function Hero() {
                     <p className="text-[15px] text-ash">AI/ML Engineer at Veracity Digital, Colombo</p>
 
                     <h1 className="mt-5 font-display text-[clamp(3.25rem,6vw,5.75rem)] font-light leading-[0.92] tracking-[-0.045em]">
-                        Isuru
+                        Isuru{" "}
                         <br />
                         Chathuranga
                     </h1>
@@ -53,7 +53,7 @@ export default function Hero() {
                     <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
                         <a
                             href="#work"
-                            className="rounded-full bg-ember px-6 py-3 font-medium text-void transition-colors hover:bg-inferno-5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ember"
+                            className="rounded-full bg-ember px-6 py-3 font-medium text-on-ember transition-colors hover:bg-inferno-5 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ember"
                         >
                             See the work
                         </a>
@@ -63,6 +63,13 @@ export default function Hero() {
                             className="cursor-pointer py-3 font-medium text-ink underline decoration-inferno-3 decoration-1 underline-offset-[6px] transition-colors hover:text-ember focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ember"
                         >
                             Ask my agent
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => startTour()}
+                            className="cursor-pointer py-3 font-medium text-ink underline decoration-inferno-3 decoration-1 underline-offset-[6px] transition-colors hover:text-ember focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ember"
+                        >
+                            Take the tour
                         </button>
                     </div>
 
@@ -75,7 +82,7 @@ export default function Hero() {
                                     rel="noopener noreferrer"
                                     aria-label={label}
                                     title={label}
-                                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-ash transition-colors hover:border-ember/60 hover:text-ember focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+                                    className="flex h-10 w-10 items-center justify-center rounded-full border border-fg/10 text-ash transition-colors hover:border-ember/60 hover:text-ember focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
                                 >
                                     <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
                                 </a>

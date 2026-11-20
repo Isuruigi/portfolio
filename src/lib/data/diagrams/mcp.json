@@ -1,0 +1,234 @@
+{
+  "domain": "mcp",
+  "title": "How an agent reaches tools safely through MCP",
+  "subtitle": "The model writes code against typed APIs, a gateway injects a scoped token, and the code runs in an isolated sandbox.",
+  "org": "Cloudflare & Keycard",
+  "hook": "Writing code against typed APIs fit Cloudflare's whole API into about a thousand tokens.",
+  "metric": null,
+  "sources": [
+    {
+      "kind": "talk",
+      "title": "MCP = Mega Context Problem",
+      "speaker": "Matt Carey",
+      "org": "Cloudflare",
+      "videoId": "YBYUvGOuotE",
+      "url": "https://www.youtube.com/watch?v=YBYUvGOuotE"
+    },
+    {
+      "kind": "talk",
+      "title": "Who Is Making This Request? Agent Auth 101",
+      "speaker": "Kamil Potrec",
+      "org": "Keycard",
+      "videoId": "58ulJViGFgU",
+      "url": "https://www.youtube.com/watch?v=58ulJViGFgU"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "user",
+      "kind": "person",
+      "label": "User",
+      "role": "Asks the agent for help",
+      "tool": null,
+      "col": 0,
+      "row": 1,
+      "detail": "Alice asks her agent to do something in a system she has access to. Often she just hands the agent a personal access token, and the server then sees every call as Alice.",
+      "tradeoff": "Static tokens are not tied to anything: Alice can copy one to a personal machine, and they are hard to revoke.",
+      "cite": "04:01",
+      "src": 1
+    },
+    {
+      "id": "agent",
+      "kind": "service",
+      "label": "Agent client",
+      "role": "Runs the loop as MCP client",
+      "tool": "Claude Code",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 1,
+      "detail": "The agent is the MCP client. It sends the request to the model, then turns the model's output into a tool call. Many agents are bought, like Claude Code or Codex, so you cannot change their code.",
+      "tradeoff": "A good MCP client must manage stateful connections and resumability, so most clients stayed bare-bones.",
+      "cite": "18:10"
+    },
+    {
+      "id": "llm",
+      "kind": "model",
+      "label": "LLM",
+      "role": "Writes code, not tool calls",
+      "tool": "Anthropic",
+      "toolFromTalk": false,
+      "col": 1,
+      "row": 0,
+      "detail": "Instead of choosing among hundreds of tool schemas, the model writes a short TypeScript program against generated API types. Cloudflare calls this Code Mode.",
+      "tradeoff": "Code is a compact plan with far more freedom than a single tool call, so one 'code' tool can replace many.",
+      "cite": "15:02"
+    },
+    {
+      "id": "types",
+      "kind": "store",
+      "label": "Typed API",
+      "role": "The API as TypeScript types",
+      "tool": "TypeScript",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 0,
+      "detail": "Types are generated from the OpenAPI spec, the source of truth. Types are a concise way to show a model inputs and outputs, and the agent discovers only the parts it needs.",
+      "tradeoff": "Cloudflare's OpenAPI spec is 2.3 million tokens; turned into naive tools it is about 1.1 million, more than any context window.",
+      "cite": "03:20"
+    },
+    {
+      "id": "gateway",
+      "kind": "gateway",
+      "label": "Agent gateway",
+      "role": "Checks, scopes, injects tokens",
+      "tool": "Keycard",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 1,
+      "detail": "Every agent call passes through the gateway. It authenticates the caller, checks policy, fetches the right credential and injects it into the request, so the agent never holds it. It can also narrow access, such as allowing reading email but blocking sending.",
+      "tradeoff": "It adds a network hop and becomes a prized target, and it only helps if agents cannot route around it.",
+      "cite": "15:01",
+      "src": 1
+    },
+    {
+      "id": "auth",
+      "kind": "service",
+      "label": "Auth and vault",
+      "role": "Issues short-lived credentials",
+      "tool": "Keycard",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 2,
+      "detail": "A runtime authorization service gives each agent its own identity, separate from the person who launched it, and issues scoped, short-lived credentials using OAuth and workload identity federation. Secrets live in a vault, outside the agent's reach.",
+      "tradeoff": "There can be no master key, and legacy systems that will never speak OAuth need a broker that swaps credentials just in time.",
+      "cite": "08:29",
+      "src": 1
+    },
+    {
+      "id": "mcp",
+      "kind": "service",
+      "label": "MCP server",
+      "role": "Exposes the whole API",
+      "tool": "Cloudflare MCP",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 1,
+      "detail": "Cloudflare's MCP server covers its whole API by letting the model's code call it, instead of publishing one tool per endpoint. In the demo, an OAuth screen granted read-only access to the entire account.",
+      "tradeoff": "The first fix, splitting the API into 16 product servers, kept context small but left gaps in coverage and made users pick servers.",
+      "cite": "04:30"
+    },
+    {
+      "id": "sandbox",
+      "kind": "service",
+      "label": "Code sandbox",
+      "role": "Runs untrusted code",
+      "tool": "Cloudflare Workers",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 2,
+      "detail": "The model's code runs in a dynamic Worker: a fresh V8 isolate with no secrets in its environment. Network access is off unless granted, and can be limited to listed domains. Deno and Pydantic's Monty offer similar sandboxes.",
+      "tradeoff": "Untrusted code could read secrets, leak them over the network, loop forever or mine crypto, so the isolation is the whole point.",
+      "cite": "10:12"
+    },
+    {
+      "id": "api",
+      "kind": "tool",
+      "label": "Cloudflare API",
+      "role": "The real system acted on",
+      "tool": "Cloudflare API",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 1,
+      "detail": "About 2,600 REST endpoints. The sandboxed code calls them through a typed SDK, so the agent can list, deploy or secure Workers in a few lines.",
+      "tradeoff": "Agents can run the same code in a loop across many sandboxes, so APIs need solid rate limiting.",
+      "cite": "17:11"
+    }
+  ],
+  "edges": [
+    {
+      "from": "user",
+      "to": "agent",
+      "label": "request"
+    },
+    {
+      "from": "agent",
+      "to": "llm",
+      "label": "prompt and types"
+    },
+    {
+      "from": "agent",
+      "to": "gateway",
+      "label": "code tool call"
+    },
+    {
+      "from": "gateway",
+      "to": "auth",
+      "label": "verify, get token"
+    },
+    {
+      "from": "gateway",
+      "to": "mcp",
+      "label": "scoped token"
+    },
+    {
+      "from": "mcp",
+      "to": "types",
+      "label": "API types"
+    },
+    {
+      "from": "mcp",
+      "to": "sandbox",
+      "label": "run code"
+    },
+    {
+      "from": "sandbox",
+      "to": "api",
+      "label": "allowed calls"
+    }
+  ],
+  "flow": [
+    {
+      "node": "user",
+      "text": "Alice asks her agent to list the Workers in her Cloudflare account."
+    },
+    {
+      "node": "llm",
+      "text": "The model writes a short TypeScript program against the generated API types."
+    },
+    {
+      "node": "gateway",
+      "text": "The gateway checks who is calling and whether policy allows it."
+    },
+    {
+      "node": "auth",
+      "text": "A short-lived token, scoped to this request, comes from the vault."
+    },
+    {
+      "node": "mcp",
+      "text": "The MCP server receives the code with the token the agent never saw."
+    },
+    {
+      "node": "sandbox",
+      "text": "The code runs in a fresh isolate with no secrets and allowed domains only."
+    },
+    {
+      "node": "api",
+      "text": "Typed calls hit the Cloudflare API; the list returns to Alice."
+    }
+  ],
+  "takeaways": [
+    {
+      "text": "MCP is fine as a protocol; the mistake is loading every tool into the model's context.",
+      "cite": "05:11"
+    },
+    {
+      "text": "Letting the model write code against typed APIs fit Cloudflare's entire API into about a thousand tokens.",
+      "cite": "22:03"
+    },
+    {
+      "text": "Keep credentials away from agents: a gateway injects them per request and can revoke access instantly.",
+      "cite": "13:58",
+      "src": 1
+    }
+  ]
+}

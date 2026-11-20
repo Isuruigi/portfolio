@@ -1,0 +1,160 @@
+{
+  "domain": "crypto",
+  "title": "How the crypto system turns market data into a signal",
+  "subtitle": "Three agents read whales, the order book and Reddit mood at once; Llama on Groq weighs them into BUY, SELL or HOLD.",
+  "metric": null,
+  "sources": [
+    {
+      "kind": "repo",
+      "title": "crypto-intelligence-system",
+      "speaker": "Isuru Chathuranga",
+      "org": "GitHub",
+      "url": "https://github.com/Isuruigi/crypto-intelligence-system"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "trader",
+      "label": "Trader",
+      "role": "Asks for a signal",
+      "kind": "person",
+      "tool": "Streamlit",
+      "toolFromTalk": true,
+      "col": 0,
+      "row": 1,
+      "detail": "Asks for a signal on a pair such as BTC/USDT from the Streamlit dashboard, the REST API or the WebSocket feed.",
+      "tradeoff": "The README says the signals are for education, not financial advice.",
+      "cite": "dashboard/streamlit_app.py"
+    },
+    {
+      "id": "api",
+      "label": "Signal API",
+      "role": "Takes the request",
+      "kind": "service",
+      "tool": "FastAPI",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 1,
+      "detail": "POST /signal runs the orchestrator; the /ws/signals WebSocket sends a new BTC/USDT signal every 60 seconds.",
+      "tradeoff": "/signals/history reads earlier signals back from the database.",
+      "cite": "app/api/routes.py"
+    },
+    {
+      "id": "orch",
+      "label": "Orchestrator",
+      "role": "Runs agents at once",
+      "kind": "service",
+      "tool": "asyncio",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 1,
+      "detail": "Gathers whale, order book and sentiment results concurrently, fetches the live price from Binance via CCXT, then hands everything to the coordinator.",
+      "tradeoff": "A failed agent is replaced by a neutral reading, so one dead source doesn't stop the signal.",
+      "cite": "app/agents/orchestrator.py"
+    },
+    {
+      "id": "whale",
+      "label": "Whale tracker",
+      "role": "Watches big wallets",
+      "kind": "tool",
+      "tool": "Blockchain.com",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 0,
+      "detail": "Pulls unconfirmed transactions over 100 BTC from the Blockchain.com API and scores accumulation versus distribution from -100 to +100.",
+      "tradeoff": "A circuit breaker stops calling the API for 60 seconds after 3 failures.",
+      "cite": "app/agents/whale_tracker.py"
+    },
+    {
+      "id": "book",
+      "label": "Order book",
+      "role": "Reads buy and sell depth",
+      "kind": "tool",
+      "tool": "CCXT",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 0,
+      "detail": "Fetches the exchange order book through CCXT and measures bid/ask imbalance, depth and spread.",
+      "tradeoff": "It keeps recent snapshots so it can flag likely spoofing.",
+      "cite": "app/agents/orderbook_analyzer.py"
+    },
+    {
+      "id": "sentiment",
+      "label": "Sentiment model",
+      "role": "Reads the crowd's mood",
+      "kind": "model",
+      "tool": "FinBERT",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 2,
+      "detail": "Scores hot posts from r/CryptoCurrency and r/Bitcoin with FinBERT from -1 to +1, and adds the Fear & Greed Index.",
+      "tradeoff": "FinBERT loads on first use rather than at startup.",
+      "cite": "app/agents/sentiment_analyzer.py"
+    },
+    {
+      "id": "cache",
+      "label": "Redis cache",
+      "role": "Reuses fresh data",
+      "kind": "cache",
+      "tool": "Redis",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 2,
+      "detail": "Each agent checks Redis first. Whale data is kept 60 seconds, order books 30 and sentiment 300.",
+      "tradeoff": "If Redis is unavailable, the cache falls back to process memory.",
+      "cite": "app/services/cache_service.py"
+    },
+    {
+      "id": "coord",
+      "label": "LLM coordinator",
+      "role": "Weighs the evidence",
+      "kind": "model",
+      "tool": "Groq",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 1,
+      "detail": "Llama 3.1 70B on Groq gets all three readings plus the whale-versus-retail gap and returns JSON: signal, confidence 0 to 100, and a thesis.",
+      "tradeoff": "If the call fails or the JSON is invalid, a rule-based fallback applies the same divergence logic.",
+      "cite": "app/agents/coordinator.py"
+    },
+    {
+      "id": "store",
+      "label": "Signal store",
+      "role": "Keeps every signal",
+      "kind": "store",
+      "tool": "PostgreSQL",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 1,
+      "detail": "Each finished signal, with its price and timestamp, is written to PostgreSQL through asyncpg.",
+      "tradeoff": "Without a database it keeps signals in memory instead.",
+      "cite": "app/services/database_service.py"
+    }
+  ],
+  "edges": [
+    { "from": "trader", "to": "api", "label": "symbol" },
+    { "from": "api", "to": "orch", "label": "generate" },
+    { "from": "orch", "to": "whale", "label": "fetch" },
+    { "from": "orch", "to": "book", "label": "fetch" },
+    { "from": "orch", "to": "sentiment", "label": "fetch" },
+    { "from": "sentiment", "to": "cache", "label": "300 s TTL" },
+    { "from": "orch", "to": "coord", "label": "all readings" },
+    { "from": "coord", "to": "store", "label": "signal" },
+    { "from": "store", "to": "trader", "label": "signal JSON" }
+  ],
+  "flow": [
+    { "node": "trader", "text": "Asks for a BTC/USDT signal from the dashboard." },
+    { "node": "api", "text": "POST /signal hands the symbol to the orchestrator." },
+    { "node": "orch", "text": "Starts the whale, order book and sentiment agents at the same time." },
+    { "node": "whale", "text": "Scores recent large BTC transfers as accumulation or distribution." },
+    { "node": "sentiment", "text": "FinBERT scores Reddit posts; the Fear & Greed Index adds the crowd's mood." },
+    { "node": "coord", "text": "Weighs whales against retail mood; a gap over 50 points means high confidence." },
+    { "node": "store", "text": "Saves the signal with its price and timestamp." },
+    { "node": "trader", "text": "Gets BUY, SELL or HOLD with a confidence and a written thesis." }
+  ],
+  "takeaways": [
+    { "text": "Agents run concurrently, and a failed one becomes a neutral reading, so a signal still arrives.", "cite": "app/agents/orchestrator.py" },
+    { "text": "The core idea is contrarian: whales buying while retail is fearful reads as bullish, and the reverse as bearish.", "cite": "app/agents/coordinator.py" },
+    { "text": "Each source is cached on its own clock: order book 30 seconds, whales 60, sentiment 300.", "cite": "app/config.py" }
+  ]
+}

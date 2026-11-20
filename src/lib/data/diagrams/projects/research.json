@@ -1,0 +1,227 @@
+{
+  "domain": "research",
+  "title": "How the research agent answers with sources",
+  "subtitle": "A LangGraph agent searches with Tavily, scrapes top pages into ChromaDB, and has Llama on Groq write a cited report.",
+  "metric": null,
+  "sources": [
+    {
+      "kind": "repo",
+      "title": "ai-research-agent",
+      "speaker": "Isuru Chathuranga",
+      "org": "GitHub",
+      "url": "https://github.com/Isuruigi/ai-research-agent",
+      "branch": "development"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "user",
+      "label": "Researcher",
+      "role": "Asks a question",
+      "kind": "person",
+      "tool": null,
+      "col": 0,
+      "row": 1,
+      "detail": "Types a question of 10 to 500 characters in the web page, or calls POST /research directly with an API key.",
+      "cite": "src/api/main.py"
+    },
+    {
+      "id": "api",
+      "label": "Research API",
+      "role": "Guards the door",
+      "kind": "gateway",
+      "tool": "FastAPI",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 1,
+      "detail": "Serves POST /research and a streaming WebSocket. Callers without a key get 10 requests a minute and 3 queries a day per IP.",
+      "tradeoff": "Demo mode forces brief answers from at most 3 results, to protect what the code calls a $3 API budget.",
+      "cite": "src/api/main.py"
+    },
+    {
+      "id": "cache",
+      "label": "Answer cache",
+      "role": "Skips repeat work",
+      "kind": "cache",
+      "tool": null,
+      "col": 1,
+      "row": 0,
+      "detail": "A repeated question returns at once from an in-memory cache keyed on a hash of the query, provider and depth.",
+      "tradeoff": "It holds 500 answers and evicts the oldest first; it lives in one process and empties on restart.",
+      "cite": "src/api/main.py"
+    },
+    {
+      "id": "memory",
+      "label": "Session memory",
+      "role": "Remembers the chat",
+      "kind": "store",
+      "tool": "Redis",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 2,
+      "detail": "Each session's messages go to Redis with a one-hour expiry, so follow-up questions keep their context.",
+      "tradeoff": "If Redis is missing or down, it falls back to in-memory history.",
+      "cite": "src/agent/memory.py"
+    },
+    {
+      "id": "graph",
+      "label": "LangGraph agent",
+      "role": "Runs the steps",
+      "kind": "service",
+      "tool": "LangGraph",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 1,
+      "detail": "A state graph runs research, then scrape, then synthesize, passing one shared state of findings and scraped chunks.",
+      "tradeoff": "After each step a router checks for errors and ends the run early rather than writing an answer from nothing.",
+      "cite": "src/agent/graph.py"
+    },
+    {
+      "id": "search",
+      "label": "Web search",
+      "role": "Finds sources",
+      "kind": "tool",
+      "tool": "Tavily",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 0,
+      "detail": "Tavily runs an advanced search for 5 results with raw page content, skipping facebook.com and twitter.com.",
+      "tradeoff": "A failed search returns an empty list, so the run carries on without sources instead of crashing.",
+      "cite": "src/tools/web_search.py"
+    },
+    {
+      "id": "scraper",
+      "label": "Page scraper",
+      "role": "Reads the pages",
+      "kind": "tool",
+      "tool": "BeautifulSoup",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 0,
+      "detail": "Loads the top 3 result URLs in parallel, strips the HTML to text, and splits it into 1,000-character chunks with 200 overlap.",
+      "tradeoff": "Each chunk keeps its source URL, which is what lets the final answer cite it.",
+      "cite": "src/tools/scraper.py"
+    },
+    {
+      "id": "vector",
+      "label": "Vector store",
+      "role": "Holds page chunks",
+      "kind": "store",
+      "tool": "ChromaDB",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 2,
+      "detail": "Chunks are embedded on the CPU with all-MiniLM-L6-v2 and stored in a ChromaDB collection for this session only.",
+      "tradeoff": "Local embeddings need no API key; the 5 most similar chunks become the LLM's context.",
+      "cite": "src/tools/vector_store.py"
+    },
+    {
+      "id": "llm",
+      "label": "Report writer",
+      "role": "Writes the answer",
+      "kind": "model",
+      "tool": "Groq",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 1,
+      "detail": "Llama 3.3 70B on Groq gets the question plus the 5 retrieved chunks, each labelled with its source, and writes a structured report.",
+      "tradeoff": "The prompt asks it to cite sources and to say where sources disagree.",
+      "cite": "src/agent/nodes.py"
+    }
+  ],
+  "edges": [
+    {
+      "from": "user",
+      "to": "api",
+      "label": "question"
+    },
+    {
+      "from": "api",
+      "to": "cache",
+      "label": "lookup"
+    },
+    {
+      "from": "api",
+      "to": "memory",
+      "label": "history"
+    },
+    {
+      "from": "api",
+      "to": "graph",
+      "label": "run agent"
+    },
+    {
+      "from": "graph",
+      "to": "search",
+      "label": "query"
+    },
+    {
+      "from": "search",
+      "to": "scraper",
+      "label": "top URLs"
+    },
+    {
+      "from": "scraper",
+      "to": "vector",
+      "label": "chunks"
+    },
+    {
+      "from": "vector",
+      "to": "llm",
+      "label": "top 5 chunks"
+    },
+    {
+      "from": "llm",
+      "to": "user",
+      "label": "cited report"
+    }
+  ],
+  "flow": [
+    {
+      "node": "user",
+      "text": "Asks what is new in solid-state batteries."
+    },
+    {
+      "node": "api",
+      "text": "Checks the daily quota and the cache, then starts the agent."
+    },
+    {
+      "node": "graph",
+      "text": "Enters the research step of the state graph."
+    },
+    {
+      "node": "search",
+      "text": "Tavily returns 5 results with their page content."
+    },
+    {
+      "node": "scraper",
+      "text": "Scrapes the top 3 pages and splits them into overlapping chunks."
+    },
+    {
+      "node": "vector",
+      "text": "Embeds the chunks and stores them in this session's collection."
+    },
+    {
+      "node": "llm",
+      "text": "Writes a structured report from the 5 closest chunks, citing sources."
+    },
+    {
+      "node": "user",
+      "text": "Gets the answer with a de-duplicated list of source links."
+    }
+  ],
+  "takeaways": [
+    {
+      "text": "Each session gets its own ChromaDB collection, so one user's scraped pages don't mix into another's answer.",
+      "cite": "src/agent/nodes.py"
+    },
+    {
+      "text": "A daily quota of 3, demo mode and an answer cache keep a public demo inside a small API budget.",
+      "cite": "src/api/main.py"
+    },
+    {
+      "text": "Tool failures return empty results or an error state, and the graph routes any error straight to the end.",
+      "cite": "src/agent/nodes.py"
+    }
+  ]
+}

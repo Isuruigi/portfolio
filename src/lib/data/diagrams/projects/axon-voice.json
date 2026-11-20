@@ -1,0 +1,143 @@
+{
+  "domain": "axon-voice",
+  "title": "How Axon's voice line answers a question",
+  "subtitle": "Deepgram hears, Axon's guarded chat agent answers, and ElevenLabs speaks each sentence as soon as it's written.",
+  "org": "Isuru Chathuranga",
+  "hook": "Ears, brain and voice are separate, so the voice line reuses the chat's guard, retrieval and knowledge.",
+  "metric": null,
+  "sources": [
+    {
+      "kind": "project",
+      "title": "Axon's voice line",
+      "speaker": "Isuru Chathuranga",
+      "org": "Live on this site",
+      "url": ""
+    }
+  ],
+  "nodes": [
+    {
+      "id": "caller",
+      "label": "Visitor",
+      "role": "Asks out loud",
+      "kind": "person",
+      "tool": null,
+      "col": 0,
+      "row": 1,
+      "detail": "Someone on the site presses Start a voice call and talks. Their browser streams the microphone straight to Deepgram.",
+      "tradeoff": "Echo cancellation in the browser keeps Axon's own voice from being heard as the visitor talking."
+    },
+    {
+      "id": "token",
+      "label": "Token minting",
+      "role": "Keeps keys on the server",
+      "kind": "gateway",
+      "tool": "Cloudflare Workers",
+      "col": 1,
+      "row": 0,
+      "detail": "A Pages Function rate-limits the caller, then asks Deepgram for a 30-second token. The browser opens its speech connection with that, never with the API key.",
+      "tradeoff": "The token only has to live long enough to open the connection, so the microphone is requested first."
+    },
+    {
+      "id": "stt",
+      "label": "Speech to text",
+      "role": "Axon's ears",
+      "kind": "model",
+      "tool": "Deepgram",
+      "col": 1,
+      "row": 1,
+      "detail": "Nova-3 transcribes as the visitor speaks and uses endpointing to decide when they have finished, so Axon doesn't answer mid-sentence.",
+      "tradeoff": "A longer silence threshold avoids cutting people off but adds a beat before every reply."
+    },
+    {
+      "id": "guard",
+      "label": "Guard",
+      "role": "Checks before any model",
+      "kind": "eval",
+      "tool": null,
+      "col": 2,
+      "row": 0,
+      "detail": "The same code guard as the chat: off-topic and prompt-injection checks, size limits and per-visitor rate limits, before any model is called.",
+      "tradeoff": "Refusing in code is instant and free, but only catches what the rules describe."
+    },
+    {
+      "id": "agent",
+      "label": "Axon chat agent",
+      "role": "Axon's brain",
+      "kind": "service",
+      "tool": "Groq",
+      "col": 2,
+      "row": 1,
+      "detail": "The finished sentence goes to the same agent as the chat, asked for a short spoken reply: one to three sentences, no lists or links, with page actions as hidden tags.",
+      "tradeoff": "One agent for chat and voice means one knowledge base to keep right, at the cost of a text step a speech-to-speech model would skip."
+    },
+    {
+      "id": "cards",
+      "label": "Knowledge cards",
+      "role": "What Axon knows",
+      "kind": "store",
+      "tool": null,
+      "col": 2,
+      "row": 2,
+      "detail": "A BM25 retriever picks the cards that answer the question, so spoken answers come from the same written facts as the chat's cited ones.",
+      "tradeoff": "Curated cards keep answers accurate, but anything not written down, Axon can't say."
+    },
+    {
+      "id": "tts",
+      "label": "Axon's voice",
+      "role": "Speaks each sentence",
+      "kind": "model",
+      "tool": "ElevenLabs",
+      "col": 3,
+      "row": 1,
+      "detail": "Each sentence is sent to ElevenLabs Flash as soon as it's complete and played while the next is fetched, in the same designed voice as the guided tour.",
+      "tradeoff": "Sentence-sized requests start speaking sooner, but each one is a separate round trip."
+    },
+    {
+      "id": "budget",
+      "label": "Voice budget",
+      "role": "Caps what speech costs",
+      "kind": "monitor",
+      "tool": null,
+      "col": 3,
+      "row": 2,
+      "detail": "ElevenLabs bills by character, so speech has a per-visitor and a daily character allowance. When it runs out the call keeps going in the browser's own voice.",
+      "tradeoff": "A hard cap protects the bill, at the price of a plainer voice on a busy day."
+    },
+    {
+      "id": "page",
+      "label": "Page actions",
+      "role": "Shows what it's saying",
+      "kind": "tool",
+      "tool": null,
+      "col": 4,
+      "row": 1,
+      "detail": "A tag at the end of a reply scrolls the page to a project, opens the contact form, or ends the call after the goodbye has played.",
+      "tradeoff": "Tags in the text are simple and work with any model, but rely on the model following the format."
+    }
+  ],
+  "edges": [
+    { "from": "caller", "to": "stt", "label": "microphone" },
+    { "from": "token", "to": "stt", "label": "30 s token" },
+    { "from": "stt", "to": "agent", "label": "finished turn" },
+    { "from": "guard", "to": "agent" },
+    { "from": "cards", "to": "agent" },
+    { "from": "agent", "to": "tts", "label": "sentences" },
+    { "from": "budget", "to": "tts" },
+    { "from": "agent", "to": "page", "label": "tags" },
+    { "from": "tts", "to": "caller", "label": "audio" }
+  ],
+  "flow": [
+    { "node": "caller", "text": "The visitor asks a question out loud." },
+    { "node": "token", "text": "A 30-second token lets the browser reach Deepgram without the key." },
+    { "node": "stt", "text": "Nova-3 transcribes live and marks when the visitor has finished." },
+    { "node": "agent", "text": "The guard checks it, cards are retrieved, and a short spoken answer streams back." },
+    { "node": "tts", "text": "Each finished sentence plays in Axon's ElevenLabs voice while the next is written." },
+    { "node": "page", "text": "A tag in the reply scrolls the page to what Axon is talking about." },
+    { "node": "caller", "text": "If the visitor cuts in, playback stops and Axon listens again." }
+  ],
+  "takeaways": [
+    { "text": "Splitting ears, brain and voice lets the voice line reuse the chat's guard, retrieval and knowledge instead of a second prompt." },
+    { "text": "Speaking sentence by sentence starts the voice before the whole answer is written." },
+    { "text": "Speech is billed by character, so it has a daily budget and falls back to the browser's voice when that runs out." }
+  ]
+}

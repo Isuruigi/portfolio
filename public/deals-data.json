@@ -1,0 +1,259 @@
+{
+  "generated_at": "2026-11-17T05:47:13.848Z",
+  "window_days": 14,
+  "free_tiers": [
+    {
+      "name": "Beliq",
+      "url": "https://beliq.eu",
+      "line": "European REST API platform for e-invoicing, including generating, validating and… The free plan includes 20 live documents/month, plus 400 sandbox documents/month (no…",
+      "category": "APIs & data",
+      "via": "https://github.com/ripienaar/free-for-dev#apis-data-and-ml"
+    },
+    {
+      "name": "nosocial Embed API",
+      "url": "https://nosocial.eu/api-docs",
+      "line": "A free API for developers to embed public posts from X, Instagram, TikTok, YouTube, Bluesky, Threads, Facebook, Telegram, Reddit, and LinkedIn on their websites. It…",
+      "category": "APIs & data",
+      "via": "https://github.com/ripienaar/free-for-dev#apis-data-and-ml"
+    },
+    {
+      "name": "Rizamo",
+      "url": "https://rizamo.com",
+      "line": "Social media publishing API: schedule and publish to Instagram, Facebook, TikTok… Free forever for 2 connected accounts, unlimited posts, every feature included, no…",
+      "category": "APIs & data",
+      "via": "https://github.com/ripienaar/free-for-dev#apis-data-and-ml"
+    },
+    {
+      "name": "TimeLogic API",
+      "url": "https://timelogicapi.com",
+      "line": "World time and timezone API with cryptographically signed JSON responses, so you can… Free plan includes 10,000 requests/month on all endpoints.",
+      "category": "APIs & data",
+      "via": "https://github.com/ripienaar/free-for-dev#apis-data-and-ml"
+    },
+    {
+      "name": "VPNDetection",
+      "url": "https://vpndetection.io",
+      "line": "VPN, proxy and hosting detection API for any IP address. The free plan answers the VPN, Tor and relay flags, country and ASN, with no API key, signup or monthly cap.",
+      "category": "APIs & data",
+      "via": "https://github.com/ripienaar/free-for-dev#apis-data-and-ml"
+    },
+    {
+      "name": "Stategraph",
+      "url": "https://stategraph.com",
+      "line": "GitOps-first Terraform automation with pull request-driven workflows, project isolation… Free for up to 3 users.",
+      "category": "Dev tools",
+      "via": "https://github.com/ripienaar/free-for-dev#ci-and-cd"
+    },
+    {
+      "name": "GravEx Chat",
+      "url": "https://chat.gravex.app/en/",
+      "line": "Free chat sdk that works for any client, like web, Android, iOS or whatever. Create API key and hand it over to your own Agent(Claude, Codex...) with llms.txt, then you…",
+      "category": "Dev tools",
+      "via": "https://github.com/ripienaar/free-for-dev#messaging-and-streaming"
+    },
+    {
+      "name": "notifysphere.net",
+      "url": "https://notifysphere.net/",
+      "line": "All-in-one Customer Engagement and Automation Tool ( push notifications, whatsapp… Free for up to 1,000 active users per month.",
+      "category": "Dev tools",
+      "via": "https://github.com/ripienaar/free-for-dev#messaging-and-streaming"
+    },
+    {
+      "name": "Pingzen",
+      "url": "https://pingzen.dev",
+      "line": "Free uptime and API monitoring with up to 55 monitors, 1-minute check intervals, and instant alerts.",
+      "category": "Dev tools",
+      "via": "https://github.com/ripienaar/free-for-dev#monitoring"
+    },
+    {
+      "name": "Gairė",
+      "url": "https://gaire.lt/en",
+      "line": "Web Change monitoring for research, price changes, out-of/in stock monitoring. Free plan up to 10 pages checked every hour, alerts by sms, email, Webhook…",
+      "category": "Dev tools",
+      "via": "https://github.com/ripienaar/free-for-dev#monitoring"
+    },
+    {
+      "name": "hypermonitors.com",
+      "url": "https://hypermonitors.com",
+      "line": "Monitors your infrastructure from three different locations (ZH - NYC - SG) with every… Free forever for 5 monitors and 5 minute checks.",
+      "category": "Dev tools",
+      "via": "https://github.com/ripienaar/free-for-dev#monitoring"
+    },
+    {
+      "name": "Cisco Networking Academy",
+      "url": "https://netacad.com/",
+      "line": "Offers free certification-aligned courses in topics like cybersecurity, networking, and Python.",
+      "category": "Learning",
+      "via": "https://github.com/ripienaar/free-for-dev#education-and-career-development"
+    },
+    {
+      "name": "addy.io",
+      "url": "https://addy.io",
+      "line": "Open-source anonymous email forwarding, create unlimited email aliases for free",
+      "category": "Dev tools",
+      "via": "https://github.com/ripienaar/free-for-dev#email"
+    },
+    {
+      "name": "Alias Email",
+      "url": "https://alias.email",
+      "line": "Free 10 Bump email addresses, one custom domain",
+      "category": "Dev tools",
+      "via": "https://github.com/ripienaar/free-for-dev#email"
+    },
+    {
+      "name": "Groundmail",
+      "url": "https://groundmail.dev",
+      "line": "Transactional email API and SMTP relay. 3,000 emails/month free (100/day), three domains, three agent mailboxes, inbound email included.",
+      "category": "Dev tools",
+      "via": "https://github.com/ripienaar/free-for-dev#email"
+    },
+    {
+      "name": "UserCheck",
+      "url": "https://www.usercheck.com",
+      "line": "Prevent users to sign up with temporary email addresses, 120 requests/hour (~86,400 per month)",
+      "category": "Dev tools",
+      "via": "https://github.com/ripienaar/free-for-dev#email"
+    },
+    {
+      "name": "Mailkube",
+      "url": "https://mailkube.com/",
+      "line": "Email infrastructure for developers, 4,000 emails/month free, unlimited domains included",
+      "category": "Dev tools",
+      "via": "https://github.com/ripienaar/free-for-dev#email"
+    },
+    {
+      "name": "evalship",
+      "url": "https://evalship.com",
+      "line": "find the flaws in your LLM evals. Free for 1 private repo for 1 user, 100 PR analyses a month, 30 days of eval history.",
+      "category": "AI & ML",
+      "via": "https://github.com/ripienaar/free-for-dev#generative-ai"
+    },
+    {
+      "name": "EthioDeploy",
+      "url": "https://ethiodeploy.com/",
+      "line": "Hosting and agentic coding platform containing Built-in Analytics, Database, GitHub CI/CD, free sub-domain, CLI, AI coding agent. Free tier allows one project 256 MB RAM…",
+      "category": "Cloud & hosting",
+      "via": "https://github.com/ripienaar/free-for-dev#paas"
+    },
+    {
+      "name": "Uppcoder",
+      "url": "https://portal.uppcoder.com/",
+      "line": "Full stack development environment hosted on own infrastructure with selectable… Free tier: always on, 2GB disk and 2GB ram.",
+      "category": "Cloud & hosting",
+      "via": "https://github.com/ripienaar/free-for-dev#paas"
+    },
+    {
+      "name": "readthedocs.com",
+      "url": "https://readthedocs.com/",
+      "line": "Free documentation hosting with versioning, PDF generation, and more",
+      "category": "Cloud & hosting",
+      "via": "https://github.com/ripienaar/free-for-dev#web-hosting"
+    },
+    {
+      "name": "Reliant",
+      "url": "https://reliantlabs.io",
+      "line": "Host, monitor, and deploy your services with production best practices. One free static site per organization, 1 GiB of storage, 10 GiB of traffic a month, CDN with…",
+      "category": "Cloud & hosting",
+      "via": "https://github.com/ripienaar/free-for-dev#web-hosting"
+    },
+    {
+      "name": "InstaBox",
+      "url": "https://instabox.sh/",
+      "line": "Cloud Linux machine for AI agents and developers, running on Firecracker microVMs with… Free plan: one 4 vCPU / 8 GiB machine, 20 GiB disk, 5 snapshots and 100 GiB…",
+      "category": "Cloud & hosting",
+      "via": "https://github.com/ripienaar/free-for-dev#iaas"
+    },
+    {
+      "name": "Out Plane",
+      "url": "https://outplane.com",
+      "line": "Cloud sandboxes for coding agents (Hangars) plus app hosting in Germany. Free: Hangars, cloud machines where agents like Claude Code, Codex and Cursor run, with no…",
+      "category": "Cloud & hosting",
+      "via": "https://github.com/ripienaar/free-for-dev#iaas"
+    },
+    {
+      "name": "Raff",
+      "url": "https://rafftechnologies.com/products/managed-databases",
+      "line": "Managed PostgreSQL, MySQL and Valkey, 1 free database per account with no expiry, 1 vCPU, 1 GB RAM and 2 GB storage (Valkey: 512 MB memory), 20 direct and 200 pooled…",
+      "category": "Databases & storage",
+      "via": "https://github.com/ripienaar/free-for-dev#managed-data-services"
+    },
+    {
+      "name": "We.Team",
+      "url": "https://www.we.team/en",
+      "line": "Encrypt, share, copy, and move all your cloud storage files from one place. The basic plan provides unlimited file transfer with 250 MB max.",
+      "category": "Databases & storage",
+      "via": "https://github.com/ripienaar/free-for-dev#storage-and-media-processing"
+    },
+    {
+      "name": "cocalc.ai",
+      "url": "https://cocalc.ai/",
+      "line": "Collaborative calculation in the cloud. Browser access to full Ubuntu with built-in collaboration and lots of free software for mathematics, science, data science…",
+      "category": "Dev tools",
+      "via": "https://github.com/ripienaar/free-for-dev#ide-and-code-editing"
+    },
+    {
+      "name": "OnlineCompiler.io",
+      "url": "https://onlinecompiler.io/",
+      "line": "Online compiler and code execution API for 46 languages. The editor is free with no sign-in, and the free API plan includes 100,000 runs a month.",
+      "category": "Dev tools",
+      "via": "https://github.com/ripienaar/free-for-dev#ide-and-code-editing"
+    }
+  ],
+  "hacker_news": [
+    {
+      "title": "Yogurt – Free, private, open-source alternative to Granola",
+      "url": "https://github.com/FrigadeHQ/yogurt",
+      "discussion": "https://news.ycombinator.com/item?id=50454625",
+      "points": 305,
+      "date": "2026-11-11"
+    },
+    {
+      "title": "A 15 MB self-hosted Netflix and Spotify for your media server",
+      "url": "https://github.com/HolyArrs/HolyArrs",
+      "discussion": "https://news.ycombinator.com/item?id=50439000",
+      "points": 170,
+      "date": "2026-11-10"
+    },
+    {
+      "title": "Sutra-OS – A self-hosted ontology platform",
+      "url": "https://github.com/0nelight/sutra-os",
+      "discussion": "https://news.ycombinator.com/item?id=50525052",
+      "points": 46,
+      "date": "2026-11-16"
+    }
+  ],
+  "in_the_news": [],
+  "link_check": {
+    "checked_at": "2026-11-17",
+    "results": {
+      "https://console.groq.com/docs/rate-limits": "ok",
+      "https://developers.cloudflare.com/workers-ai/platform/pricing/": "ok",
+      "https://developers.cloudflare.com/workers/platform/pricing/": "ok",
+      "https://supabase.com/pricing": "ok",
+      "https://www.jetbrains.com/academy/student-pack/": "ok",
+      "https://neon.com/pricing": "ok",
+      "https://huggingface.co/pricing": "ok",
+      "https://ollama.com": "ok",
+      "https://course.fast.ai": "ok",
+      "https://qdrant.tech/pricing/": "ok",
+      "https://huggingface.co/learn": "ok",
+      "https://www.nvidia.com/en-us/startups/": "ok",
+      "https://livekit.io/pricing": "ok",
+      "https://azure.microsoft.com/en-us/free/students": "ok",
+      "https://cloud.google.com/startup": "ok",
+      "https://openrouter.ai/docs/api/reference/limits": "ok",
+      "https://www.kaggle.com/learn": "ok",
+      "https://www.microsoft.com/en-us/startups": "ok",
+      "https://aws.amazon.com/startups/credits": "ok",
+      "https://www.deeplearning.ai/courses/": "ok",
+      "https://ai.google.dev/gemini-api/docs/pricing": "ok",
+      "https://education.github.com/pack": "ok"
+    }
+  },
+  "sources": {
+    "free_for_dev": "ok (7ef9de7 (1362 entries) -> today (1365), since 2026-11-03)",
+    "hacker_news": "ok",
+    "news": "ok",
+    "links": "ok"
+  }
+}

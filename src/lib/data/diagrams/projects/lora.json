@@ -1,0 +1,159 @@
+{
+  "domain": "lora",
+  "title": "How the adaptive LoRA system routes a prompt",
+  "subtitle": "A learned router picks a specialist LoRA adapter, a GPU engine generates with it, and a self-evaluator scores it.",
+  "metric": null,
+  "sources": [
+    {
+      "kind": "repo",
+      "title": "adaptive-lora-framework",
+      "speaker": "Isuru Chathuranga",
+      "org": "GitHub",
+      "url": "https://github.com/Isuruigi/adaptive-lora-framework"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "user",
+      "label": "User",
+      "role": "Sends a prompt",
+      "kind": "person",
+      "tool": "Gradio",
+      "toolFromTalk": true,
+      "col": 0,
+      "row": 1,
+      "detail": "Sends a prompt from the Gradio demo or the API, either naming an adapter or leaving the choice to the router.",
+      "tradeoff": "The hosted Gradio demo uses keyword routing and Llama 3.1 8B on Groq with one system prompt per adapter, not the trained adapters.",
+      "cite": "app.py"
+    },
+    {
+      "id": "gateway",
+      "label": "API gateway",
+      "role": "Guards and forwards",
+      "kind": "gateway",
+      "tool": "FastAPI",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 1,
+      "detail": "Identifies the caller by API key or IP, allows 60 requests a minute, and forwards the prompt to a Modal serverless GPU endpoint.",
+      "tradeoff": "A circuit breaker opens after 5 failures and waits 60 seconds before trying the GPU again.",
+      "cite": "deploy/api_gateway.py"
+    },
+    {
+      "id": "cache",
+      "label": "Response cache",
+      "role": "Skips repeat prompts",
+      "kind": "cache",
+      "tool": null,
+      "col": 1,
+      "row": 0,
+      "detail": "Keeps responses by prompt and adapter for one hour, up to 1,000 entries, evicting the oldest first.",
+      "tradeoff": "It lives in memory; the code notes Redis as the production choice.",
+      "cite": "deploy/api_gateway.py"
+    },
+    {
+      "id": "router",
+      "label": "Learned router",
+      "role": "Picks the adapter",
+      "kind": "model",
+      "tool": "PyTorch",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 1,
+      "detail": "A small BERT encoder with heads that predict adapter weights, query complexity (easy, medium, hard) and confidence. Adapters above 0.1 weight are used.",
+      "tradeoff": "The README claims 87.3% routing accuracy.",
+      "cite": "src/router/router_model.py"
+    },
+    {
+      "id": "adapters",
+      "label": "Adapter registry",
+      "role": "Stores the specialists",
+      "kind": "store",
+      "tool": "PEFT",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 0,
+      "detail": "Specialist adapters such as reasoning, code and analysis are registered with metadata and loaded onto the base model with PEFT, or merged into it.",
+      "tradeoff": "The README claims 4 GB of GPU memory against 16 GB for its single-adapter baseline.",
+      "cite": "src/adapters/adapter_manager.py"
+    },
+    {
+      "id": "gpu",
+      "label": "GPU inference",
+      "role": "Generates the answer",
+      "kind": "gpu",
+      "tool": "vLLM",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 1,
+      "detail": "A vLLM engine serves the base model and attaches the chosen LoRA adapter per request, with up to 4 adapters of rank 64 or less.",
+      "tradeoff": "The Modal T4 deployment keeps one container warm but, for now, serves the 4-bit base model under every adapter name.",
+      "cite": "src/serving/inference_engine.py"
+    },
+    {
+      "id": "cluster",
+      "label": "GPU cluster",
+      "role": "Runs the replicas",
+      "kind": "cluster",
+      "tool": "Kubernetes",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 2,
+      "detail": "A Deployment runs 2 replicas with one NVIDIA GPU each, and a HorizontalPodAutoscaler scales between 2 and 10.",
+      "tradeoff": "The README prices Kubernetes at $100+ a month against about $0.001 a request on Modal.",
+      "cite": "k8s/deployment.yaml"
+    },
+    {
+      "id": "evaluator",
+      "label": "Self-evaluator",
+      "role": "Scores the answer",
+      "kind": "eval",
+      "tool": "Sentence Transformers",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 1,
+      "detail": "Scores relevance, factuality, coherence, safety and uncertainty, weighted 0.3, 0.25, 0.2, 0.15 and 0.1. Below 0.6 counts as a failure.",
+      "tradeoff": "It can also ask an OpenAI or Anthropic model to judge, when those keys are set.",
+      "cite": "src/evaluation/self_evaluator.py"
+    },
+    {
+      "id": "monitor",
+      "label": "Monitoring",
+      "role": "Watches speed and drift",
+      "kind": "monitor",
+      "tool": "Prometheus",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 2,
+      "detail": "Prometheus collects request, token and latency metrics for Grafana dashboards; a drift detector compares new query embeddings with a baseline.",
+      "tradeoff": "An alert fires when average adapter inference time stays above 5 seconds for 5 minutes.",
+      "cite": "src/monitoring/drift_detector.py"
+    }
+  ],
+  "edges": [
+    { "from": "user", "to": "gateway", "label": "prompt" },
+    { "from": "gateway", "to": "cache", "label": "lookup" },
+    { "from": "gateway", "to": "router", "label": "prompt" },
+    { "from": "router", "to": "gpu", "label": "adapter choice" },
+    { "from": "adapters", "to": "gpu", "label": "LoRA weights" },
+    { "from": "cluster", "to": "gpu", "label": "hosts" },
+    { "from": "gpu", "to": "evaluator", "label": "response" },
+    { "from": "evaluator", "to": "monitor", "label": "scores" },
+    { "from": "evaluator", "to": "user", "label": "scored answer" }
+  ],
+  "flow": [
+    { "node": "user", "text": "Asks for a Python binary search function." },
+    { "node": "gateway", "text": "Checks the rate limit, misses the cache, and forwards the prompt." },
+    { "node": "router", "text": "Encodes the prompt and gives the code adapter the most weight." },
+    { "node": "adapters", "text": "Supplies the code adapter's LoRA weights." },
+    { "node": "gpu", "text": "Generates with the base model plus the code adapter." },
+    { "node": "evaluator", "text": "Combines relevance, coherence, factuality and safety into one weighted score." },
+    { "node": "monitor", "text": "Records latency and checks the query embedding for drift." },
+    { "node": "user", "text": "Gets the answer and the name of the adapter that wrote it." }
+  ],
+  "takeaways": [
+    { "text": "Gumbel-Softmax keeps adapter choice differentiable in training, so the router learns from data rather than keyword rules.", "cite": "src/router/router_model.py" },
+    { "text": "QLoRA trains each adapter on a 4-bit NF4 base model with double quantization to cut GPU memory.", "cite": "src/adapters/lora_trainer.py" },
+    { "text": "Answers under a 0.6 weighted score are stored as failure patterns; the README ties these to targeted synthetic data.", "cite": "src/evaluation/self_evaluator.py" }
+  ]
+}

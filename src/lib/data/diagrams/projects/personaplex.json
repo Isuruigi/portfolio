@@ -1,0 +1,162 @@
+{
+  "domain": "personaplex",
+  "title": "How PersonaPlex answers a phone call",
+  "subtitle": "Twilio streams the call to a FastAPI server that hears with Deepgram, thinks with GPT-4o-mini and speaks with Edge TTS.",
+  "metric": null,
+  "sources": [
+    {
+      "kind": "repo",
+      "title": "personaplex-agent",
+      "speaker": "Isuru Chathuranga",
+      "org": "GitHub",
+      "url": "https://github.com/Isuruigi/personaplex-agent"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "caller",
+      "label": "Caller",
+      "role": "Phones the Twilio number",
+      "kind": "person",
+      "tool": "Twilio",
+      "toolFromTalk": true,
+      "col": 0,
+      "row": 1,
+      "detail": "A person dials the Twilio number. The same pipeline also runs in a browser over a WebSocket, with no phone line needed.",
+      "tradeoff": "Phone audio arrives as 8 kHz mu-law, so it has to be converted before speech to text can use it.",
+      "cite": "src/telephony/twilio_handler.py"
+    },
+    {
+      "id": "webhook",
+      "label": "Call webhook",
+      "role": "Picks up the call",
+      "kind": "gateway",
+      "tool": "Twilio",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 0,
+      "detail": "Twilio posts to /twilio/inbound. The server checks the X-Twilio-Signature header, then replies with TwiML that opens a media stream.",
+      "tradeoff": "Requests with a bad signature get a 403, which blocks fake calls but needs the Twilio auth token set.",
+      "cite": "src/telephony/twilio_handler.py"
+    },
+    {
+      "id": "stream",
+      "label": "Media stream",
+      "role": "Moves audio both ways",
+      "kind": "service",
+      "tool": "FastAPI",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 1,
+      "detail": "A FastAPI WebSocket at /twilio/stream receives base64 mu-law audio, decodes it to 16 kHz PCM, and sends replies back down the same socket.",
+      "tradeoff": "Listening and answering run as two concurrent asyncio tasks, so the server keeps hearing the caller while the agent talks.",
+      "cite": "src/telephony/twilio_handler.py"
+    },
+    {
+      "id": "stt",
+      "label": "Speech to text",
+      "role": "Hears the caller finish",
+      "kind": "model",
+      "tool": "Deepgram",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 1,
+      "detail": "Streams audio to Deepgram's nova-2 model with interim results and voice activity events. Final pieces are held until Deepgram marks speech_final.",
+      "tradeoff": "If speech_final never comes, an UtteranceEnd event after 1,000 ms of silence flushes the text instead.",
+      "cite": "src/stt/deepgram_stt.py"
+    },
+    {
+      "id": "persona",
+      "label": "Persona file",
+      "role": "Sets who is speaking",
+      "kind": "store",
+      "tool": "PyYAML",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 0,
+      "detail": "Each persona (visa consultant, customer service, teacher) is a YAML file that becomes the system prompt and the opening greeting.",
+      "tradeoff": "Persona names are checked against a whitelist; an unknown name falls back to the default persona.",
+      "cite": "src/persona/prompt_builder.py"
+    },
+    {
+      "id": "llm",
+      "label": "LLM",
+      "role": "Writes the reply",
+      "kind": "model",
+      "tool": "OpenAI",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 1,
+      "detail": "GPT-4o-mini streams a reply of up to 300 tokens from the call history, with the persona as the system prompt. The README puts the cost at about $0.001 per conversation.",
+      "tradeoff": "Trimmed history keeps the system prompt and first two exchanges plus recent turns, so the caller's name isn't forgotten.",
+      "cite": "src/llm/conversation.py"
+    },
+    {
+      "id": "tools",
+      "label": "Voice tools",
+      "role": "Looks up weather and time",
+      "kind": "tool",
+      "tool": "wttr.in",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 2,
+      "detail": "The LLM can call get_weather, which fetches wttr.in, or get_time, which reads the server clock.",
+      "tradeoff": "The code runs the tool, but passing its result back into a follow-up reply is still a simplified stub.",
+      "cite": "src/tools/voice_tools.py"
+    },
+    {
+      "id": "tts",
+      "label": "Text to speech",
+      "role": "The agent's voice",
+      "kind": "model",
+      "tool": "Edge TTS",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 1,
+      "detail": "edge-tts speaks the reply in an Indian English neural voice; pydub converts the MP3 to 8 kHz mu-law for the phone line.",
+      "tradeoff": "On calls the whole reply is voiced at once; the browser path voices it sentence by sentence as tokens arrive.",
+      "cite": "src/telephony/twilio_handler.py"
+    },
+    {
+      "id": "bargein",
+      "label": "Barge-in guard",
+      "role": "Stops talk on interrupt",
+      "kind": "monitor",
+      "tool": "Twilio",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 2,
+      "detail": "Reply audio goes out in 1-second chunks. Before each chunk it checks for a new caller transcript and, if there is one, sends Twilio a clear event.",
+      "tradeoff": "Barge-in fires on a finished caller transcript, not raw sound, and is checked once per 1-second chunk.",
+      "cite": "src/telephony/twilio_handler.py"
+    }
+  ],
+  "edges": [
+    { "from": "caller", "to": "webhook", "label": "incoming call" },
+    { "from": "webhook", "to": "stream", "label": "TwiML stream" },
+    { "from": "caller", "to": "stream", "label": "mu-law audio" },
+    { "from": "stream", "to": "stt", "label": "PCM audio" },
+    { "from": "stt", "to": "llm", "label": "final transcript" },
+    { "from": "persona", "to": "llm", "label": "system prompt" },
+    { "from": "llm", "to": "tools", "label": "tool call" },
+    { "from": "llm", "to": "tts", "label": "reply text" },
+    { "from": "tts", "to": "caller", "label": "reply audio" },
+    { "from": "stt", "to": "bargein", "label": "new transcript" },
+    { "from": "bargein", "to": "tts", "label": "stop playback" }
+  ],
+  "flow": [
+    { "node": "caller", "text": "A caller dials the Twilio number." },
+    { "node": "webhook", "text": "Checks Twilio's signature and returns TwiML that opens a media stream." },
+    { "node": "stream", "text": "Decodes 8 kHz mu-law audio to 16 kHz PCM and passes it on." },
+    { "node": "stt", "text": "Deepgram transcribes and waits for speech_final before handing the sentence over." },
+    { "node": "llm", "text": "GPT-4o-mini drafts a reply as the visa consultant persona." },
+    { "node": "tts", "text": "Edge TTS voices the reply and pydub converts it for the phone line." },
+    { "node": "bargein", "text": "If the caller cuts in, playback stops between 1-second chunks." },
+    { "node": "caller", "text": "Hears the reply, or is listened to again after interrupting." }
+  ],
+  "takeaways": [
+    { "text": "Replies wait for Deepgram's speech_final, with a 1,000 ms UtteranceEnd fallback, so the agent doesn't answer mid-sentence.", "cite": "src/stt/deepgram_stt.py" },
+    { "text": "Playback goes out in 1-second chunks so a new caller transcript can cut the agent off between them.", "cite": "src/telephony/twilio_handler.py" },
+    { "text": "Trimmed history always keeps the system prompt and first two exchanges, so details from turn one survive.", "cite": "src/llm/conversation.py" }
+  ]
+}

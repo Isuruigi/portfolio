@@ -1,0 +1,228 @@
+{
+  "domain": "harness",
+  "title": "How a harness makes a weak model finish the job",
+  "subtitle": "Plain code around the model (tools, guardrails, context, verify) that ties a black-box agent to something stable.",
+  "org": "IBM",
+  "hook": "Same prompt, same weak model: harness code alone turned a failing agent into a working one.",
+  "metric": null,
+  "sources": [
+    {
+      "title": "Harnesses in AI: A Deep Dive",
+      "speaker": "Tejas Kumar",
+      "org": "IBM",
+      "videoId": "C_GG5g38vLU",
+      "url": "https://www.youtube.com/watch?v=C_GG5g38vLU",
+      "kind": "talk"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "harness",
+      "label": "Run harness",
+      "role": "Outer loop around the agent",
+      "kind": "cluster",
+      "tool": null,
+      "col": 0,
+      "row": 1,
+      "detail": "The entry point. It runs the whole agent as one attempt and retries, giving up after three attempts.",
+      "tradeoff": "A harness can be a loop around your agent loop; here it enforces max attempts at the harness level.",
+      "cite": "13:00"
+    },
+    {
+      "id": "context",
+      "label": "Context builder",
+      "role": "Packs and trims messages",
+      "kind": "service",
+      "tool": "Claude Code",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 0,
+      "detail": "Starts with a basic system prompt and the user's task. When messages pile up, it keeps those two plus the last two messages.",
+      "tradeoff": "The speaker calls this compressor super naive and says better ways exist.",
+      "cite": "11:30"
+    },
+    {
+      "id": "loop",
+      "label": "Agent loop",
+      "role": "Ask, act, record, repeat",
+      "kind": "service",
+      "tool": "OpenAI Agents SDK",
+      "toolFromTalk": false,
+      "col": 1,
+      "row": 1,
+      "detail": "A while-true loop: get the model's next step, run it, push the events to a trace, stop when the model says it is done.",
+      "tradeoff": "A harness is not just the agent loop; it is the stuff around the agent loop.",
+      "cite": "05:10"
+    },
+    {
+      "id": "model",
+      "label": "Model",
+      "role": "Rented black box",
+      "kind": "model",
+      "tool": "OpenAI",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 0,
+      "detail": "GPT-3.5 Turbo, a 2023 model picked on purpose to show a harness can make a weak model do the job.",
+      "tradeoff": "Rented models are black boxes; a provider could serve a different model and you would never know.",
+      "cite": "02:00"
+    },
+    {
+      "id": "tools",
+      "label": "Tool registry",
+      "role": "What the agent can do",
+      "kind": "tool",
+      "tool": "Playwright",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 1,
+      "detail": "Each tool has a name, description, parameters and an execute function. Here they drive a Chromium browser through plain Playwright.",
+      "tradeoff": "Plain Playwright, not Playwright MCP: tools are just traditional engineering.",
+      "cite": "07:30"
+    },
+    {
+      "id": "guardrails",
+      "label": "Guardrails",
+      "role": "Hard limits in code",
+      "kind": "eval",
+      "tool": null,
+      "col": 1,
+      "row": 2,
+      "detail": "Max iterations kills the run after six steps. Max messages triggers context compression.",
+      "tradeoff": "They are small functions that compose, so you can stack as many as you want.",
+      "cite": "10:30"
+    },
+    {
+      "id": "login",
+      "label": "Login handler",
+      "role": "Deterministic hook",
+      "kind": "gateway",
+      "tool": null,
+      "col": 3,
+      "row": 1,
+      "detail": "Runs every loop step. On a login page it fills credentials, submits, and tells the agent the harness logged in.",
+      "tradeoff": "Almost free when not on a login page, and secrets stay in harness code, not the model.",
+      "cite": "15:40"
+    },
+    {
+      "id": "trace",
+      "label": "Trace history",
+      "role": "Record of every step",
+      "kind": "monitor",
+      "tool": "OpenTelemetry",
+      "toolFromTalk": false,
+      "col": 3,
+      "row": 2,
+      "detail": "Every agent event is pushed into one history list. The harness reads it later instead of trusting the model's word.",
+      "tradeoff": "The logs showed the first agent clicked upvote, hit a login screen, and still called it a success.",
+      "cite": "09:30"
+    },
+    {
+      "id": "verify",
+      "label": "Verify step",
+      "role": "Checks the work is real",
+      "kind": "eval",
+      "tool": null,
+      "col": 4,
+      "row": 1,
+      "detail": "Plain code checks the trace: did the upvote click really succeed, and did any login step fail or go unhandled?",
+      "tradeoff": "In a coding agent, the same step runs lint and tests to make sure nothing broke.",
+      "cite": "14:00"
+    }
+  ],
+  "edges": [
+    {
+      "from": "harness",
+      "to": "loop",
+      "label": "starts attempt"
+    },
+    {
+      "from": "context",
+      "to": "loop",
+      "label": "messages"
+    },
+    {
+      "from": "guardrails",
+      "to": "loop",
+      "label": "caps steps"
+    },
+    {
+      "from": "loop",
+      "to": "model",
+      "label": "next step?"
+    },
+    {
+      "from": "model",
+      "to": "tools",
+      "label": "tool call"
+    },
+    {
+      "from": "tools",
+      "to": "login",
+      "label": "each step"
+    },
+    {
+      "from": "login",
+      "to": "trace",
+      "label": "push events"
+    },
+    {
+      "from": "trace",
+      "to": "verify",
+      "label": "reads history"
+    },
+    {
+      "from": "verify",
+      "to": "harness",
+      "label": "retry, max 3"
+    }
+  ],
+  "flow": [
+    {
+      "node": "harness",
+      "text": "Starts attempt one of at most three for the upvote task."
+    },
+    {
+      "node": "context",
+      "text": "Packs a basic system prompt and the task into messages."
+    },
+    {
+      "node": "loop",
+      "text": "Loops until the model says it is done, capped at six steps."
+    },
+    {
+      "node": "model",
+      "text": "GPT-3.5 Turbo picks the next action, like clicking upvote."
+    },
+    {
+      "node": "tools",
+      "text": "Playwright clicks upvote and Hacker News redirects to a login page."
+    },
+    {
+      "node": "login",
+      "text": "The harness spots the login page, signs in, and tells the agent."
+    },
+    {
+      "node": "trace",
+      "text": "Each step's events are pushed into the trace history."
+    },
+    {
+      "node": "verify",
+      "text": "Code checks the trace for a real upvote before reporting success."
+    }
+  ],
+  "takeaways": [
+    {
+      "text": "A harness is everything around the model that grounds it in reality. The goal is reliability.",
+      "cite": "04:00"
+    },
+    {
+      "text": "The prompt never changed. Harness code alone turned a failing GPT-3.5 Turbo agent into one that worked.",
+      "cite": "18:30"
+    },
+    {
+      "text": "With a great harness, cheap or free models can go very far.",
+      "cite": "17:40"
+    }
+  ]
+}

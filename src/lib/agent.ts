@@ -11,3 +11,15 @@ export const OPEN_AGENT_EVENT = "open-chatbot";
 export function openAgent(prompt?: string) {
     window.dispatchEvent(new CustomEvent(OPEN_AGENT_EVENT, { detail: prompt }));
 }
+
+// Open the console ready for one of Axon's modes (fit, build, learn…), cursor in the box
+export const OPEN_MODE_EVENT = "axon-open-mode";
+export function openAgentMode(mode: string) {
+    window.dispatchEvent(new CustomEvent(OPEN_MODE_EVENT, { detail: mode }));
+}
+
+// Start the guided tour (src/components/chat/AxonTour.tsx); pass a persona to skip the question
+export const TOUR_EVENT = "axon-tour";
+export function startTour(persona?: "hiring" | "building" | "learning") {
+    window.dispatchEvent(new CustomEvent(TOUR_EVENT, { detail: persona }));
+}

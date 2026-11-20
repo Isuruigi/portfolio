@@ -1,0 +1,6 @@
+allowBuilds:
+  '@google/genai': true
+  '@livekit/blingfire': true
+  '@livekit/local-inference': true
+  protobufjs: true
+  onnxruntime-node: true

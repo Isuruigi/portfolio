@@ -99,7 +99,7 @@ function LeadStory({ story, now }: { story: Story; now: number }) {
             href={story.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="group grid grid-cols-1 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.02] transition-colors hover:border-ember/40 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ember md:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]"
+            className="group grid grid-cols-1 overflow-hidden rounded-3xl border border-fg/10 bg-fg/[0.02] transition-colors hover:border-ember/40 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ember md:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]"
         >
             <div className="relative aspect-[16/10] overflow-hidden md:aspect-auto md:min-h-[22rem]">
                 <StoryImage src={story.image} source={story.source} className="absolute inset-0" />
@@ -126,7 +126,7 @@ function StoryCard({ story, now }: { story: Story; now: number }) {
             href={story.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex h-full flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] transition-colors hover:border-ember/40 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ember"
+            className="group flex h-full flex-col overflow-hidden rounded-2xl border border-fg/10 bg-fg/[0.02] transition-colors hover:border-ember/40 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ember"
         >
             <div className="relative aspect-[16/9] overflow-hidden">
                 <StoryImage src={story.image} source={story.source} className="absolute inset-0" />
@@ -150,7 +150,7 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
             onClick={onClick}
             aria-pressed={active}
             className={`shrink-0 cursor-pointer rounded-full border px-3.5 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember ${
-                active ? "border-ember bg-ember/10 text-ink" : "border-white/10 text-ash hover:border-white/25 hover:text-ink"
+                active ? "border-ember bg-ember/10 text-ink" : "border-fg/10 text-ash hover:border-fg/25 hover:text-ink"
             }`}
         >
             {children}
@@ -236,13 +236,13 @@ export default function Newsroom() {
                     </div>
                 </div>
 
-                {failed && <p className="mt-12 border-t border-white/10 pt-6 text-ash">Today&apos;s news didn&apos;t load. Try again in a moment.</p>}
+                {failed && <p className="mt-12 border-t border-fg/10 pt-6 text-ash">Today&apos;s news didn&apos;t load. Try again in a moment.</p>}
 
                 {!data && !failed && (
                     <div className="mt-12 grid animate-pulse grid-cols-1 gap-5 md:grid-cols-2" aria-busy="true" aria-label="Loading news">
-                        <div className="h-80 rounded-3xl bg-white/[0.04] md:col-span-2" />
-                        <div className="h-64 rounded-2xl bg-white/[0.03]" />
-                        <div className="h-64 rounded-2xl bg-white/[0.03]" />
+                        <div className="h-80 rounded-3xl bg-fg/[0.04] md:col-span-2" />
+                        <div className="h-64 rounded-2xl bg-fg/[0.03]" />
+                        <div className="h-64 rounded-2xl bg-fg/[0.03]" />
                     </div>
                 )}
 
@@ -276,7 +276,7 @@ export default function Newsroom() {
                         <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_19rem]">
                             <div aria-live="polite">
                                 {stories.length === 0 ? (
-                                    <p className="border-t border-white/10 pt-6 text-ash">Nothing on {topic} for this day yet.</p>
+                                    <p className="border-t border-fg/10 pt-6 text-ash">Nothing on {topic} for this day yet.</p>
                                 ) : (
                                     <>
                                         {lead && <LeadStory story={lead} now={now} />}
@@ -291,7 +291,7 @@ export default function Newsroom() {
                                             <button
                                                 type="button"
                                                 onClick={() => setShown((n) => n + PAGE)}
-                                                className="mt-8 w-full cursor-pointer rounded-full border border-white/15 py-3 text-sm text-ash transition-colors hover:border-ember hover:text-ember focus-visible:outline-2 focus-visible:outline-ember"
+                                                className="mt-8 w-full cursor-pointer rounded-full border border-fg/15 py-3 text-sm text-ash transition-colors hover:border-ember hover:text-ember focus-visible:outline-2 focus-visible:outline-ember"
                                             >
                                                 Show {Math.min(PAGE, rest.length - shown)} more of {rest.length - shown}
                                             </button>
@@ -304,14 +304,14 @@ export default function Newsroom() {
                                 {data.papers.length > 0 && (
                                     <div>
                                         <h3 className="text-sm text-ash">Top papers on Hugging Face</h3>
-                                        <ol className="mt-3 border-t border-white/10">
+                                        <ol className="mt-3 border-t border-fg/10">
                                             {data.papers.slice(0, 5).map((p) => (
                                                 <li key={p.link}>
                                                     <a
                                                         href={p.link}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
-                                                        className="group flex gap-3 border-b border-white/10 py-3.5 focus-visible:outline-2 focus-visible:outline-ember"
+                                                        className="group flex gap-3 border-b border-fg/10 py-3.5 focus-visible:outline-2 focus-visible:outline-ember"
                                                     >
                                                         <span className="flex w-9 shrink-0 flex-col items-center font-mono text-[11px] tabular-nums text-ember">
                                                             <ChevronUp className="h-3.5 w-3.5" aria-hidden="true" />
@@ -329,14 +329,14 @@ export default function Newsroom() {
                                 {data.releases.length > 0 && (
                                     <div>
                                         <h3 className="text-sm text-ash">Shipped in the tools I use</h3>
-                                        <ul className="mt-3 border-t border-white/10">
+                                        <ul className="mt-3 border-t border-fg/10">
                                             {data.releases.map((r) => (
                                                 <li key={r.repo}>
                                                     <a
                                                         href={r.link}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
-                                                        className="group flex items-baseline justify-between gap-3 border-b border-white/10 py-3 focus-visible:outline-2 focus-visible:outline-ember"
+                                                        className="group flex items-baseline justify-between gap-3 border-b border-fg/10 py-3 focus-visible:outline-2 focus-visible:outline-ember"
                                                     >
                                                         <span className="min-w-0">
                                                             <span className="block text-sm transition-colors group-hover:text-ember">{r.repo.split("/")[1]}</span>

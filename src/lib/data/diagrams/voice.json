@@ -1,0 +1,242 @@
+{
+  "domain": "voice",
+  "title": "How a voice agent answers in about 600 ms",
+  "subtitle": "Speech flows through turn detection, speech to text, an LLM and text to speech inside one tight latency budget.",
+  "org": "Together AI & LiveKit",
+  "hook": "Callers notice past 500 ms, and turn detection listens to intonation, not just silence.",
+  "metric": {
+    "label": "Latency budget",
+    "unit": "ms"
+  },
+  "sources": [
+    {
+      "title": "Engineering voice agents: Latency, quality, and scale",
+      "speaker": "Rishabh Bhargava",
+      "org": "Together AI",
+      "videoId": "N7b1PJc7SFc",
+      "url": "https://www.youtube.com/watch?v=N7b1PJc7SFc",
+      "kind": "talk"
+    },
+    {
+      "title": "How to Build Voice Agents That Don't Fall Apart When You Interrupt",
+      "speaker": "Jesse Hall",
+      "org": "LiveKit",
+      "videoId": "OmyqelTwpOo",
+      "url": "https://www.youtube.com/watch?v=OmyqelTwpOo",
+      "kind": "talk"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "caller",
+      "label": "Caller",
+      "role": "Speaks and interrupts",
+      "kind": "person",
+      "tool": "Twilio",
+      "toolFromTalk": false,
+      "col": 0,
+      "row": 1,
+      "detail": "A real person on the phone, often on speakerphone in traffic with kids in the back seat, not clean benchmark audio.",
+      "tradeoff": "People answer each other in about 300 ms; once an agent takes more than 500 ms, callers notice.",
+      "cite": "02:59"
+    },
+    {
+      "id": "orchestrator",
+      "label": "Agent orchestrator",
+      "role": "Routes audio between models",
+      "kind": "service",
+      "tool": "LiveKit",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 0,
+      "detail": "Receives the caller's streamed audio chunks and wires speech to text, the LLM and text to speech together. Pipecat and LiveKit are common choices.",
+      "tradeoff": "In a pipeline, handling interruptions and barge-ins takes a lot more engineering than in a speech-to-speech model.",
+      "cite": "16:17"
+    },
+    {
+      "id": "stt",
+      "label": "Speech to text",
+      "role": "The agent's ears",
+      "kind": "model",
+      "tool": "Whisper",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 1,
+      "detail": "Turns streamed audio into text; the best models get about 6% of words wrong on open benchmarks. A misheard name carries through every later step.",
+      "tradeoff": "Whisper was trained on 30-second clips; newer streaming models look ahead only 80 ms to 1 second.",
+      "cite": "05:26"
+    },
+    {
+      "id": "turn",
+      "label": "Turn detector",
+      "role": "Decides when you're done",
+      "kind": "eval",
+      "tool": "LiveKit",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 1,
+      "detail": "Decides whether a pause means the caller has finished. LiveKit's model listens to rhythm, pitch and intonation, not only the transcript.",
+      "tradeoff": "A leading alternative cut callers off 9.9% of the time; LiveKit's cut them off 4.5% on its hotel agent.",
+      "cite": "13:05",
+      "src": 1
+    },
+    {
+      "id": "llm",
+      "label": "LLM",
+      "role": "The agent's brain",
+      "kind": "model",
+      "tool": "Gemma",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 1,
+      "detail": "Reads the transcript, decides whether to call a tool, and streams a reply. Text to speech needs a whole sentence, so time to first sentence matters.",
+      "tradeoff": "About 300 ms to first token is the target, which points to 8B to 30B models; bigger burns the budget.",
+      "cite": "08:48"
+    },
+    {
+      "id": "tools",
+      "label": "Async tools",
+      "role": "Does the real work",
+      "kind": "tool",
+      "tool": "LiveKit Agents",
+      "toolFromTalk": false,
+      "col": 3,
+      "row": 2,
+      "detail": "Looks up transactions, checks payment status or files disputes. Awaiting the call separately lets the conversation keep going meanwhile.",
+      "tradeoff": "Some back-end calls take tens of seconds; that can't be hidden, so the agent keeps talking like a human would.",
+      "cite": "09:49",
+      "src": 1
+    },
+    {
+      "id": "tts",
+      "label": "Text to speech",
+      "role": "The agent's voice",
+      "kind": "model",
+      "tool": "Cartesia",
+      "toolFromTalk": false,
+      "col": 4,
+      "row": 1,
+      "detail": "Turns each sentence into audio chunks streamed back to the caller, ideally with the right accent, pronunciation and emotion.",
+      "tradeoff": "The 200 ms here is the top of the 100 to 200 ms time to first audio the talk gives for a whole optimized setup, not a TTS-only figure.",
+      "cite": "13:19"
+    },
+    {
+      "id": "infra",
+      "label": "Co-located inference",
+      "role": "Keeps the models close",
+      "kind": "gpu",
+      "tool": "Together AI",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 0,
+      "detail": "Runs the models in the same data center as the orchestrator scales up early, and scales down only once live calls have finished.",
+      "tradeoff": "Cutting network hops from 75 ms to 5 ms made an already tuned agent about 30% faster.",
+      "cite": "14:02"
+    }
+  ],
+  "edges": [
+    {
+      "from": "caller",
+      "to": "orchestrator",
+      "label": "audio chunks"
+    },
+    {
+      "from": "orchestrator",
+      "to": "stt",
+      "label": "audio"
+    },
+    {
+      "from": "stt",
+      "to": "turn",
+      "label": "transcript"
+    },
+    {
+      "from": "turn",
+      "to": "llm",
+      "label": "end of turn"
+    },
+    {
+      "from": "llm",
+      "to": "tools",
+      "label": "async call"
+    },
+    {
+      "from": "tools",
+      "to": "llm",
+      "label": "result"
+    },
+    {
+      "from": "llm",
+      "to": "tts",
+      "label": "first sentence"
+    },
+    {
+      "from": "tts",
+      "to": "caller",
+      "label": "reply audio"
+    },
+    {
+      "from": "infra",
+      "to": "llm",
+      "label": "hosts"
+    },
+    {
+      "from": "infra",
+      "to": "tts",
+      "label": "hosts"
+    }
+  ],
+  "flow": [
+    {
+      "node": "caller",
+      "text": "Caller says they want to pay on the 3rd, then pauses."
+    },
+    {
+      "node": "orchestrator",
+      "text": "Streams the caller's audio chunks to speech to text."
+    },
+    {
+      "node": "stt",
+      "text": "Finishes the transcript about 100 ms after the caller stops talking.",
+      "ms": 100
+    },
+    {
+      "node": "turn",
+      "text": "Hears the falling intonation and decides the caller's turn has ended."
+    },
+    {
+      "node": "llm",
+      "text": "Streams a reply and fires the payment tool without waiting on it.",
+      "ms": 300
+    },
+    {
+      "node": "tools",
+      "text": "Schedules the payment in the background while the conversation continues."
+    },
+    {
+      "node": "tts",
+      "text": "Speaks the first full sentence as soon as the LLM finishes it.",
+      "ms": 200
+    },
+    {
+      "node": "caller",
+      "text": "Hears the reply; a gap near 600 ms feels human."
+    }
+  ],
+  "takeaways": [
+    {
+      "text": "People reply in about 300 ms; past 500 ms callers notice, and at one to two seconds they hang up.",
+      "cite": "02:59"
+    },
+    {
+      "text": "Hearing intonation, not just pauses, keeps the agent from cutting off a caller who says 'five hundred...' mid-amount.",
+      "cite": "13:46",
+      "src": 1
+    },
+    {
+      "text": "Pick the stack by running simulated callers through whole conversations; leaderboards score single models on clean audio.",
+      "cite": "15:59",
+      "src": 1
+    }
+  ]
+}

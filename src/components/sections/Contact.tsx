@@ -16,8 +16,8 @@ const elsewhere = socials;
 
 // Shared input styling; the border turns warm on error
 const fieldClass = (invalid?: boolean) =>
-    `w-full rounded-xl border bg-white/[0.03] px-4 py-3 text-ink placeholder:text-ash/60 transition-colors focus:outline-none focus-visible:border-ember focus-visible:ring-2 focus-visible:ring-ember/30 ${
-        invalid ? "border-inferno-3" : "border-white/10"
+    `w-full rounded-xl border bg-fg/[0.03] px-4 py-3 text-ink placeholder:text-ash/60 transition-colors focus:outline-none focus-visible:border-ember focus-visible:ring-2 focus-visible:ring-ember/30 ${
+        invalid ? "border-inferno-3" : "border-fg/10"
     }`;
 
 
@@ -222,7 +222,7 @@ export default function Contact() {
                                     onClick={() => chooseDoor(d.subject)}
                                     aria-pressed={chosen}
                                     className={`cursor-pointer rounded-2xl border p-6 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember ${
-                                        chosen ? "border-ember bg-ember/10" : "border-white/10 hover:border-ember/50 hover:bg-white/[0.03]"
+                                        chosen ? "border-ember bg-ember/10" : "border-fg/10 hover:border-ember/50 hover:bg-fg/[0.03]"
                                     }`}
                                 >
                                     <span className="block font-display text-2xl font-light tracking-[-0.02em] text-ink">{d.title}</span>
@@ -237,9 +237,9 @@ export default function Contact() {
                     {/* Left Column - Contact Information */}
                     <div>
                         <h3 className="font-display text-2xl font-light tracking-[-0.02em]">Or reach out directly</h3>
-                        <dl className="mt-6 border-t border-white/10">
+                        <dl className="mt-6 border-t border-fg/10">
                             {contactInfo.map((info) => (
-                                <div key={info.label} className="grid grid-cols-[6.5rem_minmax(0,1fr)] gap-4 border-b border-white/10 py-4">
+                                <div key={info.label} className="grid grid-cols-[6.5rem_minmax(0,1fr)] gap-4 border-b border-fg/10 py-4">
                                     <dt className="text-sm text-ash">{info.label}</dt>
                                     <dd className="flex min-w-0 items-center gap-2 text-[15px]">
                                         <span className="break-words">{info.value}</span>
@@ -248,7 +248,7 @@ export default function Contact() {
                                                 type="button"
                                                 onClick={() => copyToClipboard(info.value, info.label)}
                                                 aria-label={`Copy ${info.label.toLowerCase()}`}
-                                                className="shrink-0 cursor-pointer rounded p-1 text-ash transition-colors hover:bg-white/10 hover:text-ink focus-visible:outline-2 focus-visible:outline-ember"
+                                                className="shrink-0 cursor-pointer rounded p-1 text-ash transition-colors hover:bg-fg/10 hover:text-ink focus-visible:outline-2 focus-visible:outline-ember"
                                             >
                                                 {copiedField === info.label ? (
                                                     <Check className="h-4 w-4 text-ember" aria-hidden="true" />
@@ -373,7 +373,7 @@ export default function Contact() {
                                     onChange={(e) => handleChange("subject", e.target.value)}
                                     onBlur={() => handleBlur("subject")}
                                     name="subject"
-                                    className={`${fieldClass(!!(touched.subject && errors.subject))} cursor-pointer bg-[#0b0a12] text-ink`}
+                                    className={`${fieldClass(!!(touched.subject && errors.subject))} cursor-pointer bg-surface text-ink`}
                                 >
                                     <option value="">Choose a subject…</option>
                                     {subjectOptions.map((option) => (
@@ -423,11 +423,11 @@ export default function Contact() {
                             <button
                                 type="submit"
                                 disabled={status === "loading" || status === "success"}
-                                className="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-ember font-medium text-void transition-colors hover:bg-inferno-5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember disabled:cursor-not-allowed disabled:opacity-70"
+                                className="flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full bg-ember font-medium text-on-ember transition-colors hover:bg-inferno-5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember disabled:cursor-not-allowed disabled:opacity-70"
                             >
                                 {status === "loading" && (
                                     <>
-                                        <span className="h-4 w-4 animate-spin rounded-full border-2 border-void/30 border-t-void" aria-hidden="true" />
+                                        <span className="h-4 w-4 animate-spin rounded-full border-2 border-on-ember/30 border-t-on-ember" aria-hidden="true" />
                                         Sending…
                                     </>
                                 )}

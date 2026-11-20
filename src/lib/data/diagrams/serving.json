@@ -1,0 +1,258 @@
+{
+  "domain": "serving",
+  "title": "How an LLM is served on Kubernetes GPUs",
+  "subtitle": "A request enters the cluster, a cache-aware router picks GPU pods, and prefill and decode run on separate workers.",
+  "org": "Red Hat & Modal",
+  "hook": "Splitting prefill from decode cut P99 inter-token latency from 900 ms to 100 ms.",
+  "metric": null,
+  "sources": [
+    {
+      "title": "KV Cache-Aware Routing and P/D Disaggregation on Kubernetes",
+      "speaker": "Yuchen Fama & Ashish Kamra",
+      "org": "Red Hat",
+      "videoId": "YXowceUKYJI",
+      "url": "https://www.youtube.com/watch?v=YXowceUKYJI",
+      "kind": "talk"
+    },
+    {
+      "title": "What Is an Inference Engine, Anyway?",
+      "speaker": "Charles Frye",
+      "org": "Modal",
+      "videoId": "woIYJYd_etI",
+      "url": "https://www.youtube.com/watch?v=woIYJYd_etI",
+      "kind": "talk"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "client",
+      "label": "Agent client",
+      "role": "Sends multi-turn requests",
+      "kind": "person",
+      "tool": "Claude Code",
+      "toolFromTalk": true,
+      "col": 0,
+      "row": 1,
+      "detail": "Coding agents send turn after turn that reuse the same system prompt and tool definitions. The team studied traces from SWE-bench and real Claude Code sessions, from a few turns up to 3,000.",
+      "tradeoff": "Cache hit rates often exceed 90%, and input can be over 100 times the output.",
+      "cite": "04:06"
+    },
+    {
+      "id": "gateway",
+      "label": "Cluster gateway",
+      "role": "Front door to the cluster",
+      "kind": "gateway",
+      "tool": "Kubernetes",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 1,
+      "detail": "The request enters the Kubernetes cluster at a gateway, which hands it to the router. llm-d is a Kubernetes-native inference framework under the CNCF, and the model servers run as pods (containers) in the cluster.",
+      "tradeoff": "Default Kubernetes scheduling, which ignores the cache, was the slowest baseline in Red Hat's tests.",
+      "cite": "12:05"
+    },
+    {
+      "id": "router",
+      "label": "KV-aware router",
+      "role": "Picks the best GPU pod",
+      "kind": "gateway",
+      "tool": "llm-d",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 1,
+      "detail": "llm-d's endpoint picker keeps probing each vLLM pod: running and waiting requests, KV cache use, and which prompt prefixes are cached. It sends the request to a lightly loaded pod most likely to get a cache hit.",
+      "tradeoff": "In the demo a cold turn took about 3 seconds; a turn reusing the cached system prompt took about 1.",
+      "cite": "06:31"
+    },
+    {
+      "id": "prefill",
+      "label": "Prefill workers",
+      "role": "Reads the whole prompt",
+      "kind": "gpu",
+      "tool": "vLLM",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 1,
+      "detail": "Pods running the vLLM inference engine on GPUs. Prefill processes the full prompt in one compute-heavy, bursty pass and builds its KV cache; the engine's scheduler batches requests so the GPU stays busy.",
+      "tradeoff": "On an agentic workload with a 45:1 input-to-output ratio, 2 prefill + 1 decode workers gave 4x faster first token and 60% more requests.",
+      "cite": "20:07"
+    },
+    {
+      "id": "kvxfer",
+      "label": "KV transfer",
+      "role": "Moves cache between GPUs",
+      "kind": "queue",
+      "tool": "NIXL",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 2,
+      "detail": "The prefill worker outputs KV transfer metadata. The decode worker uses it to pull the computed KV cache across the network fabric.",
+      "tradeoff": "Needs a fast fabric such as RDMA or RoCE; without one, the speakers advise staying with aggregated serving.",
+      "cite": "16:33"
+    },
+    {
+      "id": "decode",
+      "label": "Decode workers",
+      "role": "Streams the answer",
+      "kind": "gpu",
+      "tool": "vLLM",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 1,
+      "detail": "Separate vLLM pods generate one token at a time from the transferred cache. Decode is memory-bandwidth hungry and latency sensitive, so keeping long prefills off these GPUs stops them stalling the token stream.",
+      "tradeoff": "Splitting prefill from decode cut P99 inter-token latency from about 900 ms to 100 ms on 16 H100s.",
+      "cite": "13:12"
+    },
+    {
+      "id": "kvstore",
+      "label": "KV cache tiers",
+      "role": "Keeps context warm",
+      "kind": "cache",
+      "tool": "Mooncake",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 2,
+      "detail": "The KV cache stores attention state for tokens already processed, so a shared prefix is not recomputed. llm-d is adding offload tiers like NVMe SSD and KV stores like Mooncake, plus session-aware eviction.",
+      "tradeoff": "Frye treats heavy spilling to CPU memory and disk like OS swap: a sign the deployment is under-provisioned.",
+      "cite": "45:53",
+      "src": 1
+    },
+    {
+      "id": "metrics",
+      "label": "Pod metrics",
+      "role": "Watches load and latency",
+      "kind": "monitor",
+      "tool": "Prometheus",
+      "toolFromTalk": false,
+      "col": 2,
+      "row": 0,
+      "detail": "Each vLLM pod reports queue depth and KV cache use, which the router reads. Dashboards track time to first token and inter-token latency per replica.",
+      "tradeoff": "In Frye's traffic spike, queuing raised time to first token, then inter-token latency, until new replicas came online.",
+      "cite": "56:46",
+      "src": 1
+    },
+    {
+      "id": "autoscaler",
+      "label": "Autoscaler",
+      "role": "Scales GPU pools",
+      "kind": "cluster",
+      "tool": "llm-d",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 0,
+      "detail": "Watches capacity and the live traffic mix, then scales prefill and decode pods up or down independently.",
+      "tradeoff": "A fixed prefill-to-decode ratio is only a start; it has to shift with traffic.",
+      "cite": "17:30"
+    }
+  ],
+  "edges": [
+    {
+      "from": "client",
+      "to": "gateway",
+      "label": "HTTP request"
+    },
+    {
+      "from": "gateway",
+      "to": "router"
+    },
+    {
+      "from": "router",
+      "to": "prefill",
+      "label": "prefill job"
+    },
+    {
+      "from": "router",
+      "to": "decode",
+      "label": "decode slot"
+    },
+    {
+      "from": "prefill",
+      "to": "kvxfer",
+      "label": "KV metadata"
+    },
+    {
+      "from": "kvxfer",
+      "to": "decode",
+      "label": "KV pulled"
+    },
+    {
+      "from": "prefill",
+      "to": "kvstore",
+      "label": "offload KV"
+    },
+    {
+      "from": "kvstore",
+      "to": "router",
+      "label": "prefix hits"
+    },
+    {
+      "from": "prefill",
+      "to": "metrics",
+      "label": "pod metrics"
+    },
+    {
+      "from": "metrics",
+      "to": "router",
+      "label": "load scores"
+    },
+    {
+      "from": "metrics",
+      "to": "autoscaler",
+      "label": "load signals"
+    },
+    {
+      "from": "autoscaler",
+      "to": "prefill",
+      "label": "scale pool"
+    },
+    {
+      "from": "autoscaler",
+      "to": "decode",
+      "label": "scale pool"
+    }
+  ],
+  "flow": [
+    {
+      "node": "client",
+      "text": "A coding agent sends its next turn with the same long system prompt."
+    },
+    {
+      "node": "gateway",
+      "text": "The request enters the Kubernetes cluster through the gateway."
+    },
+    {
+      "node": "router",
+      "text": "The endpoint picker chooses pods by load and cached prefix."
+    },
+    {
+      "node": "prefill",
+      "text": "vLLM reads the prompt on GPU, reusing cached KV, and builds the rest."
+    },
+    {
+      "node": "kvxfer",
+      "text": "The decode pod pulls the KV cache over the fast network."
+    },
+    {
+      "node": "decode",
+      "text": "vLLM streams tokens back; P99 gap between tokens about 100 ms.",
+      "ms": 100
+    },
+    {
+      "node": "metrics",
+      "text": "Pod metrics update; the autoscaler adds pods if queues grow."
+    }
+  ],
+  "takeaways": [
+    {
+      "text": "Cache-aware routing alone beat default Kubernetes scheduling, before splitting prefill and decode.",
+      "cite": "14:25"
+    },
+    {
+      "text": "Separating prefill and decode made P99 inter-token latency about nine times better: 900 ms to 100 ms.",
+      "cite": "13:30"
+    },
+    {
+      "text": "Disaggregation is a trade-off: best at mid concurrency with long prompts, and needs RDMA-class networking.",
+      "cite": "16:07"
+    }
+  ]
+}

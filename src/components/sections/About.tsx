@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
+import { LEARNING, PROFICIENT, STACK } from "../../../axon/stack.js";
 
 const facts = [
     { term: "Now", detail: "AI/ML Engineer at Veracity Digital", highlight: true },
@@ -15,29 +16,9 @@ const inProduction = [
     { name: "Cost-Aware Fraud Detection", line: "Deployed with monitoring and 92% test coverage", href: "#fraud" },
 ];
 
-// The toolbox, grouped by what it's for. Proficient tools come first in each group.
-const stack = [
-    { area: "Languages", tools: ["Python", "TypeScript", "R"] },
-    { area: "LLMs & agents", tools: ["LangGraph", "LangChain", "Groq", "CrewAI", "MCP", "OpenAI", "Anthropic", "Transformers", "vLLM", "LoRA / PEFT"] },
-    { area: "Retrieval", tools: ["Qdrant", "RAG", "GraphRAG", "Neo4j", "ChromaDB", "Tavily"] },
-    { area: "Voice", tools: ["Twilio", "Deepgram", "Edge TTS", "Gemini Live", "ElevenLabs"] },
-    { area: "ML", tools: ["PyTorch", "scikit-learn", "Pandas", "NumPy", "XGBoost", "TensorFlow", "Keras", "OpenCV"] },
-    { area: "MLOps", tools: ["FastAPI", "Docker", "Kubernetes", "MLflow", "LangSmith", "Prometheus", "Grafana", "CI/CD"] },
-    { area: "Data", tools: ["PostgreSQL", "Kafka", "Redpanda", "Airflow", "PySpark", "Redis", "Dragonfly"] },
-    { area: "Automation", tools: ["n8n", "Make", "Zapier"] },
-    { area: "Cloud", tools: ["GCP / Vertex AI", "AWS / Bedrock", "Azure OpenAI", "Oracle Cloud"] },
-    { area: "Web", tools: ["Next.js", "Cloudflare Workers", "Playwright"] },
-];
-
-// Learned recently and practised in side builds and the bootcamp lab, not yet run in production
-const learning = [
-    {
-        area: "Agent architectures",
-        tools: ["Parallel agents (Grok Heavy-style)", "Orchestrator–workers", "Planner–executor", "Evaluator–optimizer", "Agentic RAG", "Tiered agent memory", "A2A protocol"],
-    },
-    { area: "Agent harnesses", tools: ["Claude Agent SDK", "Claude Code", "OpenAI Agents SDK", "Codex", "Google ADK", "Vercel AI SDK"] },
-    { area: "Evals & guardrails", tools: ["lm-eval-harness", "promptfoo", "RAGAS", "DeepEval", "Langfuse", "OpenTelemetry", "Llama Guard", "NeMo Guardrails"] },
-];
+// The toolbox lives in axon/stack.js, shared with Axon and the search data: add a tool there.
+const stack = STACK;
+const learning = LEARNING;
 
 const links = [
     { label: "LinkedIn", href: "https://www.linkedin.com/in/isuruig" },
@@ -82,12 +63,12 @@ export default function About() {
 
                     <div className="mt-12">
                         <h3 className="text-sm text-ash">In production</h3>
-                        <ul className="mt-3 border-t border-white/10">
+                        <ul className="mt-3 border-t border-fg/10">
                             {inProduction.map((p) => (
                                 <li key={p.name}>
                                     <a
                                         href={p.href}
-                                        className="group grid grid-cols-1 gap-1 border-b border-white/10 py-4 transition-colors hover:bg-white/[0.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember sm:grid-cols-[minmax(0,15rem)_minmax(0,1fr)_1rem] sm:items-baseline sm:gap-6"
+                                        className="group grid grid-cols-1 gap-1 border-b border-fg/10 py-4 transition-colors hover:bg-fg/[0.02] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember sm:grid-cols-[minmax(0,15rem)_minmax(0,1fr)_1rem] sm:items-baseline sm:gap-6"
                                     >
                                         <span className="flex items-center gap-2.5 font-medium group-hover:text-ember">
                                             <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-ember" aria-hidden="true" />
@@ -101,9 +82,9 @@ export default function About() {
                         </ul>
                     </div>
 
-                    <dl className="mt-12 border-t border-white/10">
+                    <dl className="mt-12 border-t border-fg/10">
                         {facts.map((f) => (
-                            <div key={f.term} className="grid grid-cols-1 gap-1 border-b border-white/10 py-4 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-6">
+                            <div key={f.term} className="grid grid-cols-1 gap-1 border-b border-fg/10 py-4 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-6">
                                 <dt className="text-sm text-ash">{f.term}</dt>
                                 <dd className={`flex items-center gap-2.5 text-[15px] ${f.highlight ? "font-medium text-ink" : ""}`}>
                                     {f.highlight && (
@@ -116,14 +97,16 @@ export default function About() {
                     </dl>
 
                     <div className="mt-12">
-                        <h3 className="text-sm text-ash">Stack</h3>
-                        <dl className="mt-3 border-t border-white/10">
+                        <h3 className="text-sm text-ash">
+                            Stack <span className="text-ash/70">· always growing; ember outline = most used</span>
+                        </h3>
+                        <dl className="mt-3 border-t border-fg/10">
                             {stack.map((s) => (
-                                <div key={s.area} className="grid grid-cols-1 gap-2 border-b border-white/10 py-4 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-6">
+                                <div key={s.area} className="grid grid-cols-1 gap-2 border-b border-fg/10 py-4 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-6">
                                     <dt className="text-sm text-ash">{s.area}</dt>
                                     <dd className="flex flex-wrap gap-1.5">
                                         {s.tools.map((t) => (
-                                            <span key={t} className="rounded-full border border-white/10 px-2.5 py-0.5 font-mono text-[11px] text-ink/85">
+                                            <span key={t} className={`rounded-full border px-2.5 py-0.5 font-mono text-[11px] ${PROFICIENT.has(t) ? "border-ember/40 text-ink" : "border-fg/10 text-ink/85"}`}>
                                                 {t}
                                             </span>
                                         ))}
@@ -137,9 +120,9 @@ export default function About() {
                         <h3 className="text-sm text-ash">
                             Recently learned <span className="text-ash/70">· side builds and the bootcamp lab, not yet in production</span>
                         </h3>
-                        <dl className="mt-3 border-t border-white/10">
+                        <dl className="mt-3 border-t border-fg/10">
                             {learning.map((s) => (
-                                <div key={s.area} className="grid grid-cols-1 gap-2 border-b border-white/10 py-4 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-6">
+                                <div key={s.area} className="grid grid-cols-1 gap-2 border-b border-fg/10 py-4 sm:grid-cols-[9rem_minmax(0,1fr)] sm:gap-6">
                                     <dt className="text-sm text-ash">{s.area}</dt>
                                     <dd className="flex flex-wrap gap-1.5">
                                         {s.tools.map((t) => (

@@ -2,6 +2,9 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Host_Grotesk, Martian_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import Chatbot from "@/components/Chatbot";
+import AxonTour from "@/components/chat/AxonTour";
+import Cursor from "@/components/Cursor";
+import { SITE, keywords, structuredData } from "@/lib/seo";
 import "./globals.css";
 
 const inter = Inter({
@@ -29,45 +32,35 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Isuru Chathuranga | AI/ML Engineer @ Veracity Digital",
-  description: "AI/ML Engineer at Veracity Digital and Technical Assistant on BuildrLabs.ai's AI Bootcamps, shipping systems that hold up in production, not just notebooks. Agentic AI, RAG and GraphRAG, multi-agent systems, and MLOps with PyTorch, LangGraph, and vLLM. Based in Colombo, Sri Lanka - Remote Ready.",
-  metadataBase: new URL("https://isuruig.com"),
-  keywords: [
-    "AI Engineer",
-    "Agentic AI",
-    "LangGraph",
-    "RAG",
-    "GraphRAG",
-    "vLLM",
-    "ML Engineer",
-    "MLOps",
-    "AIOps",
-    "PyTorch",
-    "LangChain",
-    "Multi-Agent Systems",
-    "LLM Engineering",
-    "Production ML",
-    "Remote Developer",
-    "Sri Lanka",
-    "Open Source Contributor",
-  ],
-  authors: [{ name: "Isuru Chathuranga" }],
+  metadataBase: new URL(SITE.url),
+  title: SITE.title,
+  description: SITE.description,
+  keywords,
+  authors: [{ name: SITE.name, url: SITE.url }],
+  creator: SITE.name,
+  alternates: { canonical: "/" },
   openGraph: {
-    type: "website",
+    type: "profile",
     locale: "en_US",
-    url: "https://isuruig.com",
-    title: "Isuru Chathuranga | AI/ML Engineer",
-    description: "Shipping AI systems that hold up in production, not just notebooks",
-    siteName: "Isuru Chathuranga Portfolio",
+    url: SITE.url,
+    siteName: SITE.name,
+    title: SITE.title,
+    description: SITE.description,
+    firstName: "Isuru",
+    lastName: "Chathuranga",
+    images: [{ url: SITE.image, width: 1200, height: 630, alt: "Isuru Chathuranga, AI/ML Engineer in Colombo, Sri Lanka" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Isuru Chathuranga | AI/ML Engineer",
-    description: "AI systems that hold up in production, not just notebooks",
+    title: SITE.title,
+    description: SITE.description,
+    creator: "@Isuru_ig",
+    images: [SITE.image],
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
   },
 };
 
@@ -79,15 +72,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${hostGrotesk.variable} ${martianMono.variable} font-sans antialiased`}>
+        {/* Structured data: who this page is about, for search engines and AI assistants (src/lib/seo.ts) */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData()).replace(/</g, "\\u003c") }} />
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-          forcedTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange={false}
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
         >
           {children}
           <Chatbot />
+          <AxonTour />
+          <Cursor />
         </ThemeProvider>
       </body>
     </html>

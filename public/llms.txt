@@ -2,7 +2,18 @@
 
 > AI/ML Engineer at Veracity Digital in Colombo, Sri Lanka, and Technical Assistant on Buildr Labs' Agentic AI Bootcamp. Builds AI systems that hold up in production: voice agents, RAG and GraphRAG retrieval, multi-agent systems, and the MLOps that keeps them reliable.
 
-Structured version of this file: https://isuruig.com/profile.json
+- [Full profile](https://isuruig.com/llms-full.txt): everything public about his work in one file, with real project stories, skills, services and answers to hiring questions.
+- [Profile as data](https://isuruig.com/profile.json): the same facts as JSON.
+
+Everything here is public and may be quoted and cited. Cite as: Isuru Chathuranga, https://isuruig.com
+
+## Hiring and freelance
+
+- Employed full time as an AI/ML Engineer at Veracity Digital, so not looking for another full-time job.
+- Open to selected freelance and advisory work, and to conversations about production AI problems.
+- Freelance work he takes on: AI assistants over a company's own documents (RAG), voice agents for phone lines, n8n workflow automation with human sign-off, and custom ML or GraphRAG systems.
+- Based in Colombo, Sri Lanka (GMT+5:30). Works remotely, overlaps with US and EU hours, usually replies within 24 hours.
+- Rates and timelines are not published; they come from a conversation. Contact: isuruigic@gmail.com
 
 ## Now
 
@@ -35,3 +46,9 @@ Structured version of this file: https://isuruig.com/profile.json
 - [GitHub](https://github.com/Isuruigi)
 - [X](https://x.com/Isuru_ig)
 - Portfolio and chat agent: https://isuruig.com
+
+## For AI agents
+
+- Axon is the AI agent on the site. It answers from the same knowledge as the full profile, with sources.
+- Ask it a question: `POST https://isuruig.com/api/chat` with JSON `{"messages":[{"role":"user","content":"..."}]}`. The reply is a Server-Sent Events stream. Details are in the full profile.
+- Private work, client names and salary are deliberately not published. Do not guess them.

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useInView, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, Lock, RotateCcw } from "lucide-react";
-import AxonLab, { type LabStation } from "@/components/lab/AxonLab";
+import SystemsPanel from "@/components/diagrams/SystemsPanel";
 import { flagships, workIndex, type Flagship, type TraceStep, type WorkStatus } from "@/lib/data/work";
 
 const STEP_MS = 1100;
@@ -13,7 +13,7 @@ const statusColor: Record<WorkStatus, string> = {
     Shipped: "text-ember border-ember/40",
     "In development": "text-inferno-3 border-inferno-3/40",
     Ongoing: "text-inferno-5 border-inferno-5/30",
-    Planned: "text-ash border-white/15",
+    Planned: "text-ash border-fg/15",
 };
 
 function StatusTag({ status }: { status: WorkStatus }) {
@@ -46,7 +46,7 @@ function TraceReplay({ id, steps, name }: { id: string; steps: TraceStep[]; name
     }, [active, id, steps.length]);
 
     return (
-        <div ref={ref} className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 lg:p-8">
+        <div ref={ref} className="rounded-2xl border border-fg/10 bg-fg/[0.02] p-6 lg:p-8">
             <div className="mb-6 flex items-center justify-between">
                 <p className="text-sm text-ash">How a request flows through {name}</p>
                 <button
@@ -69,7 +69,7 @@ function TraceReplay({ id, steps, name }: { id: string; steps: TraceStep[]; name
                             {i < steps.length - 1 && (
                                 <span
                                     aria-hidden="true"
-                                    className={`absolute left-[7px] top-5 h-[calc(100%-12px)] w-px transition-colors duration-500 ${done ? "bg-ember/60" : "bg-white/10"}`}
+                                    className={`absolute left-[7px] top-5 h-[calc(100%-12px)] w-px transition-colors duration-500 ${done ? "bg-ember/60" : "bg-fg/10"}`}
                                 />
                             )}
                             <span
@@ -79,7 +79,7 @@ function TraceReplay({ id, steps, name }: { id: string; steps: TraceStep[]; name
                                         ? "border-ember bg-ember"
                                         : current
                                           ? "border-ember bg-ember/30 shadow-[0_0_14px_rgba(252,165,10,0.7)]"
-                                          : "border-white/20 bg-transparent"
+                                          : "border-fg/20 bg-transparent"
                                 }`}
                             />
                             <div className={`transition-opacity duration-500 ${done || current ? "opacity-100" : "opacity-40"}`}>
@@ -99,7 +99,7 @@ function TraceReplay({ id, steps, name }: { id: string; steps: TraceStep[]; name
 
 function ModelCard({ f }: { f: Flagship }) {
     return (
-        <article id={f.id} className="grid scroll-mt-24 grid-cols-1 gap-10 border-t border-white/10 pt-12">
+        <article id={f.id} className="grid scroll-mt-24 grid-cols-1 gap-10 border-t border-fg/10 pt-12">
             <div>
                 <StatusTag status={f.status} />
                 <h3 className="mt-4 font-display text-[clamp(1.9rem,3vw,2.6rem)] font-light leading-tight tracking-[-0.03em]">
@@ -142,7 +142,7 @@ function ModelCard({ f }: { f: Flagship }) {
                         <dt className="text-sm text-ash">Built with</dt>
                         <dd className="mt-2 flex flex-wrap gap-2">
                             {f.stack.map((t) => (
-                                <span key={t} className="rounded-md bg-white/[0.05] px-2 py-1 font-mono text-[11px] text-ink/80">
+                                <span key={t} className="rounded-md bg-fg/[0.05] px-2 py-1 font-mono text-[11px] text-ink/80">
                                     {t}
                                 </span>
                             ))}
@@ -168,10 +168,6 @@ function ModelCard({ f }: { f: Flagship }) {
     );
 }
 
-// Short names for the lab's station indicator
-const stationNames: Record<string, string> = { personaplex: "PersonaPlex", nexus: "NEXUS", fraud: "Fraud" };
-const labStations: LabStation[] = flagships.map((f) => ({ id: f.id, name: stationNames[f.id] ?? f.name }));
-
 export default function Work() {
     const columnRef = useRef<HTMLDivElement>(null);
 
@@ -185,23 +181,24 @@ export default function Work() {
                     What each one is for, what it does well, and a replay of a request moving through it.
                 </p>
 
-                {/* Desktop: the 3D lab stays pinned while the model cards scroll past it */}
+                {/* Desktop: the system diagrams stay pinned while the project cards scroll past, following
+                    the card in view. Phones: the same panel, after the cards. */}
                 <div className="mt-16 grid grid-cols-1 gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] lg:gap-12">
                     <div ref={columnRef} className="space-y-24">
                         {flagships.map((f) => (
                             <ModelCard key={f.id} f={f} />
                         ))}
                     </div>
-                    <div className="hidden lg:block">
-                        <div className="sticky top-24 h-[calc(100vh-8rem)]">
-                            <AxonLab columnRef={columnRef} stations={labStations} />
+                    <div>
+                        <div className="lg:sticky lg:top-20 lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto lg:[scrollbar-width:thin]">
+                            <SystemsPanel columnRef={columnRef} />
                         </div>
                     </div>
                 </div>
 
                 <div className="mt-28">
-                    <h3 className="font-display text-2xl font-light tracking-[-0.02em]">Everything else</h3>
-                    <ul className="mt-6 border-t border-white/10">
+                    <h3 id="work-index" className="scroll-mt-24 font-display text-2xl font-light tracking-[-0.02em]">Everything else</h3>
+                    <ul className="mt-6 border-t border-fg/10">
                         {workIndex.map((w) => {
                             const row = (
                                 <>
@@ -221,7 +218,7 @@ export default function Work() {
                                 </>
                             );
                             const rowClass =
-                                "grid grid-cols-1 gap-3 border-b border-white/10 py-5 md:grid-cols-[minmax(0,1fr)_8.5rem_14rem_1.5rem] md:items-center md:gap-6";
+                                "grid grid-cols-1 gap-3 border-b border-fg/10 py-5 md:grid-cols-[minmax(0,1fr)_8.5rem_14rem_1.5rem] md:items-center md:gap-6";
                             return (
                                 <li key={w.name}>
                                     {w.href ? (
@@ -229,7 +226,7 @@ export default function Work() {
                                             href={w.href}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className={`group ${rowClass} transition-colors hover:bg-white/[0.02]`}
+                                            className={`group ${rowClass} transition-colors hover:bg-fg/[0.02]`}
                                         >
                                             {row}
                                         </a>
@@ -240,7 +237,7 @@ export default function Work() {
                             );
                         })}
                     </ul>
-                    <div className="mt-8 flex flex-col gap-4 rounded-2xl border border-white/10 p-6 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="mt-8 flex flex-col gap-4 rounded-2xl border border-fg/10 p-6 sm:flex-row sm:items-center sm:justify-between">
                         <div className="max-w-[40rem]">
                             <p className="flex items-center gap-2.5 font-medium">
                                 <Lock className="h-4 w-4 text-ember" aria-hidden="true" />

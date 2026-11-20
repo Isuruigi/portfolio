@@ -1,0 +1,163 @@
+{
+  "domain": "memory-harness",
+  "org": "Sakana AI",
+  "title": "How a memory harness keeps long-running agents on track",
+  "subtitle": "Sakana AI's on-device harness: core, recall and archival memory around small local research agents.",
+  "hook": "A ranked ledger of past decisions beat vector RAG, letting a local model recall step 124 at step 500.",
+  "metric": null,
+  "sources": [
+    {
+      "title": "Memory Harnesses for Long-Running Research Agents",
+      "speaker": "Stefania Druga",
+      "org": "Sakana AI",
+      "videoId": "R3-anFK1YM8",
+      "url": "https://www.youtube.com/watch?v=R3-anFK1YM8",
+      "kind": "talk"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "agent",
+      "label": "Research agent",
+      "role": "Works the long task",
+      "kind": "service",
+      "tool": null,
+      "col": 0,
+      "row": 1,
+      "detail": "Small research agents with zero durable memory of their own, so every memory they use has to come from the harness.",
+      "tradeoff": "On long tasks, context rot sets in: the model contradicts itself, redoes work, or drifts from the question.",
+      "cite": "03:49"
+    },
+    {
+      "id": "harness",
+      "label": "Memory harness",
+      "role": "Write, manage, read",
+      "kind": "service",
+      "tool": null,
+      "col": 1,
+      "row": 1,
+      "detail": "Memory is treated as a write, manage, read control loop around the model, not just a database. It logs each turn and assembles what the agent sees.",
+      "tradeoff": "The model stays fixed across tasks; only the recall block's settings change between runs.",
+      "cite": "03:22"
+    },
+    {
+      "id": "core",
+      "label": "Core block",
+      "role": "Always in the window",
+      "kind": "cache",
+      "tool": null,
+      "col": 1,
+      "row": 0,
+      "detail": "A core block of traces that is always shown to the agent on every turn.",
+      "tradeoff": "Core memory is always present; anything older must be fetched by the recall block.",
+      "cite": "04:18"
+    },
+    {
+      "id": "archival",
+      "label": "Archival block",
+      "role": "Memory across sessions",
+      "kind": "store",
+      "tool": null,
+      "col": 1,
+      "row": 2,
+      "detail": "Keeps track of information across different sessions, beyond a single run.",
+      "tradeoff": "The open question is what survives when the agent runs over and over, across many sessions.",
+      "cite": "04:18"
+    },
+    {
+      "id": "recall",
+      "label": "Recall policy",
+      "role": "Chooses what to pull in",
+      "kind": "gateway",
+      "tool": null,
+      "col": 2,
+      "row": 1,
+      "detail": "Tested as a ladder: no recall, vector RAG, a ranked decisions ledger, and an oracle. Ranked-only recall performed best.",
+      "tradeoff": "Ranking beat gating, where the harness first asks whether memory is needed at all.",
+      "cite": "08:17"
+    },
+    {
+      "id": "ledger",
+      "label": "Decisions ledger",
+      "role": "Ranked record of choices",
+      "kind": "store",
+      "tool": null,
+      "col": 2,
+      "row": 2,
+      "detail": "Records the decisions made on every turn so the harness can prioritise and rank them later.",
+      "tradeoff": "Ranked recall was not just more accurate; it also cost less, because bad memory burns tokens.",
+      "cite": "04:49"
+    },
+    {
+      "id": "model",
+      "label": "Local model",
+      "role": "Reasons on device",
+      "kind": "model",
+      "tool": "Qwen",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 1,
+      "detail": "Runs on an M3 Ultra Mac with 96 GB: Qwen 27B quantised to 4-bit, and DeepSeek V4 Flash.",
+      "tradeoff": "DeepSeek V4 Flash runs one query at a time with no batching, so evaluations take days.",
+      "cite": "03:22"
+    },
+    {
+      "id": "grader",
+      "label": "Benchmark check",
+      "role": "Scores the answer",
+      "kind": "eval",
+      "tool": null,
+      "col": 4,
+      "row": 1,
+      "detail": "A long-horizon memory benchmark: the answer sits at step 124, but the question comes at step 500. Run over 68 questions with many seeds.",
+      "tradeoff": "The ranked-recall result held on both local models and on a second benchmark, Spider 2.",
+      "cite": "07:16"
+    },
+    {
+      "id": "oracle",
+      "label": "Oracle recall",
+      "role": "Ground-truth reference",
+      "kind": "eval",
+      "tool": null,
+      "col": 4,
+      "row": 0,
+      "detail": "Hands the harness the correct memory for every loop, as a ground-truth reference for the other recall modes.",
+      "tradeoff": "It still misses the max: the model can get the right memory and ignore it or get confused.",
+      "cite": "08:44"
+    }
+  ],
+  "edges": [
+    { "from": "agent", "to": "harness", "label": "every turn" },
+    { "from": "harness", "to": "ledger", "label": "writes decisions" },
+    { "from": "harness", "to": "archival", "label": "saves sessions" },
+    { "from": "harness", "to": "recall", "label": "what's relevant?" },
+    { "from": "ledger", "to": "recall", "label": "ranked entries" },
+    { "from": "oracle", "to": "recall", "label": "ground truth" },
+    { "from": "core", "to": "model", "label": "always shown" },
+    { "from": "recall", "to": "model", "label": "top memories" },
+    { "from": "model", "to": "grader", "label": "answer" }
+  ],
+  "flow": [
+    { "node": "agent", "text": "At step 500, the agent is asked about something from step 124." },
+    { "node": "harness", "text": "The harness has logged every turn's decisions as it went." },
+    { "node": "ledger", "text": "Step 124 sits in the ledger, far outside the context window." },
+    { "node": "recall", "text": "The ranked policy pulls the best-matching past step back in." },
+    { "node": "core", "text": "Core traces are always shown alongside the recalled memory." },
+    { "node": "model", "text": "Qwen 27B, running locally, reads the packed context and answers." },
+    { "node": "grader", "text": "The benchmark checks the answer against the true step." }
+  ],
+  "takeaways": [
+    {
+      "text": "When the task fits in context, a memory harness adds cost but not capability.",
+      "cite": "06:16"
+    },
+    {
+      "text": "Bad memory is expensive: it spends more tokens and can send the agent the wrong way.",
+      "cite": "09:42"
+    },
+    {
+      "text": "Treat the recall policy as a first-class metric: what you store, how you rank, what you recall.",
+      "cite": "10:10"
+    }
+  ]
+}

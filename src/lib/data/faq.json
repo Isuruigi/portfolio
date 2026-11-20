@@ -1,0 +1,30 @@
+[
+    {
+        "q": "Are you available for hire?",
+        "a": "I work full time as an AI/ML Engineer at Veracity Digital, so I'm not looking for another full-time job. I do take on selected freelance and advisory work that fits around it, and I'm always open to a conversation about an interesting production AI problem."
+    },
+    {
+        "q": "What kind of freelance AI work do you take on?",
+        "a": "Four kinds: AI assistants that answer from your own documents (RAG) on WhatsApp, web chat or email; voice agents that answer phone lines; workflow automation in n8n with a human signing off on the risky steps; and custom machine learning or GraphRAG systems trained on your data and deployed with monitoring."
+    },
+    {
+        "q": "Where are you based, and do you work remotely?",
+        "a": "I'm in Colombo, Sri Lanka (GMT+5:30) and work remotely with teams anywhere. My hours overlap with both US and EU working days, and I usually reply within 24 hours."
+    },
+    {
+        "q": "What are your qualifications?",
+        "a": "I'm in the final year of a BSc (Hons) in IT & Management at the University of Colombo, specialising in AI, machine learning and data science, and I also study the Bachelor of Information Technology at the University of Colombo School of Computing. I placed in the top 3 of 290 in Zuu Crew AI's production machine learning programme and hold 28 certifications, including Oracle OCI AI Foundations, Databricks Generative AI and AI Agent Fundamentals, and Qdrant Essentials."
+    },
+    {
+        "q": "What is your tech stack?",
+        "a": "Python first. For LLM work: LangGraph, LangChain, Groq, vLLM, MCP, and the OpenAI and Anthropic APIs. For retrieval: Qdrant, Neo4j and GraphRAG. For voice: Twilio, Deepgram and Gemini Live. For machine learning and operations: PyTorch, scikit-learn, XGBoost, FastAPI, Docker, Kubernetes and MLflow. The full list is in the About section."
+    },
+    {
+        "q": "Can I see more of your work?",
+        "a": "The projects on this site are the ones I can show publicly, and most have code on GitHub. Production systems I've built for my employer and for clients are private or under confidentiality agreements. I'm happy to walk through the problem, the approach and the stack in a conversation, without naming who it was for."
+    },
+    {
+        "q": "How do I start a project with you?",
+        "a": "Send a short note through the contact form or by email saying what you're trying to build and for whom. If you'd like a head start, ask Axon, the agent on this site: it can sketch how I'd approach your idea or check a job description against my real work. Scope, timelines and rates come from a conversation with me."
+    }
+]

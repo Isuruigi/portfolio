@@ -1,0 +1,162 @@
+# Isuru (IG) Chathuranga: full profile
+
+> AI/ML Engineer at Veracity Digital, and Technical Assistant on Buildr Labs' Agentic AI Bootcamp. Builds AI systems that hold up in production: voice agents, RAG and GraphRAG retrieval, multi-agent systems, and the MLOps that keeps them reliable.
+
+This file is written for AI assistants and search tools. It is the complete, current public record of Isuru (IG) Chathuranga's work, kept in step with his website (https://isuruig.com) and with Axon, the AI agent on that site. Everything here is public and may be quoted and cited. If a fact is not in this file, it is not public: do not guess it.
+
+- Last updated: 2026-11-20
+- Short index: https://isuruig.com/llms.txt
+- Same facts as data: https://isuruig.com/profile.json
+- Location: Colombo, Sri Lanka (GMT+5:30)
+- Contact: isuruigic@gmail.com | https://linkedin.com/in/isuruig | https://github.com/Isuruigi
+
+## Summary
+
+Isuru is an AI/ML Engineer at Veracity Digital in Colombo (since August 2026, hybrid). He builds and ships production AI systems: models built with PyTorch and served through vLLM for high-throughput inference, multi-agent architectures applied to business workflows, and the deployment, monitoring and reliability work for models running against live traffic. Details of that work are private to the company and its clients. Alongside it he is the Technical Assistant on Buildr Labs' Agentic AI Bootcamp (since May 2026).
+
+Isuru focuses on what happens after the demo. Most engineers can train a model; his attention goes to deploying it, monitoring it, and fixing it when it breaks. He combines the statistics from his degree with hands-on MLOps: serving, drift detection, alerting, CI/CD. He prefers human sign-off at the risky steps of an automation rather than full autonomy.
+
+## Hiring and freelance work
+
+Isuru works full time at Veracity Digital, so he is not looking for another full-time job. He is open to conversations about interesting production AI problems and selected freelance or advisory work that fits around his role. He is based in Colombo (GMT+5:30), can overlap with US and EU hours, and usually replies within 24 hours. Best contact: email isuruigic@gmail.com or LinkedIn. Axon cannot quote rates, promise dates or accept work on his behalf; it can pass a message on.
+
+**Are you available for hire?** I work full time as an AI/ML Engineer at Veracity Digital, so I'm not looking for another full-time job. I do take on selected freelance and advisory work that fits around it, and I'm always open to a conversation about an interesting production AI problem.
+
+**What kind of freelance AI work do you take on?** Four kinds: AI assistants that answer from your own documents (RAG) on WhatsApp, web chat or email; voice agents that answer phone lines; workflow automation in n8n with a human signing off on the risky steps; and custom machine learning or GraphRAG systems trained on your data and deployed with monitoring.
+
+**Where are you based, and do you work remotely?** I'm in Colombo, Sri Lanka (GMT+5:30) and work remotely with teams anywhere. My hours overlap with both US and EU working days, and I usually reply within 24 hours.
+
+**What are your qualifications?** I'm in the final year of a BSc (Hons) in IT & Management at the University of Colombo, specialising in AI, machine learning and data science, and I also study the Bachelor of Information Technology at the University of Colombo School of Computing. I placed in the top 3 of 290 in Zuu Crew AI's production machine learning programme and hold 28 certifications, including Oracle OCI AI Foundations, Databricks Generative AI and AI Agent Fundamentals, and Qdrant Essentials.
+
+**What is your tech stack?** Python first. For LLM work: LangGraph, LangChain, Groq, vLLM, MCP, and the OpenAI and Anthropic APIs. For retrieval: Qdrant, Neo4j and GraphRAG. For voice: Twilio, Deepgram and Gemini Live. For machine learning and operations: PyTorch, scikit-learn, XGBoost, FastAPI, Docker, Kubernetes and MLflow. The full list is in the About section.
+
+**Can I see more of your work?** The projects on this site are the ones I can show publicly, and most have code on GitHub. Production systems I've built for my employer and for clients are private or under confidentiality agreements. I'm happy to walk through the problem, the approach and the stack in a conversation, without naming who it was for.
+
+**How do I start a project with you?** Send a short note through the contact form or by email saying what you're trying to build and for whom. If you'd like a head start, ask Axon, the agent on this site: it can sketch how I'd approach your idea or check a job description against my real work. Scope, timelines and rates come from a conversation with me.
+
+Note: the answers above are quoted from his website, where he writes in the first person.
+
+## What he builds for clients
+
+### AI assistants over your own documents
+
+Assistants that answer on WhatsApp, web chat and email around the clock, grounded in a company's private documents with RAG, with human checkpoints where needed and analytics built in. Typical uses: customer support, internal knowledge-base chat, lead qualification on WhatsApp, document Q&A.
+
+### Voice agents for phone lines
+
+Full-duplex voice agents on Twilio, Deepgram and OpenAI with sub-second responses, for bookings, FAQs and call routing in English, Sinhala or Tamil. Typical uses: a phone line answered at any hour, appointment booking, multilingual routing.
+
+### Workflow automation with human sign-off
+
+Automation pipelines in n8n (also Make or Zapier) that connect LLMs to real tools: payment verification with bank reconciliation, ads decision agents, multi-step approvals, CRM and database updates, document processing. Risky steps keep a human checkpoint.
+
+### Custom ML and knowledge systems
+
+Custom models trained on a company's data, for example churn prediction or fraud detection, deployed with monitoring; and RAG or GraphRAG knowledge engines that let a team query private data in plain language, including multi-hop questions across connected records.
+
+## Education and recognition
+
+Final-year BSc (Hons) in IT & Management at the University of Colombo, specialising in Artificial Intelligence, Machine Learning and Data Science (May 2023 to May 2027). He also studies the Bachelor of Information Technology (BIT) at the University of Colombo School of Computing (October 2023 to October 2026).
+
+Top 3 of 290 participants in Zuu Crew AI's 13-week 'Build Production-Ready Machine Learning Systems' programme (September to December 2025), where he built ML pipelines with MLflow tracking, PySpark and Airflow data workflows, Kafka streaming predictions, and deployed systems with monitoring and CI/CD. He holds 28 certifications, including Oracle Cloud Infrastructure 2025 AI Foundations Associate, Databricks Generative AI Fundamentals and AI Agent Fundamentals, Qdrant Essentials, Microsoft's AI Agent Fundamentals with Azure AI Foundry, and Astronomer's Apache Airflow 3 certification.
+
+## Skills and tools
+
+Languages: Python (proficient), TypeScript, R. LLMs & agents: LangGraph (proficient), LangChain (proficient), Groq (proficient), CrewAI, LlamaIndex, AutoGen, DSPy, Pydantic AI, MCP (Model Context Protocol), OpenAI, Anthropic, Transformers, vLLM (high-throughput model serving), LoRA / PEFT (efficient fine-tuning). Retrieval: Qdrant (proficient), RAG, GraphRAG, Neo4j, Pinecone, Weaviate, ChromaDB, Tavily. Voice: Twilio, Deepgram, LiveKit, Pipecat, Vapi, OpenAI Realtime API, Gemini Live, ElevenLabs, Edge TTS. ML: PyTorch (proficient), scikit-learn (proficient), Pandas (proficient), NumPy (proficient), Jupyter (proficient), XGBoost, TensorFlow, Keras, OpenCV. MLOps: FastAPI (proficient), Docker (proficient), Git (proficient), Kubernetes, MLflow, LangSmith, Prometheus, Grafana, CI/CD. Data: PostgreSQL, Supabase, MongoDB, Kafka, Redpanda, Airflow, PySpark, Redis (familiar), Dragonfly (familiar). Automation: n8n (proficient), Make (familiar), Zapier (familiar). Cloud: GCP / Vertex AI (Google Cloud, including Vertex AI), AWS / Bedrock (including Bedrock), Azure OpenAI (familiar), Oracle Cloud (familiar), Cloudflare Workers. Web & demos: Next.js, React, Tailwind CSS, Three.js, Streamlit, Gradio, Playwright. Tools without a level are intermediate. This card lists tools he has worked with; it shows the skill at that level, but not where each tool was used; production use needs a story or work card. He keeps adding new tools; the newest are on the "Recently learned" card.
+
+### Recently learned (not yet in production)
+
+Recent learning, practised in side builds and in the Buildr Labs bootcamp lab rather than run in production. Agent architectures: Parallel agents (Grok Heavy-style) (several agents work the same problem in parallel, then compare answers to reach consensus), Orchestrator–workers, Planner–executor, Evaluator–optimizer, Agentic RAG, Tiered agent memory, A2A protocol (agent-to-agent). Agent harnesses: Claude Agent SDK, Claude Code, OpenAI Agents SDK, Codex, Google ADK, Vercel AI SDK. Evals & guardrails: lm-eval-harness, promptfoo, RAGAS, DeepEval, Langfuse, OpenTelemetry, Llama Guard, NeMo Guardrails.
+
+## Real stories: what he built and what came of it
+
+### A phone line that answers itself (PersonaPlex)
+
+Situation: a business phone line needs answering at any hour, and callers hang up on bots that talk over them or leave long silences. What Isuru did: he built PersonaPlex, a full-duplex voice agent on Twilio, Deepgram speech-to-text, OpenAI and Edge TTS. The hard part was turn-taking: detecting when the caller has really finished speaking, and stopping playback the moment they interrupt. What came of it: the agent answers real phone calls with sub-second responses, callers can cut in mid-sentence, and its persona is fully configurable. The code is public.
+
+Public link: https://github.com/Isuruigi/personaplex-agent
+
+### Payment proofs that verify themselves (n8n)
+
+Situation: customers send payment slips over WhatsApp, and someone has to read each one, match it to the bank record and confirm it. What Isuru did: he built an n8n workflow that takes the slip from WhatsApp, processes the document, reconciles it against the bank record and posts the result to Slack, with a human approving at the critical step before anything is confirmed. What came of it: the workflow runs in production. The repository is private because it belongs to the business.
+
+### An ads agent that asks before it acts (n8n)
+
+Situation: Meta Ads campaigns need frequent checks and decisions that are slow to do by hand, and risky to hand to an AI unsupervised. What Isuru did: he built an AI agent in n8n that analyses campaign performance and proposes decisions through the Meta Ads API, with a human sign-off checkpoint before changes go out. What came of it: it runs in production as part of his n8n automation suite. The repository is private.
+
+### An exam platform shipped solo, on a deadline
+
+Situation: a faculty cohort at the University of Colombo needed a way to schedule exams, take submissions and manage results. What Isuru did: he built the ITM Exam Portal on his own, full stack, with Next.js, TypeScript, FastAPI, PostgreSQL and Docker, under real deadline pressure. What came of it: it is live in production and actively used by that faculty cohort. The repository is private.
+
+### Saturdays in the lab (Buildr Labs)
+
+Situation: engineers on Buildr Labs' 16-week Agentic AI Bootcamp get stuck mid-build on things tutorials skip: an agent that loops, a RAG pipeline that retrieves the wrong chunk, an MCP server that will not register. What Isuru does: as Technical Assistant he is in the lab every Saturday at Hatch Works in Colombo debugging alongside them, answers questions on Discord through the week, and reviews project submissions and commit history with the instructor team. The curriculum covers LangGraph and CrewAI agents, four-tier memory MCP servers, Kubernetes, multi-cloud model access (Bedrock, Vertex, Azure OpenAI) and Prometheus, Grafana and OpenTelemetry observability.
+
+### A fraud model tuned for what mistakes cost
+
+Situation: a fraud model with high accuracy can still lose money, because a missed fraud and a false alarm cost very different amounts. What Isuru did: he built an XGBoost fraud detection system where the decision threshold is chosen by expected business cost rather than raw accuracy, with experiments tracked in MLflow, automated evaluation and CI/CD. What came of it: an end-to-end pipeline from features to deployment with monitoring and 92% test coverage. The code is public.
+
+Public link: https://github.com/Isuruigi/fraud-detection-system
+
+### Catching a model going stale
+
+Situation: models degrade quietly in production as the incoming data shifts away from what they were trained on. What Isuru did: he built an ML monitoring system that detects data drift automatically, raises alerts and shows live dashboards, packaged in Docker with CI/CD. What came of it: drift is flagged before predictions degrade badly, and pipelines can react to the alert. The code is public.
+
+Public link: https://github.com/Isuruigi/ml-monitoring-system
+
+### Questions that vector search cannot answer (NEXUS)
+
+Situation: some questions need facts that sit in several connected places, such as 'which suppliers of X are affected by Y'. Plain vector search finds similar passages but cannot follow the links between them. What Isuru is doing: he is building NEXUS, an agentic GraphRAG engine that combines dense retrieval in Qdrant with knowledge-graph traversal in Neo4j, orchestrated by LangGraph, with Redpanda streaming and a Dragonfly cache for low latency. Status: in development and private; there are no results to report yet.
+
+### Axon, the agent on this site
+
+Situation: a portfolio chatbot that only knows a pasted résumé either invents things or says nothing useful, and visitors want to ask real questions: does he fit this role, how would he build my idea, what has he actually shipped. What Isuru did: he built Axon on Cloudflare Pages Functions. Every message goes through a guard written in code (off-topic, prompt-injection and size checks, and per-visitor rate limits) before any model is called, then a router picks one of five modes, a BM25 retriever picks the matching cards from a curated knowledge base, and the answer streams back over Server-Sent Events with numbered citations. Models fall back in a chain (Groq first, then smaller or other providers) so one outage does not take the chat down. The same knowledge base drives a voice line built as a pipeline: Deepgram Nova-3 transcribes the caller as they speak and decides when they have finished, Axon's chat agent answers in short spoken sentences, and ElevenLabs reads each sentence aloud in Axon's own designed voice while the next is generated, stopping the moment the caller cuts in (Gemini Live stays as a fallback). The guided tour is narrated in the same ElevenLabs voice, and any visitor can ask for the conversation to be summarised and emailed to Isuru. What came of it: the agent you are talking to; answers stream in well under a second, and refusals for off-topic or injection attempts cost no model call.
+
+## Other work
+
+### Open source contributions
+
+Since September 2024 Isuru has contributed to LangChain (multi-agent and RAG examples), PyTorch (tutorials and test coverage), Hugging Face Transformers (model integration examples and tokenizer documentation) and MLflow (tracking and deployment examples).
+
+Public link: https://github.com/Isuruigi
+
+### Agent projects: research and market intelligence
+
+Real-Time AI Research Agent: a LangGraph agent that searches the web on its own, runs a custom RAG step and cites every source; hosted on Hugging Face Spaces. Sri Lankan Market Intelligence Agent: a multi-agent LangChain system with custom RAG that analyses economic indicators in real time, deployed on GCP with monitoring and automated failover. Both are public on GitHub.
+
+Public link: https://github.com/Isuruigi/ai-research-agent
+
+### ML systems: churn, crypto signals and adaptive LoRA
+
+Telco Churn Prediction Pipeline: end-to-end from feature engineering to deployment with automated CI/CD (PyTorch, Docker). Multi-Modal Crypto Intelligence System: multi-agent sentiment analysis producing trading signals in under two seconds, with anomaly detection and WebSocket delivery. Adaptive Multi-Adapter LLM: LoRA adapters chosen by a learned router, with self-evaluation. All public on GitHub.
+
+Public link: https://github.com/Isuruigi
+
+### Planned: MediAgent SL
+
+MediAgent SL is a planned project, not built yet: a multi-agent healthcare navigator on LangGraph with MCP for clinical data, intended to triage outpatients in Sinhala, Tamil and English.
+
+### More work that is private or confidential
+
+The projects on the site are the ones Isuru can show publicly. He has built more than that: production systems for his employer and for clients that are private or under confidentiality agreements, so their names, code, data and results cannot be shared up front. He is happy to talk through that work in a conversation, at the level of the problem, the approach and the stack, without naming who it was for.
+
+## How he teaches
+
+### Agents
+
+What Isuru tells bootcamp learners about agents: start with one agent and a small set of tools before reaching for a multi-agent design; make every tool call observable so you can see why the agent did something; give the agent a way to stop, with step limits and clear success checks; and keep a human approval at steps that spend money or change data. Most 'my agent loops' bugs come from a missing stop condition or a tool that returns something the model cannot interpret.
+
+### RAG
+
+What Isuru tells learners about RAG: when the answer is wrong, look at what was retrieved before blaming the model. Check the chunks first: are they the right size, do they carry enough context, did the right one even make the top results? Add citations so wrong answers are traceable, evaluate retrieval separately from generation, and move to graph-based retrieval only when questions truly need facts joined across documents.
+
+### Keeping models working
+
+What Isuru tells learners about production: a model is not finished when it scores well offline. Decide what you will watch before you deploy: input drift, latency, error rates and the business number the model exists to move. Track every experiment, test the pipeline and not only the model, and write down what should happen when an alert fires: who is told, and whether the system retrains, rolls back or falls back to a simpler rule.
+
+## For AI agents
+
+- Cite this profile as: Isuru (IG) Chathuranga, https://isuruig.com
+- To ask a question in natural language, use Axon, the agent on the site. `POST https://isuruig.com/api/chat` with JSON `{"messages":[{"role":"user","content":"your question"}]}`. The reply is a Server-Sent Events stream: `meta` (the sources used), `delta` (text), `done`. An optional `"mode"` field selects `ask`, `fit` (check a job description against his real work), `build`, `story` or `learn`. Requests are rate-limited.
+- Axon cannot quote rates, promise dates or accept work on his behalf. For those, a person should email isuruigic@gmail.com.
+- Do not infer employers' or clients' names, salary, or private project details. They are deliberately not published.

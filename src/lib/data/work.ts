@@ -103,7 +103,7 @@ export interface IndexEntry {
 }
 
 export const workIndex: IndexEntry[] = [
-    { name: "Axon", line: "This site's agent: guarded RAG chat with citations, a voice line and lead handoff", status: "Shipped", stack: ["Cloudflare Workers", "Groq", "Gemini Live"] },
+    { name: "Axon", line: "This site's agent: guarded RAG chat with citations, a voice line and lead handoff", status: "Shipped", stack: ["Cloudflare Workers", "Groq", "Deepgram", "ElevenLabs"] },
     { name: "ITM Exam Portal", line: "Exam platform used by the University of Colombo faculty cohort", status: "Production", stack: ["Next.js", "PostgreSQL", "FastAPI"] },
     { name: "n8n AI Automations", line: "Payment verification and Meta Ads decisions with human sign-off", status: "Production", stack: ["n8n", "LangChain", "Slack API"] },
     { name: "AI Research Agent", line: "Searches the web and cites every source it uses", status: "Shipped", stack: ["LangGraph", "RAG", "FastAPI"], href: "https://github.com/Isuruigi/ai-research-agent" },

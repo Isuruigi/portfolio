@@ -1,0 +1,245 @@
+{
+  "domain": "finetune",
+  "title": "How a small fine-tuned model goes from data to serving",
+  "subtitle": "Two talks joined: Snorkel trains a small finance model with RL, and Gabber serves many LoRA adapters on one vLLM GPU.",
+  "org": "Snorkel AI & Gabber",
+  "hook": "A 4B model trained with RL beat its 235B sibling: about 60% versus 51%.",
+  "metric": null,
+  "sources": [
+    {
+      "kind": "talk",
+      "title": "Small Models, Big Results: Training a Finance Agent for Under $500",
+      "speaker": "Charles Dickens",
+      "org": "Snorkel AI",
+      "videoId": "TyPpSRXGhbc",
+      "url": "https://www.youtube.com/watch?v=TyPpSRXGhbc"
+    },
+    {
+      "kind": "talk",
+      "title": "Serving Voice AI at $1/hr: Open-source, LoRAs, Latency, Load Balancing",
+      "speaker": "Neil Dwyer",
+      "org": "Gabber",
+      "videoId": "rD23-VZZHOo",
+      "url": "https://www.youtube.com/watch?v=rD23-VZZHOo"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "source",
+      "kind": "store",
+      "label": "Raw filings",
+      "role": "Real domain documents",
+      "tool": "EDGAR",
+      "toolFromTalk": true,
+      "col": 0,
+      "row": 1,
+      "detail": "Snorkel pulled 10-K annual reports from the SEC's EDGAR system. Analysts use these filings to spot risks and inform investment decisions.",
+      "tradeoff": "The point is data that matches the real task: specialized workflows need a specialist model, not a bigger generalist.",
+      "cite": "05:14"
+    },
+    {
+      "id": "curate",
+      "kind": "service",
+      "label": "Data curation",
+      "role": "Builds and verifies examples",
+      "tool": "Qwen3",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 1,
+      "detail": "Qwen3 30B turns the filings into about 6,900 SQL tables and writes one question-answer pair per table, guided by a question taxonomy built with financial experts. Each pair then passes three checks: programmatic consistency, independent agent review, and expert manual review.",
+      "tradeoff": "Programmatic checks use lineage metadata to catch hallucinated table and column names before they reach training.",
+      "cite": "06:01"
+    },
+    {
+      "id": "splits",
+      "kind": "store",
+      "label": "Dataset splits",
+      "role": "Train, validation, benchmark",
+      "tool": "Hugging Face",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 0,
+      "detail": "About 4,000 training examples, 500 for validation and 290 in a held-out benchmark. The data and scripts are published on GitHub and Hugging Face.",
+      "tradeoff": "No company appears in more than one split, so the benchmark cannot be passed by memorizing a company's tables.",
+      "cite": "06:55"
+    },
+    {
+      "id": "train",
+      "kind": "gpu",
+      "label": "RL fine-tuning",
+      "role": "Specializes a small model",
+      "tool": "rLLM",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 1,
+      "detail": "Qwen3 4B runs as a ReAct agent with tools over the tables, trained with GRPO on the rLLM framework. About 1,000 environments run at once to generate trajectories, on eight H100s.",
+      "tradeoff": "The whole run cost under $500: about $420 of compute and $40 for the judge API.",
+      "cite": "10:00"
+    },
+    {
+      "id": "reward",
+      "kind": "eval",
+      "label": "Reward judge",
+      "role": "Scores each answer",
+      "tool": "GPT-5 nano",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 2,
+      "detail": "An LLM judge compares the agent's final answer with the reference answer and returns a binary reward: right or wrong.",
+      "tradeoff": "An expert-designed rubric with weighted partial credit did not beat the simple binary reward.",
+      "cite": "13:41"
+    },
+    {
+      "id": "heldout",
+      "kind": "eval",
+      "label": "Held-out eval",
+      "role": "Checks before shipping",
+      "tool": "BFCL",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 0,
+      "detail": "The tuned model is scored on the 290 expert-curated benchmark questions, on harder multi-table questions, and on BFCL for general tool calling.",
+      "tradeoff": "Specializing did not erode general skills: BFCL accuracy rose slightly, with small gains on multi-turn and memory.",
+      "cite": "12:08"
+    },
+    {
+      "id": "lora",
+      "kind": "store",
+      "label": "LoRA adapters",
+      "role": "One small fine-tune each",
+      "tool": "PEFT",
+      "toolFromTalk": false,
+      "col": 3,
+      "row": 1,
+      "detail": "Gabber trains a low-rank fine-tune for every customer voice clone: rank 16, alpha 32, on basically all projections. Each adapter is 100 to 200 MB, depending on hyperparameters.",
+      "tradeoff": "10 minutes of audio forced overfitting over five epochs; about 30 minutes is what you really want.",
+      "cite": "06:56",
+      "src": 1
+    },
+    {
+      "id": "router",
+      "kind": "gateway",
+      "label": "Hash-ring router",
+      "role": "Finds the adapter's GPU",
+      "tool": "Redis",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 0,
+      "detail": "A consistent hash ring maps each session to the GPU that holds its LoRA, and Redis stores the answer. The WebRTC backend connects to any GPU, which proxies the session to the right one.",
+      "tradeoff": "Removing a server moves only a few sessions, and a popular voice can simply be added to more servers.",
+      "cite": "13:45",
+      "src": 1
+    },
+    {
+      "id": "serve",
+      "kind": "gpu",
+      "label": "vLLM multi-LoRA",
+      "role": "Serves many adapters at once",
+      "tool": "vLLM",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 1,
+      "detail": "vLLM runs many generations, with different LoRAs, in the same batch on the same GPU. FP8 dynamic quantization made L40S GPUs fast enough without calibration work.",
+      "tradeoff": "With a batch of 10, LoRA voices ran at 95 tokens a second, just above the roughly 85 needed for real time.",
+      "cite": "12:18",
+      "src": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "source",
+      "to": "curate",
+      "label": "10-K reports"
+    },
+    {
+      "from": "curate",
+      "to": "splits",
+      "label": "verified Q&A"
+    },
+    {
+      "from": "splits",
+      "to": "train",
+      "label": "4,000 train"
+    },
+    {
+      "from": "reward",
+      "to": "train",
+      "label": "binary reward"
+    },
+    {
+      "from": "train",
+      "to": "heldout",
+      "label": "checkpoint"
+    },
+    {
+      "from": "splits",
+      "to": "heldout",
+      "label": "290 held out"
+    },
+    {
+      "from": "train",
+      "to": "lora",
+      "label": "tuned weights"
+    },
+    {
+      "from": "lora",
+      "to": "serve",
+      "label": "load adapter"
+    },
+    {
+      "from": "router",
+      "to": "serve",
+      "label": "sticky session"
+    }
+  ],
+  "flow": [
+    {
+      "node": "source",
+      "text": "Annual 10-K filings are pulled from the SEC's EDGAR system."
+    },
+    {
+      "node": "curate",
+      "text": "Qwen3 30B writes question-answer pairs; code, agents and experts verify them."
+    },
+    {
+      "node": "train",
+      "text": "GRPO trains Qwen3 4B in about 1,000 tool-using environments at once."
+    },
+    {
+      "node": "reward",
+      "text": "GPT-5 nano marks each final answer right or wrong."
+    },
+    {
+      "node": "heldout",
+      "text": "On held-out questions the 4B model beats its 235B sibling."
+    },
+    {
+      "node": "lora",
+      "text": "A fine-tune ships as a small LoRA adapter, 100 to 200 MB."
+    },
+    {
+      "node": "router",
+      "text": "A session hashes to the GPU already holding that adapter."
+    },
+    {
+      "node": "serve",
+      "text": "vLLM batches it with other adapters; first audio in about 100 ms.",
+      "ms": 100
+    }
+  ],
+  "takeaways": [
+    {
+      "text": "A 4B model trained with RL on expert-verified data beat its 235B sibling: about 60% versus 51%.",
+      "cite": "02:51"
+    },
+    {
+      "text": "Simple won: training on single-table questions with a binary reward beat curricula and rubric rewards.",
+      "cite": "12:53"
+    },
+    {
+      "text": "Gabber fine-tuned away 600 ms of leading silence, cutting first-audio latency to about 100 ms P50.",
+      "cite": "09:28",
+      "src": 1
+    }
+  ]
+}

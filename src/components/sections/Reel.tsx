@@ -49,7 +49,7 @@ export default function Reel() {
     };
 
     return (
-        <section aria-label="Reel" className="bg-void pb-8 pt-4 text-ink">
+        <section id="reel" aria-label="Reel" className="bg-void pb-8 pt-4 text-ink">
             <div className="relative mx-auto max-w-[1280px] px-5 lg:px-10">
                 <video
                     ref={ref}
@@ -61,7 +61,7 @@ export default function Reel() {
                     preload="none"
                     controls={reduce}
                     aria-label="30-second reel with voiceover: voice agents, multi-agent systems and MLOps, ending on Isuru Chathuranga, AI engineer at Veracity Digital"
-                    className="aspect-video w-full rounded-3xl border border-white/10 bg-void object-cover"
+                    className="aspect-video w-full rounded-3xl border border-fg/10 bg-void object-cover"
                 />
                 {!reduce && (
                     <button

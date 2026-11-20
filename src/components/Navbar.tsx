@@ -4,9 +4,11 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { AGENT_NAME, openAgent } from "@/lib/agent";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const navLinks = [
     { href: "#work", label: "Work" },
+    { href: "#atlas", label: "Field guide" },
     { href: "#career", label: "Career" },
     { href: "#teaching", label: "Teaching" },
     { href: "#about", label: "About" },
@@ -88,7 +90,7 @@ export default function Navbar() {
                     </motion.button>
 
                     {/* Desktop Navigation */}
-                    <div className="hidden md:flex items-center gap-8">
+                    <div className="hidden md:flex items-center gap-6">
                         <ul className="flex items-center gap-6">
                             {navLinks.map((link, index) => (
                                 <motion.li
@@ -123,14 +125,16 @@ export default function Navbar() {
                         <button
                             type="button"
                             onClick={() => openAgent()}
-                            className="cursor-pointer rounded-full border border-ember/60 px-4 py-1.5 text-sm font-medium text-ember transition-colors hover:bg-ember hover:text-void focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+                            className="cursor-pointer rounded-full border border-ember/60 px-4 py-1.5 text-sm font-medium text-ember transition-colors hover:bg-ember hover:text-on-ember focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
                         >
                             Ask {AGENT_NAME}
                         </button>
+                        <ThemeToggle />
                     </div>
 
                     {/* Mobile Menu Button */}
                     <div className="flex items-center gap-4 md:hidden">
+                        <ThemeToggle />
                         <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}

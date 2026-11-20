@@ -1,0 +1,251 @@
+{
+  "domain": "evals",
+  "title": "How an AI agent is tested before and after it ships",
+  "subtitle": "Offline simulations and calibrated judges gate every change; live traces feed failures back into prompts and test sets.",
+  "org": "Lyft & Uber",
+  "hook": "A judge that gates nothing is useless: here every score decides whether a change ships.",
+  "metric": null,
+  "sources": [
+    {
+      "kind": "talk",
+      "title": "Build Evals That Actually Matter",
+      "speaker": "Nick Ung & Akshay Sharma",
+      "org": "Lyft",
+      "videoId": "3z2uT5aDx_Y",
+      "url": "https://www.youtube.com/watch?v=3z2uT5aDx_Y"
+    },
+    {
+      "kind": "talk",
+      "title": "Building Closed-Loop Evals for a Multimodal Agent at Scale",
+      "speaker": "Soumya Gupta & Jai Chopra",
+      "org": "Uber",
+      "videoId": "31GUkCBD-Uc",
+      "url": "https://www.youtube.com/watch?v=31GUkCBD-Uc"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "dev",
+      "kind": "person",
+      "label": "Agent engineer",
+      "role": "Changes the agent",
+      "tool": null,
+      "col": 0,
+      "row": 1,
+      "detail": "Edits the system prompt, tools, context or agent graph of Lyft's customer support agent. Like an ML model, the agent must pass offline evals before it reaches users.",
+      "tradeoff": "Lyft's rule: live users are never the test data for an agent.",
+      "cite": "04:43"
+    },
+    {
+      "id": "golden",
+      "kind": "store",
+      "label": "Golden dataset",
+      "role": "Labeled real cases",
+      "tool": "Langfuse",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 0,
+      "detail": "Built from sampled production conversations, plus mutated copies that cover golden paths and edge cases. Domain experts label traces in annotation queues, and labeled traces join the dataset.",
+      "tradeoff": "Asking an LLM for 50 test queries gives data that looks nothing like production, a key gotcha for Lyft.",
+      "cite": "11:27"
+    },
+    {
+      "id": "harness",
+      "kind": "service",
+      "label": "Eval harness",
+      "role": "Runs every eval from config",
+      "tool": "promptfoo",
+      "toolFromTalk": false,
+      "col": 1,
+      "row": 1,
+      "detail": "A config-driven harness: tasks, datasets, personas, model adapters and evaluators are defined once in YAML, so analysts can add cases too. It runs thousands of examples in parallel.",
+      "tradeoff": "Lyft's first simulations were scattered notebook scripts that were not repeatable; a standard harness is their next investment.",
+      "cite": "32:49"
+    },
+    {
+      "id": "sim",
+      "kind": "model",
+      "label": "User simulator",
+      "role": "Plays a real customer",
+      "tool": "τ-bench",
+      "toolFromTalk": true,
+      "col": 1,
+      "row": 2,
+      "detail": "Inspired by τ-bench, an LLM plays the customer in full multi-turn chats, given an intent, account state and a persona such as refund seeker or AI skeptic. Lyft fine-tuned it on real user messages.",
+      "tradeoff": "A polite frontier model as the user gave a 90%+ pass rate; realistic users lowered scores, which is what you want.",
+      "cite": "14:20"
+    },
+    {
+      "id": "judge",
+      "kind": "eval",
+      "label": "LLM judge",
+      "role": "Grades each conversation",
+      "tool": "DeepEval",
+      "toolFromTalk": true,
+      "col": 2,
+      "row": 1,
+      "detail": "Binary pass/fail rubrics written with domain experts, plus code assertions, such as checking the agent granted a concession when it should. The judge is treated as a classifier: precision and recall against about 100 hand-labeled examples.",
+      "tradeoff": "Pre-built DeepEval scores like helpfulness were a baseline but not actionable, so Lyft moved to task-specific binary judges.",
+      "cite": "18:39"
+    },
+    {
+      "id": "gate",
+      "kind": "eval",
+      "label": "Launch gate",
+      "role": "Blocks regressions",
+      "tool": "GitHub Actions",
+      "toolFromTalk": false,
+      "col": 3,
+      "row": 1,
+      "detail": "A change ships only if offline evals meet the launch criteria. Lyft already runs the suite as a pre-commit hook, and is building a regression suite into CI/CD.",
+      "tradeoff": "84% versus 88% on 50 traces may be noise; add confidence intervals before a shipping decision.",
+      "cite": "25:55"
+    },
+    {
+      "id": "prod",
+      "kind": "service",
+      "label": "Live agent",
+      "role": "Answers real users",
+      "tool": "LangGraph",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 1,
+      "detail": "Lyft's customer support agent is a multi-agent system built with LangGraph, answering riders and drivers in production.",
+      "tradeoff": "Real users are impatient and terse, which makes the agent much harder to evaluate than polite simulated users.",
+      "cite": "14:43"
+    },
+    {
+      "id": "traces",
+      "kind": "monitor",
+      "label": "Traces and graders",
+      "role": "Watches live runs",
+      "tool": "LangSmith",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 0,
+      "detail": "Each trace records the full graph run: which nodes ran, what the LLM saw, tool calls, tokens and latency per call. Online graders score live conversations, and experts review failures.",
+      "tradeoff": "Everything depends on traces: without them there is no error analysis, no labels, and no way to check the judge.",
+      "cite": "29:21"
+    },
+    {
+      "id": "optimizer",
+      "kind": "model",
+      "label": "Prompt optimizer",
+      "role": "Fixes the failing agent",
+      "tool": "DSPy",
+      "toolFromTalk": false,
+      "col": 3,
+      "row": 0,
+      "detail": "Uber samples production on a schedule and has humans label it. A diagnoser finds which agent disagrees with the labels; reflect and synthesize agents then rewrite that agent's config.",
+      "tradeoff": "The new config ships only if it passes the golden set; no human in the loop, but guardrails are watched and rollback is quick.",
+      "cite": "11:09",
+      "src": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "dev",
+      "to": "harness",
+      "label": "prompt change"
+    },
+    {
+      "from": "golden",
+      "to": "harness",
+      "label": "test cases"
+    },
+    {
+      "from": "harness",
+      "to": "sim",
+      "label": "plays users"
+    },
+    {
+      "from": "harness",
+      "to": "judge",
+      "label": "transcripts"
+    },
+    {
+      "from": "golden",
+      "to": "judge",
+      "label": "human labels"
+    },
+    {
+      "from": "judge",
+      "to": "gate",
+      "label": "pass or fail"
+    },
+    {
+      "from": "gate",
+      "to": "prod",
+      "label": "ship"
+    },
+    {
+      "from": "prod",
+      "to": "traces",
+      "label": "every run"
+    },
+    {
+      "from": "traces",
+      "to": "golden",
+      "label": "labeled traces"
+    },
+    {
+      "from": "traces",
+      "to": "optimizer",
+      "label": "mismatches"
+    },
+    {
+      "from": "optimizer",
+      "to": "harness",
+      "label": "new config"
+    }
+  ],
+  "flow": [
+    {
+      "node": "dev",
+      "text": "An engineer edits the support agent's system prompt."
+    },
+    {
+      "node": "harness",
+      "text": "The harness replays thousands of test cases from config, in parallel."
+    },
+    {
+      "node": "sim",
+      "text": "A fine-tuned user model plays impatient customers across multi-turn chats."
+    },
+    {
+      "node": "judge",
+      "text": "Binary rubric judges and code checks grade every conversation."
+    },
+    {
+      "node": "gate",
+      "text": "The change ships only if the launch criteria still pass."
+    },
+    {
+      "node": "prod",
+      "text": "The LangGraph agent now answers real users."
+    },
+    {
+      "node": "traces",
+      "text": "Every run is traced; graders and experts flag the failures."
+    },
+    {
+      "node": "optimizer",
+      "text": "A diagnoser rewrites the failing prompt and re-tests it on the golden set."
+    }
+  ],
+  "takeaways": [
+    {
+      "text": "An LLM judge score that gates nothing is useless; tie every judge to a launch decision.",
+      "cite": "05:57"
+    },
+    {
+      "text": "Lyft's polite simulated users scored 90%+; fine-tuning on real messages made evals harder and truer.",
+      "cite": "15:26"
+    },
+    {
+      "text": "Uber's loop samples production, labels it, auto-tunes prompts, and ships only after passing the golden set.",
+      "cite": "11:09",
+      "src": 1
+    }
+  ]
+}

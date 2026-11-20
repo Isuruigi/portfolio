@@ -1,0 +1,169 @@
+{
+  "domain": "sandbox-cloud",
+  "org": "OpenAI",
+  "title": "How OpenAI runs untrusted agent code in microVMs",
+  "subtitle": "The sandbox cloud behind ChatGPT and Codex web: hardware-isolated microVMs, block-level snapshots, smart placement.",
+  "hook": "Snapshots return before the upload ends and ship only changed disk blocks, so agents can checkpoint often.",
+  "metric": null,
+  "sources": [
+    {
+      "title": "From fork() to Fleet: Designing an Agent Sandbox Cloud",
+      "speaker": "Abhishek Bhardwaj",
+      "org": "OpenAI",
+      "videoId": "OqM67QG_Ikk",
+      "url": "https://www.youtube.com/watch?v=OqM67QG_Ikk",
+      "kind": "talk"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "model",
+      "label": "Model",
+      "role": "Writes code to run",
+      "kind": "model",
+      "tool": "OpenAI",
+      "toolFromTalk": true,
+      "col": 0,
+      "row": 0,
+      "detail": "Trained to call code execution on problems with checkable answers, like counting letters in a word, instead of guessing from memory.",
+      "tradeoff": "Research needs throughput across many rollouts; the product needs low latency, or users churn.",
+      "cite": "02:23"
+    },
+    {
+      "id": "harness",
+      "label": "Agent harness",
+      "role": "Asks for a sandbox",
+      "kind": "service",
+      "tool": "ChatGPT",
+      "toolFromTalk": true,
+      "col": 0,
+      "row": 1,
+      "detail": "Parses the model's reply, and when it says to execute code, calls the tool somewhere: a laptop for local agents, a cloud node for ChatGPT and Codex web.",
+      "tradeoff": "Even a well-meaning model may try to get root to help you, so the code is treated as untrusted.",
+      "cite": "04:14"
+    },
+    {
+      "id": "control",
+      "label": "Control plane",
+      "role": "Picks a cluster",
+      "kind": "gateway",
+      "tool": null,
+      "col": 1,
+      "row": 1,
+      "detail": "Nodes are grouped into clusters spread across regions. The top-level control plane picks a cluster by region, load and other factors, ideally near the ChatGPT cluster.",
+      "tradeoff": "Low latency and reliability stay the north stars for every placement decision.",
+      "cite": "41:29"
+    },
+    {
+      "id": "scheduler",
+      "label": "Node scheduler",
+      "role": "Picks a node",
+      "kind": "gateway",
+      "tool": null,
+      "col": 2,
+      "row": 1,
+      "detail": "Inside a cluster it picks a node by load and skips failing ones. On a restore it scores highest the node that already holds the snapshot's layers.",
+      "tradeoff": "Snapshot-aware routing means less to download, so creates are faster and more reliable.",
+      "cite": "43:23"
+    },
+    {
+      "id": "warm",
+      "label": "Warm pool",
+      "role": "Fast sandbox starts",
+      "kind": "cache",
+      "tool": null,
+      "col": 2,
+      "row": 0,
+      "detail": "Keeps pre-warmed sandboxes ready, or starts a microVM just in time from a saved memory snapshot in milliseconds. A hybrid grows the pool from that snapshot.",
+      "tradeoff": "A warm pool burns CPU and memory while idle; memory snapshots avoid that cost.",
+      "cite": "42:26"
+    },
+    {
+      "id": "vmm",
+      "label": "MicroVM",
+      "role": "Hardware isolation",
+      "kind": "cluster",
+      "tool": "Cloud Hypervisor",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 1,
+      "detail": "A Rust VMM process is created with a kernel, root file system, CPU and memory, then started on /dev/kvm. Root inside the guest still has no control of the host.",
+      "tradeoff": "Every guest exit costs performance, memory is reclaimed slowly, and a VFIO GPU serves one sandbox at a time.",
+      "cite": "25:43"
+    },
+    {
+      "id": "pid1",
+      "label": "Guest API server",
+      "role": "Runs tools inside",
+      "kind": "service",
+      "tool": null,
+      "col": 4,
+      "row": 1,
+      "detail": "PID 1 inside the guest exposes an API server. The harness reaches it over vsock to run commands, save state or attach devices.",
+      "tradeoff": "Inside is a whole Linux box, and models drive Linux well because they were pre-trained on so much of it.",
+      "cite": "26:40"
+    },
+    {
+      "id": "blockcache",
+      "label": "Block cache",
+      "role": "Always-on disk",
+      "kind": "cache",
+      "tool": "NBD",
+      "toolFromTalk": true,
+      "col": 3,
+      "row": 2,
+      "detail": "The guest sees a normal block device. Writes go to an in-cluster cache, which writes back to durable object storage.",
+      "tradeoff": "NFS was rejected as slower and not POSIX-compliant, and models work best with standard POSIX.",
+      "cite": "40:05"
+    },
+    {
+      "id": "snapshot",
+      "label": "Snapshot store",
+      "role": "Incremental disk saves",
+      "kind": "store",
+      "tool": "Amazon S3",
+      "toolFromTalk": true,
+      "col": 4,
+      "row": 2,
+      "detail": "A save call finds changed blocks on a copy-on-write layer, zips the diff, uploads it and returns a snapshot ID. Restore replays the layer lineage onto the base image.",
+      "tradeoff": "Saving gigabytes every turn would bankrupt the company, so only the diff between snapshots is stored.",
+      "cite": "39:11"
+    }
+  ],
+  "edges": [
+    { "from": "model", "to": "harness", "label": "run this code" },
+    { "from": "harness", "to": "control", "label": "create sandbox" },
+    { "from": "control", "to": "scheduler", "label": "chosen cluster" },
+    { "from": "scheduler", "to": "vmm", "label": "places on node" },
+    { "from": "warm", "to": "vmm", "label": "memory snapshot" },
+    { "from": "vmm", "to": "pid1", "label": "vsock" },
+    { "from": "pid1", "to": "blockcache", "label": "disk writes" },
+    { "from": "blockcache", "to": "snapshot", "label": "write back" },
+    { "from": "snapshot", "to": "scheduler", "label": "layer lineage" },
+    { "from": "pid1", "to": "harness", "label": "tool result" }
+  ],
+  "flow": [
+    { "node": "model", "text": "Writes code to count letters instead of guessing the answer." },
+    { "node": "harness", "text": "Parses the reply and requests a sandbox to run the code." },
+    { "node": "control", "text": "Picks a cluster near ChatGPT, weighing region and load." },
+    { "node": "scheduler", "text": "Picks the healthy node that already holds the most snapshot layers." },
+    { "node": "warm", "text": "Starts the microVM in milliseconds from a saved memory snapshot." },
+    { "node": "vmm", "text": "Cloud Hypervisor runs the guest on KVM, walled off by hardware." },
+    { "node": "pid1", "text": "The guest's PID 1 API runs the code and returns the result." },
+    { "node": "snapshot", "text": "Changed blocks are zipped and uploaded; a snapshot ID returns right away." }
+  ],
+  "takeaways": [
+    {
+      "text": "Containers and gVisor still sit on the host kernel, so a chained exploit can reach it.",
+      "cite": "18:09"
+    },
+    {
+      "text": "Teams try containers, gVisor and V8 first, then end up wanting a VM: start with microVMs.",
+      "cite": "28:57"
+    },
+    {
+      "text": "Storage is the next unlock: fast snapshot and restore let harnesses recover from failures and explore.",
+      "cite": "41:02"
+    }
+  ]
+}

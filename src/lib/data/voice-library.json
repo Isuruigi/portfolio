@@ -1,0 +1,157 @@
+{
+  "greeting": {
+    "file": "/media/voice/f91a876206b7.mp3",
+    "text": "Hi, I'm Axon, Isuru's agent. Ask me anything about his work, or say, show me PersonaPlex.",
+    "action": null
+  },
+  "onscreen": {
+    "file": "/media/voice/97830df9709e.mp3",
+    "text": "Good question. I've put my answer on your screen, so have a quick read.",
+    "action": null
+  },
+  "goodbye": {
+    "file": "/media/voice/2c29c85934a3.mp3",
+    "text": "Thanks for calling. It was great talking to you. Bye for now!",
+    "action": "end"
+  },
+  "offtopic": {
+    "file": "/media/voice/2d520e92f8ec.mp3",
+    "text": "That's outside what I can help with. I'm here to talk about Isuru's work, his projects, and how to work with him.",
+    "action": null
+  },
+  "about": {
+    "file": "/media/voice/3857aba0825b.mp3",
+    "text": "Isuru is an AI and ML engineer at Veracity Digital in Colombo. He builds AI systems that hold up in production: voice agents, retrieval and multi-agent systems, with the monitoring to prove they keep working.",
+    "action": "go:about"
+  },
+  "role": {
+    "file": "/media/voice/9955733a76d0.mp3",
+    "text": "He's an AI and ML engineer at Veracity Digital in Colombo, where he builds and ships production AI: models served with vLLM, multi-agent workflows wired into real business processes, and the monitoring around them.",
+    "action": "go:career"
+  },
+  "teaching": {
+    "file": "/media/voice/a15c0075f78e.mp3",
+    "text": "On Saturdays he's the Technical Assistant on Buildr Labs' Agentic AI Bootcamp, helping engineers through hands-on labs and reviewing the agents they build.",
+    "action": "go:teaching"
+  },
+  "hire": {
+    "file": "/media/voice/0dd4dbd742c8.mp3",
+    "text": "He isn't looking for another full-time role right now, but he does take on selected freelance and advisory projects. The contact form is the best way to start.",
+    "action": "contact:hire"
+  },
+  "freelance": {
+    "file": "/media/voice/7ce815fe4754.mp3",
+    "text": "He takes on AI assistants over a company's own documents, voice agents for phone lines, n8n automations with a human sign-off, and custom machine learning or GraphRAG systems.",
+    "action": "contact:hire"
+  },
+  "location": {
+    "file": "/media/voice/d6ed0351f0e3.mp3",
+    "text": "He's based in Colombo, Sri Lanka, and works with clients remotely.",
+    "action": null
+  },
+  "education": {
+    "file": "/media/voice/845d0672ea2c.mp3",
+    "text": "He's in the final year of a BSc Honours in IT and Management at the University of Colombo, focused on AI, machine learning and data science.",
+    "action": "go:career"
+  },
+  "stack": {
+    "file": "/media/voice/2d7328c20d0b.mp3",
+    "text": "Python first. For LLM work, LangGraph, LangChain, vLLM and MCP. For retrieval, Qdrant, Neo4j and GraphRAG. For voice, Twilio, Deepgram, LiveKit and ElevenLabs. And Docker, Kubernetes and MLflow to run it all in production.",
+    "action": "go:about"
+  },
+  "voice": {
+    "file": "/media/voice/000b2661ed61.mp3",
+    "text": "Voice agents are one of his specialities. PersonaPlex answers real phone calls and lets callers interrupt mid-sentence. And this call is his work too: Deepgram hears you, and ElevenLabs is my voice.",
+    "action": "go:personaplex"
+  },
+  "personaplex": {
+    "file": "/media/voice/010c08f2a285.mp3",
+    "text": "PersonaPlex is a full-duplex voice agent that answers real phone calls. Twilio carries the call, Deepgram listens, OpenAI writes the reply, and callers can cut in mid-sentence. The code is on his GitHub.",
+    "action": "go:personaplex"
+  },
+  "nexus": {
+    "file": "/media/voice/870ca7c4481e.mp3",
+    "text": "NEXUS is a GraphRAG engine he's building for questions that plain vector search can't answer. It combines Qdrant for similar passages with a Neo4j knowledge graph for connected facts, orchestrated with LangGraph.",
+    "action": "go:nexus"
+  },
+  "fraud": {
+    "file": "/media/voice/3e3580500844.mp3",
+    "text": "His fraud detection system picks its decision threshold by what mistakes actually cost, not raw accuracy. It's built with XGBoost and tracked in MLflow, and the code is on his GitHub.",
+    "action": "go:fraud"
+  },
+  "research": {
+    "file": "/media/voice/d70ff8946578.mp3",
+    "text": "The AI Research Agent searches the web for you and cites every source it uses. It's built with LangGraph.",
+    "action": "go:work-index"
+  },
+  "lora": {
+    "file": "/media/voice/062af8c5b45f.mp3",
+    "text": "His adaptive LoRA project uses a learned router to pick the right specialist adapter for each prompt, then scores its own answers.",
+    "action": "go:work-index"
+  },
+  "crypto": {
+    "file": "/media/voice/00bbd6f69095.mp3",
+    "text": "The crypto intelligence system runs several agents at once, reading large transfers, the order book and market mood, and combines them into a buy, sell or hold signal.",
+    "action": "go:work-index"
+  },
+  "rag": {
+    "file": "/media/voice/ce16c4d93358.mp3",
+    "text": "Retrieval is core to his work. He builds assistants over a company's own documents, and NEXUS adds a knowledge graph for multi-hop questions. The answers you're hearing come from a retriever too.",
+    "action": "go:atlas"
+  },
+  "agents": {
+    "file": "/media/voice/dda67f517b6f.mp3",
+    "text": "He builds agents that do real work: a research agent that cites its sources, multi-agent analysis systems, and n8n workflows where a human signs off before anything risky happens.",
+    "action": "go:work"
+  },
+  "mlops": {
+    "file": "/media/voice/5fa559cc34a5.mp3",
+    "text": "That's where he spends a lot of his time: serving models, catching data drift, alerting, and CI and CD, so a model that worked last month still works today.",
+    "action": "go:work"
+  },
+  "zuu": {
+    "file": "/media/voice/6f9c4bee3bfd.mp3",
+    "text": "He finished in the top three of two hundred and ninety in Zuu Crew's production machine learning programme.",
+    "action": "go:career"
+  },
+  "opensource": {
+    "file": "/media/voice/9d04997806ac.mp3",
+    "text": "Yes, he contributes to the tools production machine learning runs on, including LangChain, PyTorch, Hugging Face and MLflow.",
+    "action": "go:about"
+  },
+  "private": {
+    "file": "/media/voice/563d195808e1.mp3",
+    "text": "Yes. Much of his production work for his employer and clients is private or under confidentiality agreements. He's happy to walk through the problem, approach and stack in a conversation.",
+    "action": "contact:hire"
+  },
+  "axon": {
+    "file": "/media/voice/7abf83c57f0b.mp3",
+    "text": "I'm Axon, Isuru's agent, and I'm one of his builds. Deepgram turns your speech into text, his chat agent finds the answer in his knowledge base, and ElevenLabs gives me my voice.",
+    "action": null
+  },
+  "guide": {
+    "file": "/media/voice/0b4d221626f2.mp3",
+    "text": "The field guide walks through every layer of an AI system, from retrieval to evals, using real architectures from leading teams next to the ones he built. Scroll and watch a request move through each one.",
+    "action": "go:atlas"
+  },
+  "contact": {
+    "file": "/media/voice/8a8a6405446f.mp3",
+    "text": "The easiest way is the contact form at the bottom of this page. You can also find him on LinkedIn.",
+    "action": "go:contact"
+  },
+  "build": {
+    "file": "/media/voice/3372635d60d4.mp3",
+    "text": "Great. Tell him the problem, what data you have, and what success looks like. He'll suggest a simple first version and how he'd keep it reliable in production.",
+    "action": "contact:build"
+  },
+  "learn": {
+    "file": "/media/voice/27391575e0f5.mp3",
+    "text": "He teaches the production side of AI engineering: retrieval, agents, and keeping models reliable once they're live. Leave a note and he'll point you in the right direction.",
+    "action": "contact:learn"
+  },
+  "strengths": {
+    "file": "/media/voice/a5797756442d.mp3",
+    "text": "He builds for production, not for the demo. He handles serving, monitoring and the fixes that keep systems working, keeps a human in the loop for risky steps, and teaches other engineers the same discipline.",
+    "action": "go:work"
+  }
+}
